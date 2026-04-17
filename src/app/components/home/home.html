@@ -1,0 +1,91 @@
+<div class="home-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Dashboard Overview</h1>
+      <p class="page-sub">Welcome back. Here's what's happening today.</p>
+    </div>
+    <a routerLink="/dashboard/companies" class="btn-primary">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M8 3v10M3 8h10" stroke-linecap="round"/>
+      </svg>
+      Add Company
+    </a>
+  </div>
+
+  <div class="stats-grid">
+    <a *ngFor="let card of cards" [routerLink]="card.route" class="stat-card" [ngClass]="'card-' + card.color">
+      <div class="stat-icon-wrap">
+        <svg *ngIf="card.icon === 'building'" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M4 18V6l6-4 6 4v12H4z"/><path d="M8 18v-5h4v5"/>
+        </svg>
+        <svg *ngIf="card.icon === 'lifting'" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M3 17v-3l4-2 3 2 4-2 3 2v3"/><path d="M10 5v8M7 8l3-3 3 3"/>
+        </svg>
+        <svg *ngIf="card.icon === 'pressure'" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+          <circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/><circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+        </svg>
+        <svg *ngIf="card.icon === 'check'" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+          <circle cx="10" cy="10" r="8"/><path d="M6 10l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <div class="stat-skeleton" *ngIf="loading"></div>
+        <div class="stat-label">{{ card.label }}</div>
+      </div>
+      <div class="stat-arrow">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M2 6h8M7 3l3 3-3 3"/>
+        </svg>
+      </div>
+    </a>
+  </div>
+  <div class="panels-grid">
+    <div class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Recent Companies</h2>
+        <a routerLink="/dashboard/companies">View all →</a>
+      </div>
+
+      <div class="panel-body">
+        <div *ngIf="loading" class="loading-rows">
+          <div class="row-skel" *ngFor="let i of [1,2,3]"></div>
+        </div>
+
+        <div *ngIf="!loading && companies.length === 0" class="empty-state">
+          <svg viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+            <path d="M16 24l6 6 10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+          </svg>
+          <p>No companies yet. <a routerLink="/dashboard/companies">Add one</a></p>
+        </div>
+
+        <div *ngFor="let co of companies.slice(0, 5)" class="company-row">
+          <div class="company-avatar">{{ co.companyName?.charAt(0)?.toUpperCase() || 'C' }}</div>
+          <div class="company-info">
+            <span class="company-name">{{ co.companyName }}</span>
+            <span class="company-loc">{{ co.city }}, {{ co.state }}</span>
+          </div>
+          <span class="badge-active">Active</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Recent Activity</h2>
+        <span class="panel-tag">Live</span>
+      </div>
+
+      <div class="panel-body">
+        <div *ngFor="let act of recentActivity" class="activity-row">
+          <div class="act-dot" [ngClass]="'dot-' + act.type"></div>
+          <div class="act-body">
+            <span class="act-action">{{ act.action }}</span>
+            <span class="act-entity">{{ act.entity }}</span>
+          </div>
+          <span class="act-time">{{ act.time }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

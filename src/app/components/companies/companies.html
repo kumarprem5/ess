@@ -1,0 +1,132 @@
+<div class="companies-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <h2>All Companies</h2>
+    <button class="btn-add" (click)="openAdd()">+ Add Company</button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-grid">
+    <input type="text" placeholder="Search Company Name"
+           [(ngModel)]="filters.companyName" (input)="applyFilters()">
+    <input type="text" placeholder="Search Contact Person"
+           [(ngModel)]="filters.contactPerson" (input)="applyFilters()">
+    <input type="text" placeholder="Search City"
+           [(ngModel)]="filters.city" (input)="applyFilters()">
+    <input type="text" placeholder="Search State"
+           [(ngModel)]="filters.state" (input)="applyFilters()">
+    <input type="text" placeholder="GST Number"
+           [(ngModel)]="filters.gstNumber" (input)="applyFilters()">
+    <input type="text" placeholder="Factory License"
+           [(ngModel)]="filters.factoryLicenseNo" (input)="applyFilters()">
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    <table class="company-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Company Name</th>
+          <th>Contact Person</th>
+          <th>Mobile</th>
+          <th>Email</th>
+          <th>City</th>
+          <th>State</th>
+          <th>GST</th>
+          <th>License No</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let company of filteredCompanies; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td class="company-name">{{ company.companyName }}</td>
+          <td>{{ company.contactPerson }}</td>
+          <td>{{ company.mobileNumber }}</td>
+          <td>{{ company.email }}</td>
+          <td>{{ company.city }}</td>
+          <td>{{ company.state }}</td>
+          <td><span class="badge badge-gst">{{ company.gstNumber || '-' }}</span></td>
+          <td><span class="badge badge-lic">{{ company.factoryLicenseNo || '-' }}</span></td>
+          <td>{{ company.createdAt | date:'dd MMM yyyy' }}</td>
+          <td>
+            <div class="actions">
+              <button class="btn-update" (click)="openUpdate(company)">Update</button>
+              <button class="btn-report" (click)="openReport(company)">Report</button>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="filteredCompanies.length === 0">
+          <td colspan="11" class="no-data">No companies found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ── Add / Update Modal Only ── -->
+<div class="overlay" [class.open]="showModal" (click)="closeModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="closeModal()">&#x2715;</button>
+
+    <ng-container *ngIf="showModal">
+      <h3>{{ modalMode === 'add' ? 'Add Company' : 'Update Company' }}</h3>
+
+      <div class="form-grid">
+        <div class="field full">
+          <label>Company Name</label>
+          <input type="text" [(ngModel)]="form.companyName" placeholder="Enter company name">
+        </div>
+        <div class="field full">
+          <label>Factory Address</label>
+          <textarea [(ngModel)]="form.factoryAddress" placeholder="Enter factory address"></textarea>
+        </div>
+        <div class="field">
+          <label>Contact Person</label>
+          <input type="text" [(ngModel)]="form.contactPerson" placeholder="Enter contact person">
+        </div>
+        <div class="field">
+          <label>Mobile Number</label>
+          <input type="text" [(ngModel)]="form.mobileNumber" placeholder="Enter mobile number">
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="form.email" placeholder="Enter email">
+        </div>
+        <div class="field">
+          <label>GST Number</label>
+          <input type="text" [(ngModel)]="form.gstNumber" placeholder="Enter GST number">
+        </div>
+        <div class="field">
+          <label>Factory License No</label>
+          <input type="text" [(ngModel)]="form.factoryLicenseNo" placeholder="Enter license number">
+        </div>
+        <div class="field">
+          <label>City</label>
+          <input type="text" [(ngModel)]="form.city" placeholder="Enter city">
+        </div>
+        <div class="field">
+          <label>State</label>
+          <input type="text" [(ngModel)]="form.state" placeholder="Enter state">
+        </div>
+        <div class="field">
+          <label>Pincode</label>
+          <input type="text" [(ngModel)]="form.pincode" placeholder="Enter pincode">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeModal()">Cancel</button>
+        <button class="btn-save" (click)="saveCompany()">
+          {{ modalMode === 'add' ? 'Save Company' : 'Update Company' }}
+        </button>
+      </div>
+    </ng-container>
+
+  </div>
+</div>
