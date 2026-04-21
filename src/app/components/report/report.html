@@ -103,7 +103,6 @@
                         <div class="row-actions">
                         <button class="btn-sm edit" (click)="openEditLifting(item)">Edit</button>
                         <button class="btn-sm print" (click)="openPrintModal(item)">Print</button>
-                        
                         </div>
                     </td>
                     </tr>
@@ -111,7 +110,6 @@
                 </table>
             </div>
             </div>
-
             <ng-template #noLifting>
             <div class="empty-block">No Lifting Records Found</div>
             </ng-template>
@@ -677,103 +675,112 @@
     </div>
     </div>
 
+ <div id="print-section" *ngIf="selectedItem">
 
-<div id="print-section" class="print-container">
-
-  <h3 class="title">
-    REPORT OF TESTING EXAMINATION OF HOISTS / LIFTING MACHINES,<br>
-    TACKLES, CHAINS & SLINGS
+  <!-- TITLE -->
+  <h3 class="print-title">
+    {{ selectedItem.testName?.split('(')[0] }}
+    <span class="sub-text" *ngIf="selectedItem.testName?.includes('(')">
+      ({{ selectedItem.testName.split('(')[1] }}
+    </span>
   </h3>
 
-  <p class="subtitle">(Refer Section 28 Rule 60-A of Factories Act, 1948)</p>
+  <table class="print-table cert-table">
+    <tbody>
 
-  <table class="print-table">
-    <tr>
-      <td>Certificate No.</td>
-      <td>{{ selectedItem?.certificateNo }}</td>
-      <td>Date of Examination</td>
-      <td>{{ selectedItem?.dateOfExamination | date:'dd.MM.yyyy' }}</td>
-    </tr>
+      <tr>
+        <td class="cn">1</td>
+        <td class="cd">Name of Occupier (Factory)</td>
+        <td class="cv">{{ selectedItem.nameOfOccupier }}</td>
+      </tr>
 
-    <tr>
-      <td>1)</td>
-      <td>Name of Occupier</td>
-      <td colspan="2">{{ selectedItem?.nameOfOccupier }}</td>
-    </tr>
+      <tr>
+        <td class="cn">2</td>
+        <td class="cd">Address of the Factory</td>
+        <td class="cv">{{ selectedItem.addressOfFactory }}</td>
+      </tr>
 
-    <tr>
-      <td>2)</td>
-      <td>Address of Factory</td>
-      <td colspan="2">{{ selectedItem?.addressOfFactory }}</td>
-    </tr>
+      <tr>
+        <td class="cn">3</td>
+        <td class="cd">
+          Distinguishing number or mark / description of lifting equipment
+        </td>
+        <td class="cv">
+          {{ selectedItem.equipmentName }}<br>
+          Model: {{ selectedItem.modelNumber }}<br>
+          Serial: {{ selectedItem.srNo }}<br>
+          Manufacturer: {{ selectedItem.manufacturerName }}<br>
+          Capacity: {{ selectedItem.capacity }}<br>
+          Location: {{ selectedItem.location }}
+        </td>
+      </tr>
 
-    <tr>
-      <td>3)</td>
-      <td>Description</td>
-      <td colspan="2">
-        {{ selectedItem?.equipmentName }} <br>
-        {{ selectedItem?.modelNumber }} <br>
-        {{ selectedItem?.srNo }}
-      </td>
-    </tr>
+      <tr>
+        <td class="cn">4</td>
+        <td class="cd">Year first taken into use in factory</td>
+        <td class="cv">{{ selectedItem.yearFirstTakenIntoUse }}</td>
+      </tr>
 
-    <tr>
-      <td>4)</td>
-      <td>Year First Taken Into Use</td>
-      <td colspan="2">{{ selectedItem?.yearFirstTakenIntoUse }}</td>
-    </tr>
+      <tr>
+        <td class="cn">5</td>
+        <td class="cd">Previous certificate details</td>
+        <td class="cv">{{ selectedItem.previousCertificateDetails }}</td>
+      </tr>
 
-    <tr>
-      <td>5)</td>
-      <td>Previous Certificate</td>
-      <td colspan="2">{{ selectedItem?.previousCertificateDetails }}</td>
-    </tr>
+      <tr>
+        <td class="cn">6</td>
+        <td class="cd">
+          Date of examination and by whom carried out
+        </td>
+        <td class="cv">
+          {{ selectedItem.periodicalExaminationDetails }}<br>
+          Inspector: {{ selectedItem.inspectorName }}<br>
+          Date: {{ selectedItem.dateOfExamination | date:'dd MMM yyyy' }}
+        </td>
+      </tr>
 
-    <tr>
-      <td>6)</td>
-      <td>Examination Details</td>
-      <td colspan="2">{{ selectedItem?.periodicalExaminationDetails }}</td>
-    </tr>
+      <tr>
+        <td class="cn">7</td>
+        <td class="cd">
+          Condition of machine (Hydraulic / Structure / Result)
+        </td>
+        <td class="cv">
+          Hydraulic: {{ selectedItem.hydraulicSystemStatus }}<br>
+          Frame: {{ selectedItem.frameAndForkCondition }}<br>
+          Result: {{ selectedItem.overallResult }}
+        </td>
+      </tr>
 
-    <tr>
-      <td>7)</td>
-      <td>Annealing / Heat Treatment</td>
-      <td colspan="2">{{ selectedItem?.annealingOrHeatTreatmentDetails }}</td>
-    </tr>
+      <tr>
+        <td class="cn">8</td>
+        <td class="cd">Annealing / Heat Treatment</td>
+        <td class="cv">{{ selectedItem.annealingOrHeatTreatmentDetails }}</td>
+      </tr>
 
-    <tr>
-      <td>8)</td>
-      <td>Defects</td>
-      <td colspan="2">{{ selectedItem?.defectsParticulars }}</td>
-    </tr>
+      <tr>
+        <td class="cn">9</td>
+        <td class="cd">Defects & Remedies</td>
+        <td class="cv">{{ selectedItem.defectsParticulars }}</td>
+      </tr>
 
-    <tr>
-      <td>9)</td>
-      <td>Safe Working Load</td>
-      <td colspan="2">{{ selectedItem?.safeWorkingLoadAssessed }}</td>
-    </tr>
+      <tr>
+        <td class="cn">10</td>
+        <td class="cd">Safe Working Load Assessed</td>
+        <td class="cv">{{ selectedItem.safeWorkingLoadAssessed }}</td>
+      </tr>
 
-    <tr>
-      <td>10)</td>
-      <td>Remarks</td>
-      <td colspan="2">{{ selectedItem?.remarks }}</td>
-    </tr>
+    </tbody>
   </table>
 
-  <div class="footer">
+  <!-- FOOTER TEXT -->
+  <div class="cert-footer">
     <p>
-      I certify that on {{ selectedItem?.certifiedDate | date:'dd.MM.yyyy' }}
-      the above-mentioned lifting machine was thoroughly examined.
+      I certify that on {{ selectedItem.certifiedDate | date:'dd MMM yyyy' }},
+      I have thoroughly examined the lifting equipment and found it safe.
     </p>
 
-    <div class="sign-row">
-      <div>
-        <strong>{{ selectedItem?.inspectorName }}</strong><br>
-        Competent Person
-      </div>
-
-      <div>Counter Sign</div>
-    </div>
+    <p><b>Next Due Date:</b> {{ selectedItem.nextDueDate | date:'dd MMM yyyy' }}</p>
   </div>
+
 
 </div>

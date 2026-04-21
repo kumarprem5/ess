@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lifting Equipment Inspection Certificate</title>
+<style>
+  /* ── Screen: hide print section, show preview ── */
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    background: #e5e7eb;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .screen-controls {
+    max-width: 800px;
+    margin: 0 auto 16px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .screen-controls button {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: none;
+    background: #1e3a8a;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .screen-controls button:hover { background: #1d4ed8; }
+  .screen-controls .close-btn {
+    background: #6b7280;
+  }
+
+  /* ── Certificate Page ── */
+  .cert-page {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 28px 36px 32px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    line-height: 1.55;
+    color: #111;
+  }
+
+  /* ── Header ── */
+  .cert-header {
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .cert-header h1 {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: underline;
+    letter-spacing: 0.5px;
+    margin: 0 0 3px;
+    line-height: 1.4;
+  }
+  .cert-header .subtitle {
+    font-size: 11.5px;
+    font-style: italic;
+    margin: 0;
+  }
+
+  /* ── Meta row: cert no + date ── */
+  .cert-meta {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 8px 0 4px;
+    font-size: 11.5px;
+  }
+  .cert-meta .date-label { font-style: italic; }
+  .cert-meta .date-val { font-weight: bold; margin-left: 5px; }
+
+  /* ── Main table ── */
+  .cert-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
+  }
+  .cert-table td {
+    border: 1px solid #222;
+    padding: 5px 7px;
+    vertical-align: top;
+    font-size: 11.5px;
+  }
+
+  /* column widths */
+  .col-num  { width: 30px; text-align: center; font-style: italic; white-space: nowrap; }
+  .col-desc { width: 42%; font-style: italic; line-height: 1.5; }
+  .col-val  { line-height: 1.55; font-weight: normal; }
+
+  /* Certificate No row */
+  .cert-no-row td { font-size: 11.5px; }
+  .cert-no-label { font-style: italic; width: 22%; }
+  .cert-no-val   { font-weight: bold; width: 28%; }
+  .date-of-exam-label { font-style: italic; width: 22%; }
+  .date-of-exam-val   { font-weight: bold; }
+
+  /* ── Footer certify ── */
+  .cert-footer {
+    margin-top: 12px;
+    font-size: 11.5px;
+    line-height: 1.65;
+  }
+  .cert-footer .certify-text {
+    font-style: italic;
+  }
+  .cert-footer .certify-text u { font-weight: bold; }
+
+  .cert-footer .next-due {
+    font-weight: bold;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  /* ── Signatures ── */
+  .cert-sig {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 28px;
+    font-size: 11.5px;
+  }
+  .sig-left { line-height: 1.7; }
+  .sig-name { font-size: 13px; font-weight: bold; }
+  .sig-detail { font-size: 11px; }
+  .sig-stamp {
+    text-align: center;
+    font-size: 11px;
+    color: #555;
+  }
+  .stamp-circle {
+    width: 72px;
+    height: 72px;
+    border: 2px solid #1e3a8a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: #1e3a8a;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.3;
+    margin: 0 auto 4px;
+  }
+  .sig-right { font-size: 11.5px; text-align: right; }
+  .countersign-line {
+    border-top: 1px solid #333;
+    padding-top: 4px;
+    margin-top: 40px;
+    font-style: italic;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; padding: 0; margin: 0; }
+    .screen-controls { display: none !important; }
+    .cert-page {
+      max-width: 100%;
+      margin: 0;
+      border: none;
+      padding: 15mm 16mm 14mm;
+      font-size: 11.5px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="screen-controls">
+  <button onclick="window.print()">🖨 Print Certificate</button>
+  <button class="close-btn" onclick="window.close()">✕ Close</button>
+</div>
+
+<!-- ══════════════════════════════════
+     CERTIFICATE PAGE
+══════════════════════════════════ -->
+<div class="cert-page" id="cert">
+
+  <!-- HEADER -->
+  <div class="cert-header">
+    <h1>
+      Report of Testing Examination of Hoists / Lifting Machines,<br>
+      Tackles, Chains &amp; Slings
+    </h1>
+    <p class="subtitle">(Under Section 29, Rule 60-A of Factories Act, 1948)</p>
+  </div>
+
+  <!-- DATE OF EXAMINATION (right-aligned) -->
+  <div class="cert-meta">
+    <span class="date-label">Date of Examination :</span>
+    <span class="date-val" id="dateOfExamination">May 23, 2025</span>
+  </div>
+
+  <!-- MAIN TABLE -->
+  <table class="cert-table">
+
+    <!-- Certificate No row -->
+    <tr class="cert-no-row">
+      <td class="cert-no-label">Certificate No.</td>
+      <td class="cert-no-val" id="certificateNo">BEL/2305025/HMC-01</td>
+      <td class="date-of-exam-label" style="display:none;"></td>
+      <td class="date-of-exam-val" style="display:none;"></td>
+    </tr>
+
+    <!-- 1. Report No / Name of Occupier -->
+    <tr>
+      <td class="col-num">1.</td>
+      <td class="col-desc">Name of Occupier (of factory)</td>
+      <td class="col-val" id="nameOfOccupier">M/s Belrise Industries Limited</td>
+    </tr>
+
+    <!-- 2. Address -->
+    <tr>
+      <td class="col-num">2.</td>
+      <td class="col-desc">Address of Factory</td>
+      <td class="col-val" id="addressOfFactory">
+        M/s Belrise Industries Limited<br>
+        Plot No. 130 C, Sector-03, HSIIDC BAWAL, Rewari<br>
+        (Haryana)
+      </td>
+    </tr>
+
+    <!-- 3. Distinguishing marks -->
+    <tr>
+      <td class="col-num">3.</td>
+      <td class="col-desc">
+        Distinguishing number or mark if any and description sufficient to identify the lifting machine.
+      </td>
+      <td class="col-val" id="distinguishingMarksDescription">
+        Hydraulic Mobile Crane<br>
+        SWL – 2000 Kg. &nbsp;&nbsp; HMC – 01<br>
+        Mfrs: Haris<br>
+        Location – Movable In Plant
+      </td>
+    </tr>
+
+    <!-- 4. Year first taken -->
+    <tr>
+      <td class="col-num">4.</td>
+      <td class="col-desc">
+        Date when the lifting machine was first taken into use in the factory.
+      </td>
+      <td class="col-val" id="yearFirstTakenIntoUse">As per company record</td>
+    </tr>
+
+    <!-- 5. Previous certificate -->
+    <tr>
+      <td class="col-num">5.</td>
+      <td class="col-desc">
+        Date and number of the certificate relating to any test or examination made under sub – rules (1) and (7) together with name &amp; address of the person who issued the certificate.
+      </td>
+      <td class="col-val" id="previousCertificateDetails">Last time tested by us</td>
+    </tr>
+
+    <!-- 6. Periodical examination -->
+    <tr>
+      <td class="col-num">6.</td>
+      <td class="col-desc">
+        Date of each periodical thorough examination made under clause (a) (iii) sub section (i) of Section 29 of the act and sub rule (6) and by who it was carried out.
+      </td>
+      <td class="col-val" id="periodicalExaminationDetails">
+        Tested By Dr. Ashish Ahuja<br>
+        Competent Person on 23.05.2025<br><br>
+        Load Test - Normal<br>
+        <strong>Hydraulic Lifting – Normal</strong><br>
+        Hand Lever - Normal &nbsp;&nbsp; Fork – Normal
+      </td>
+    </tr>
+
+    <!-- 7. Annealing -->
+    <tr>
+      <td class="col-num">7.</td>
+      <td class="col-desc">
+        Date of annealing of other heat treatment of the chain and other lifting tackle made under sub rule (5) and by whom it was carried out.
+      </td>
+      <td class="col-val" id="annealingOrHeatTreatmentDetails">N. A.</td>
+    </tr>
+
+    <!-- 8. Defects -->
+    <tr>
+      <td class="col-num">8.</td>
+      <td class="col-desc">
+        Particulars of any defect affecting the safe working load found at any such thorough examination or after annealing and of the steps taken to remedy such defects.
+      </td>
+      <td class="col-val" id="defectsParticulars">N. A.</td>
+    </tr>
+
+    <!-- 9. SWL assessed -->
+    <tr>
+      <td class="col-num">9.</td>
+      <td class="col-desc">
+        Particulars of any defect affecting the safe working load found at any such examination or after annealing and steps taken to remedy such defects.
+      </td>
+      <td class="col-val" id="safeWorkingLoadAssessed"></td>
+    </tr>
+
+  </table>
+
+  <!-- FOOTER -->
+  <div class="cert-footer">
+    <p class="certify-text">
+      I certify that on <u id="certifiedDate">23.05.2025</u>, I have thoroughly examined the Lifting Tools &amp; Tackles and the same are
+      found safe. This is true report of my inspection.
+    </p>
+    <p class="next-due">Next Due Date : <span id="nextDueDate">22.11.2025</span></p>
+  </div>
+
+  <!-- SIGNATURES -->
+  <div class="cert-sig">
+    <div class="sig-left">
+      <div class="sig-name" id="inspectorName">Ashish Ahuja</div>
+      <div class="sig-detail">Competent Person U/s 21(2), 28, 29, 31, 67 &amp; 102</div>
+      <div class="sig-detail">Approved by CIF Haryana Vide Lic. No. 2967 dated 27.06.2019</div>
+      <div class="sig-detail">Order of Extension of Competency Memo No. 957-997 dated 26.03.2021 &amp; 3449-89 dt. 17.08.21</div>
+    </div>
+
+    <div class="sig-stamp">
+      <div class="stamp-circle">COMPETENT<br>PERSON<br>STAMP</div>
+      <span>Official Stamp</span>
+    </div>
+
+    <div class="sig-right">
+      <div class="countersign-line">Counter Sign</div>
+    </div>
+  </div>
+
+</div><!-- /cert-page -->
+
+<script>
+/**
+ * Call this function from your Angular component to populate the certificate.
+ * Pass the LiftingRecord object.
+ *
+ * Usage in Angular:
+ *   openPrintModal(item: LiftingRecord): void {
+ *     this.selectedItem = item;
+ *     setTimeout(() => window.print(), 300);
+ *   }
+ *
+ * OR open this HTML in a new window and pass data via sessionStorage.
+ */
+function populateCertificate(data) {
+  const set = (id, val) => {
+    const el = document.getElementById(id);
+    if (el && val) el.innerHTML = val;
+  };
+
+  set('certificateNo',                data.certificateNo);
+  set('dateOfExamination',            formatDate(data.dateOfExamination));
+  set('nameOfOccupier',               data.nameOfOccupier);
+  set('addressOfFactory',             data.addressOfFactory?.replace(/\n/g, '<br>'));
+  set('distinguishingMarksDescription', data.distinguishingMarksDescription?.replace(/\n/g, '<br>'));
+  set('yearFirstTakenIntoUse',        data.yearFirstTakenIntoUse);
+  set('previousCertificateDetails',   data.previousCertificateDetails);
+  set('periodicalExaminationDetails', data.periodicalExaminationDetails?.replace(/\n/g, '<br>'));
+  set('annealingOrHeatTreatmentDetails', data.annealingOrHeatTreatmentDetails);
+  set('defectsParticulars',           data.defectsParticulars);
+  set('safeWorkingLoadAssessed',      data.safeWorkingLoadAssessed);
+  set('certifiedDate',                formatDate(data.certifiedDate));
+  set('nextDueDate',                  formatDate(data.nextDueDate));
+  set('inspectorName',                data.inspectorName);
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  if (isNaN(dt)) return d;
+  return dt.toLocaleDateString('en-IN', { day:'2-digit', month:'2-digit', year:'numeric' }).replace(/\//g,'.');
+}
+
+// If data passed via sessionStorage (from Angular)
+window.addEventListener('DOMContentLoaded', () => {
+  const raw = sessionStorage.getItem('printCertData');
+  if (raw) {
+    try { populateCertificate(JSON.parse(raw)); } catch(e) {}
+    sessionStorage.removeItem('printCertData');
+  }
+});
+</script>
+</body>
+</html>

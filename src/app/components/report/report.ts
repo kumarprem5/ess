@@ -231,6 +231,8 @@ export class CompanyReport implements OnInit {
   loadAllData(): void {
     this.loading = true;
     forkJoin({
+
+
       company: this.api.getCompanyById(this.companyId),
       lifting: this.api.getAllLiftingByCompany(this.companyId),
       pressure: this.api.getAllPressureByCompany(this.companyId)
@@ -240,6 +242,8 @@ export class CompanyReport implements OnInit {
         this.allLiftingReports = res.lifting?.data ?? [];
         this.liftingReports   = [...this.allLiftingReports];
         this.pressureReports  = res.pressure?.data ?? [];
+        console.log(this.liftingReports);
+        
         this.loading = false;
       },
       error: (err) => {
@@ -274,14 +278,12 @@ export class CompanyReport implements OnInit {
   printReport(): void { window.print(); }
 
   openPrintModal(item: LiftingRecord): void {
-    this.printItem = item;
-    this.showPrintModal = true;
-    this.selectedItem = item;
+  this.selectedItem = item;
+
   setTimeout(() => {
     window.print();
-  }, 300);
-
-  }
+  }, 200);
+}
 
   closePrintModal(): void {
     this.printItem = null;
