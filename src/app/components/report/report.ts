@@ -13,8 +13,11 @@ import {
 /* =========================================================
    LIFTING RECORD MODEL — mirrors LiftingEquipmentInspectionRecord entity
 ========================================================= */
+
+
 export interface LiftingRecord {
   id?: number;
+  
   companyId: number;
 
   testName: string;
@@ -154,6 +157,9 @@ export const liftingEquipmentList: string[] = [
 })
 export class CompanyReport implements OnInit {
 
+
+  selectedItem: any;
+
   /* =========================================================
      FILTER DROPDOWN
   ========================================================= */
@@ -270,6 +276,11 @@ export class CompanyReport implements OnInit {
   openPrintModal(item: LiftingRecord): void {
     this.printItem = item;
     this.showPrintModal = true;
+    this.selectedItem = item;
+  setTimeout(() => {
+    window.print();
+  }, 300);
+
   }
 
   closePrintModal(): void {
@@ -383,18 +394,89 @@ sectionRuleOptions: string[] = [
   /* =========================================================
      MODAL ACTIONS
   ========================================================= */
- openAddLifting(): void {
+openAddLifting(): void {
   this.liftingModalMode = 'add';
   this.selectedLifting  = null;
-  this.liftingForm      = this.emptyLiftingForm();
-
-  this.liftingForm.inspectorName = this.inspectorList[0]; // default
-
-  this.fieldToggles     = this.defaultToggles();
   this.selectedDuration = '';
+
+  this.liftingForm = {
+    companyId: this.companyId,
+
+    // ── Always-on fields ──
+    testName:          'REPORTS OF EXAMINATION OF LIFTING MACHINES/TACKLES (Under Section 29 of Factories Act 1948)',
+    equipmentName:     'EOT Crane',
+    certificateNo:     '',                        // auto-generated below
+    dateOfExamination: '2026-04-07',              // 07.04.2026
+    nextDueDate:       '',                        // will be set by setDuration below
+    inspectorName:     'Brijesh Kumar',
+
+    // ── 1. Name of Occupier ──
+    nameOfOccupier: this.company?.companyName
+      ?? 'M/s Somemiya Corporation Pvt. Ltd.,',
+
+    // ── 2. Address of Factory ──
+    addressOfFactory: this.company?.factoryAddress
+      ?? 'SP2-65 Majrakath New Industrial Complex, Neemrana, Alwar Rajasthan-301705, India',
+
+    // ── 3. Distinguishing Marks ──
+    distinguishingMarksDescription:
+      'EOT CRANE\nMake: N.A., ID No. EOT-01\nSWL: 2.8 ton   Wire Rope Dia- 10 MM, Fall: 4\nLocation: Shop Floor-1',
+    modelNumber:      'N.A.',
+    srNo:             '',
+    idNumber:         'EOT-01',
+    capacity:         '2.8 ton',
+    manufacturerName: 'N.A.',
+    manufacturerYear: '2012',
+    safeWorkingLoad:  '2.8 ton',
+    location:         'Shop Floor-1',
+
+    // ── 4. Year First Taken Into Use ──
+    yearFirstTakenIntoUse: '2012',
+
+    // ── 5. Previous Certificate Details ──
+    previousCertificateDetails: 'First time tested by us',
+
+    // ── 6. Periodical Examination Details ──
+    periodicalExaminationDetails:
+      'Tested by Brijesh Kumar - Competent Person on 07.04.2026',
+    hydraulicSystemStatus:
+      'Limit Switches: Upper & lower limits functional\n' +
+      'Brake Functionality: Operational and holds load properly\n' +
+      'Rope: Normal 12.0 mm No kinks, broken strands,\n' +
+      'Hooks & Safety Latches: No wear; safety lock not functional',
+    frameAndForkCondition: 'N.A.',
+    overallResult:         'Hoist found in good working condition',
+
+    // ── 7. Annealing / Heat Treatment ──
+    annealingOrHeatTreatmentDetails: 'N.A.',
+
+    // ── 8. Defects Particulars ──
+    defectsParticulars: 'N.A.',
+
+    // ── 9. Safe Working Load Assessed ──
+    safeWorkingLoadAssessed:
+      'Load Test done on 1.25 times of Safe Working. Safe to Use.',
+
+    // ── 10. Remarks ──
+    remarks:
+      'Hoist found in good working condition\nPeriodic lubrication advised',
+
+    // ── Footer ──
+    certifiedDate: '2026-04-07',
+  };
+
+  // Generate cert no (testName + equipmentName are now set)
+  this.generateCertificateNo();
+
+  // Pre-select 1 Year duration and calculate next due date from examination date
+  this.selectedDuration = '1year';
+  this.calculateDueDate(); // call private method directly
+
+  // All toggles ON (Yes)
+  this.fieldToggles = this.defaultToggles();
+
   this.showLiftingModal = true;
 }
-
   openEditLifting(item: LiftingRecord): void {
     this.liftingModalMode = 'update';
     this.selectedLifting  = item;
@@ -476,7 +558,7 @@ sectionRuleOptions: string[] = [
 
 
 
-
-
+ 
+  
   
 }
