@@ -1,20 +1,16 @@
     <div class="report-page">
-
     <!-- Loading -->
     <div class="state-box" *ngIf="loading">
         <div class="spinner"></div>
         <p>Loading report...</p>
     </div>
-
     <!-- Error -->
     <div class="state-box" *ngIf="error && !loading">
         <p class="error-text">Failed to load company details.</p>
         <button class="btn-back" (click)="goBack()">← Go Back</button>
     </div>
-
     <!-- MAIN CONTENT -->
     <ng-container *ngIf="!loading && !error && company">
-
         <!-- HEADER -->
         <div class="report-header">
         <div>
@@ -31,10 +27,8 @@
             <button class="btn-primary" (click)="printReport()">🖨 Print</button>
         </div>
         </div>
-
         <!-- COMPANY DETAILS -->
         <div class="cards-grid">
-
         <div class="report-card">
             <div class="card-header"><h4>General Information</h4></div>
             <div class="info-row"><span>Company Name</span><strong>{{ company.companyName }}</strong></div>
@@ -50,14 +44,12 @@
             <div class="info-row"><span>Pincode</span><strong>{{ company.pincode }}</strong></div>
             <div class="info-row"><span>Factory Address</span><strong>{{ company.factoryAddress }}</strong></div>
         </div>
-
         <!-- LIFTING REPORTS -->
         <div class="report-card full-width">
             <div class="card-header section-header">
             <h4>Lifting Equipment Inspection Reports</h4>
             <button class="btn-primary" (click)="openAddLifting()">+ Add Record</button>
             </div>
-
             <!-- FILTER -->
             <div class="table-filter-bar">
             <div class="filter-group">
@@ -68,7 +60,6 @@
                 </select>
             </div>
             </div>
-
             <div *ngIf="liftingReports.length; else noLifting">
             <div class="table-wrap">
                 <table>
@@ -114,12 +105,9 @@
             <div class="empty-block">No Lifting Records Found</div>
             </ng-template>
         </div>
-
         </div>
     </ng-container>
     </div>
-
-
     <!-- ============================================================
         LIFTING MODAL
     ============================================================ -->
@@ -678,12 +666,24 @@
  <div id="print-section" *ngIf="selectedItem">
 
   <!-- TITLE -->
-  <h3 class="print-title">
-    {{ selectedItem.testName?.split('(')[0] }}
-    <span class="sub-text" *ngIf="selectedItem.testName?.includes('(')">
-      ({{ selectedItem.testName.split('(')[1] }}
-    </span>
-  </h3>
+<h3 class="print-title">
+  {{ selectedItem.testName?.split('(')[0] }}
+  <span class="sub-text" *ngIf="selectedItem.testName?.includes('(')">
+    ({{ selectedItem.testName.split('(')[1] }}
+  </span>
+</h3>
+
+<!-- TOP ROW -->
+<div class="cert-top-row">
+  <div class="left">
+    <h5>Report No: {{ selectedItem.certificateNo }}</h5>
+  </div>
+
+  <div class="right">
+    <h5>Date of Examination:
+    {{ selectedItem.dateOfExamination | date:'dd MMM yyyy' }} </h5>
+  </div>
+</div>
 
   <table class="print-table cert-table">
     <tbody>
@@ -703,7 +703,7 @@
       <tr>
         <td class="cn">3</td>
         <td class="cd">
-          Distinguishing number or mark / description of lifting equipment
+         Distinguishing number of mark if any and description sufficient to identify the lifting machine.
         </td>
         <td class="cv">
           {{ selectedItem.equipmentName }}<br>
@@ -717,20 +717,20 @@
 
       <tr>
         <td class="cn">4</td>
-        <td class="cd">Year first taken into use in factory</td>
+        <td class="cd">Date when lifting machine was first taken in use in the factory.</td>
         <td class="cv">{{ selectedItem.yearFirstTakenIntoUse }}</td>
       </tr>
 
       <tr>
         <td class="cn">5</td>
-        <td class="cd">Previous certificate details</td>
+        <td class="cd">Date and number of certificate relating to any test or examination made under sub – rules (1) & (7) together with name & address of the person who issued the certificate. </td>
         <td class="cv">{{ selectedItem.previousCertificateDetails }}</td>
       </tr>
 
       <tr>
         <td class="cn">6</td>
         <td class="cd">
-          Date of examination and by whom carried out
+         Date of each periodical thorough examination made under clause (a) (iii) sub section (i) of Section 29 of  the act and sub rule (6) and by who it was carried out. 
         </td>
         <td class="cv">
           {{ selectedItem.periodicalExaminationDetails }}<br>
@@ -742,7 +742,7 @@
       <tr>
         <td class="cn">7</td>
         <td class="cd">
-          Condition of machine (Hydraulic / Structure / Result)
+         Date of annealing of other heat treatment of the chain and other lifting tackle made under sub rule (5) and by whom it was carried out.  
         </td>
         <td class="cv">
           Hydraulic: {{ selectedItem.hydraulicSystemStatus }}<br>
@@ -753,7 +753,7 @@
 
       <tr>
         <td class="cn">8</td>
-        <td class="cd">Annealing / Heat Treatment</td>
+        <td class="cd">Particulars of any defect affecting the safe working load found at any such examination or after annealing and of the steps taken to remedy such defects.  </td>
         <td class="cv">{{ selectedItem.annealingOrHeatTreatmentDetails }}</td>
       </tr>
 
@@ -773,14 +773,45 @@
   </table>
 
   <!-- FOOTER TEXT -->
-  <div class="cert-footer">
-    <p>
-      I certify that on {{ selectedItem.certifiedDate | date:'dd MMM yyyy' }},
-      I have thoroughly examined the lifting equipment and found it safe.
-    </p>
 
-    <p><b>Next Due Date:</b> {{ selectedItem.nextDueDate | date:'dd MMM yyyy' }}</p>
+
+  <!-- FOOTER TEXT -->
+<div class="cert-footer">
+
+  <p>
+    I certify that on {{ selectedItem.certifiedDate | date:'dd MMM yyyy' }},
+    I have thoroughly examined the lifting equipment and found it safe.
+  </p>
+
+  <h6 class="next-due">
+    Next Due Date: {{ selectedItem.nextDueDate | date:'dd MMM yyyy' }}
+  </h6>
+
+  <!-- SPACE FOR STAMP -->
+  <div class="stamp-space"></div>
+
+  <!-- SIGNATURE SECTION -->
+  <div class="cert-signature-row">
+
+    <!-- LEFT SIDE -->
+    <div class="sign-left">
+      <p><b> {{ selectedItem.inspectorName }} (Competent Person)</b></p>
+      <p>Competent Person U/s 21(2), 28, 29, 31, 65 (C)</p>
+      <p>Approved by the CIF&B, Jaipur</p>
+      <p>Lic No. CMP-883/2025 dt. 22.12.2025</p>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="sign-right">
+      <p><b>Counter Sign</b></p>
+    </div>
   </div>
-
-
+  <!-- DISCLAIMER -->
+  <div class="cert-disclaimer">
+    Disclaimer:- This report of examination reflects the conditions of the
+    machine/equipment as on date. We accept no liability/responsibility
+    whatsoever in case of any accidents/mishap on/with/due to this
+    machine/equipment.
+  </div>
+</div>
 </div>

@@ -554,7 +554,7 @@ textarea.field-disabled {
   border-radius: 6px;
   padding: 20mm 18mm 16mm 18mm;
   font-family: 'Times New Roman', Times, serif;
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.5;
   color: #111;
 }
@@ -791,6 +791,14 @@ textarea.field-disabled {
 ===================================================== */
 @media print {
 
+   @page {
+    size: A4;              /* or Letter if required */
+    margin-top: 36mm;
+    margin-right: 15mm;
+    margin-bottom: 15mm;
+    margin-left: 15mm;
+  }
+
   /* Hide everything */
   body * {
     display: none !important;
@@ -844,3 +852,99 @@ textarea.field-disabled {
   }
 
 }
+/* ===== TITLE ===== */
+.print-title {
+  text-align: center;
+  margin: 0 0 8px 0;   /* remove extra gap */
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Times New Roman', serif;
+}
+
+/* subtitle */
+.print-title .sub-text {
+  display: block;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: normal;
+  margin-top: 2px;
+}
+
+/* ===== TOP ROW ===== */
+.cert-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 10px 0;
+  padding: 0 2px;              /* small inner spacing */
+  font-size: 12px;
+  font-family: 'Times New Roman', serif;
+}
+
+/* left + right alignment */
+.cert-top-row .left {
+  text-align: left;
+}
+
+.cert-top-row .right {
+  text-align: right;
+}
+
+/* ensure both stay in one line */
+.cert-top-row .left,
+.cert-top-row .right {
+  white-space: nowrap;
+}
+
+/* ===== NEXT DUE ===== */
+.next-due {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ===== SPACE FOR STAMP ===== */
+.stamp-space {
+  height: 80px;   /* adjust for stamp space */
+}
+
+/* ===== SIGNATURE ROW ===== */
+.cert-signature-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 10px;
+  font-size: 11px;
+  font-family: 'Times New Roman', serif;
+}
+
+/* LEFT SIGN */
+.sign-left p {
+  margin: 2px 0;
+  line-height: 1.4;
+}
+
+/* RIGHT SIGN */
+.sign-right {
+  text-align: right;
+  min-width: 150px;
+}
+
+.sign-right p {
+  margin: 0;
+  font-weight: bold;
+}
+
+/* ===== DISCLAIMER ===== */
+.cert-disclaimer {
+  margin-top: 20px;
+  padding-top: 6px;
+  border-top: 1px solid #999;
+  font-size: 9px;
+  font-style: italic;
+  text-align: center;
+  color: #444;
+  line-height: 1.4;
+}
+
+
