@@ -1,710 +1,552 @@
-    <div class="report-page">
-    <!-- Loading -->
-    <div class="state-box" *ngIf="loading">
-        <div class="spinner"></div>
-        <p>Loading report...</p>
-    </div>
-    <!-- Error -->
-    <div class="state-box" *ngIf="error && !loading">
-        <p class="error-text">Failed to load company details.</p>
-        <button class="btn-back" (click)="goBack()">← Go Back</button>
-    </div>
-    <!-- MAIN CONTENT -->
-    <ng-container *ngIf="!loading && !error && company">
-        <!-- HEADER -->
-        <div class="report-header">
-        <div>
-            <button class="btn-back" (click)="goBack()">← Back</button>
-            <h2>Company Report</h2>
-            <p>Company Profile & Inspection Reports</p>
-        </div>
-        <div class="header-right">
-            <div class="avatar">{{ company.companyName?.charAt(0)?.toUpperCase() }}</div>
-            <div>
-            <h3>{{ company.companyName }}</h3>
-            <small>{{ company.createdAt | date:'dd MMM yyyy' }}</small>
-            </div>
-            <button class="btn-primary" (click)="printReport()">🖨 Print</button>
-        </div>
-        </div>
-        <!-- COMPANY DETAILS -->
-        <div class="cards-grid">
-        <div class="report-card">
-            <div class="card-header"><h4>General Information</h4></div>
-            <div class="info-row"><span>Company Name</span><strong>{{ company.companyName }}</strong></div>
-            <div class="info-row"><span>Contact Person</span><strong>{{ company.contactPerson }}</strong></div>
-            <div class="info-row"><span>Mobile</span><strong>{{ company.mobileNumber }}</strong></div>
-            <div class="info-row"><span>Email</span><strong>{{ company.email }}</strong></div>
-        </div>
+<div class="report-page">
 
-        <div class="report-card">
-            <div class="card-header"><h4>Location</h4></div>
-            <div class="info-row"><span>City</span><strong>{{ company.city }}</strong></div>
-            <div class="info-row"><span>State</span><strong>{{ company.state }}</strong></div>
-            <div class="info-row"><span>Pincode</span><strong>{{ company.pincode }}</strong></div>
-            <div class="info-row"><span>Factory Address</span><strong>{{ company.factoryAddress }}</strong></div>
-        </div>
-        <!-- LIFTING REPORTS -->
-        <div class="report-card full-width">
-            <div class="card-header section-header">
-            <h4>Lifting Equipment Inspection Reports</h4>
-            <button class="btn-primary" (click)="openAddLifting()">+ Add Record</button>
-            </div>
-            <!-- FILTER -->
-            <div class="table-filter-bar">
-            <div class="filter-group">
-                <label>Lifting Machine Section 28-29</label>
-                <select [(ngModel)]="selectedTestName" (change)="filterByTestName()">
-                <option value="">All Machines</option>
-                <option *ngFor="let item of liftingTestOptions" [value]="item">{{ item }}</option>
-                </select>
-            </div>
-            </div>
-            <div *ngIf="liftingReports.length; else noLifting">
-            <div class="table-wrap">
-                <table>
-                <thead>
-                    <tr>
-                    <th>#</th>
-                    <th>Certificate No</th>
-                    <th>Equipment</th>
-                    <th>Model</th>
-                    <th>Serial No</th>
-                    <th>Manufacturer</th>
-                    <th>Capacity</th>
-                    <th>SWL Assessed</th>
-                    <th>Inspector</th>
-                    <th>Next Due</th>
-                    <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of liftingReports; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ item.certificateNo || '—' }}</td>
-                    <td>{{ item.equipmentName || '—' }}</td>
-                    <td>{{ item.modelNumber || '—' }}</td>
-                    <td>{{ item.srNo || '—' }}</td>
-                    <td>{{ item.manufacturerName || '—' }}</td>
-                    <td>{{ item.capacity || '—' }}</td>
-                    <td>{{ item.safeWorkingLoadAssessed || '—' }}</td>
-                    <td>{{ item.inspectorName || '—' }}</td>
-                    <td>{{ item.nextDueDate | date:'dd MMM yyyy' }}</td>
-                    <td>
-                        <div class="row-actions">
-                        <button class="btn-sm edit" (click)="openEditLifting(item)">Edit</button>
-                        <button class="btn-sm print" (click)="openPrintModal(item)">Print</button>
-                        </div>
-                    </td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-            </div>
-            <ng-template #noLifting>
-            <div class="empty-block">No Lifting Records Found</div>
-            </ng-template>
-        </div>
-        </div>
-    </ng-container>
-    </div>
-    <!-- ============================================================
-        LIFTING MODAL
-    ============================================================ -->
-    <div class="overlay" [class.open]="showLiftingModal" (click)="closeLiftingModal()">
-    <div class="modal modal-lg" (click)="$event.stopPropagation()">
-
-        <button class="close-btn" (click)="closeLiftingModal()">✕</button>
-        <h3>{{ liftingModalMode === 'add' ? 'Add Lifting Record' : 'Update Lifting Record' }}</h3>
-
-        <div class="form-grid">
-
-        <!-- ══════════════════════════════════════════════════════
-            ALWAYS-ON FIELDS (no toggle)
-        ══════════════════════════════════════════════════════ -->
-
-        <!-- Test Name -->
-        <div class="field">
-            <label>Test Name</label>
-            <select [(ngModel)]="liftingForm.testName" (change)="generateCertificateNo()">
-            <option value="">Select Test Name</option>
-            <option *ngFor="let item of liftingTestOptions" [value]="item">{{ item }}</option>
-            </select>
-        </div>
-
-        <!-- Equipment Name -->
-        <div class="field">
-            <label>Equipment Name</label>
-            <select [(ngModel)]="liftingForm.equipmentName" (change)="generateCertificateNo()">
-            <option value="">Select Equipment</option>
-            <option *ngFor="let item of equipmentList" [value]="item">{{ item }}</option>
-            </select>
-        </div>
-
-        <!-- Certificate No (auto-generated, readonly) -->
-        <div class="field">
-            <label>Certificate No</label>
-            <input [(ngModel)]="liftingForm.certificateNo" readonly>
-        </div>
-
-        <!-- Date of Examination -->
-        <div class="field">
-            <label>Date of Examination</label>
-            <input type="date" [(ngModel)]="liftingForm.dateOfExamination" (change)="onExaminationDateChange()">
-        </div>
-
-        <!-- Next Due Date with Duration Selector -->
-        <div class="field">
-            <label>Next Due Date</label>
-            <div class="due-date-group">
-            <div class="duration-btn-group">
-                <button type="button" class="duration-btn"
-                [class.active]="selectedDuration === '6months'"
-                (click)="setDuration('6months')">6 Months</button>
-                <button type="button" class="duration-btn"
-                [class.active]="selectedDuration === '1year'"
-                (click)="setDuration('1year')">1 Year</button>
-                <button type="button" class="duration-btn"
-                [class.active]="selectedDuration === '2years'"
-                (click)="setDuration('2years')">2 Years</button>
-            </div>
-            <input type="date" [(ngModel)]="liftingForm.nextDueDate" class="due-date-input">
-            </div>
-        </div>
-
-        <!-- Inspector Name -->
-        <div class="field">
-            <label>Inspector Name</label>
-            <select [(ngModel)]="liftingForm.inspectorName">
-            <option value="">Select Inspector</option>
-            <option *ngFor="let inspector of inspectorList" [value]="inspector">
-                {{ inspector }}
-            </option>
-            </select>
-        </div>
-
-
-        <!-- ══════════════════════════════════════════════════════
-            1. Name of Occupier (of factory)
-        ══════════════════════════════════════════════════════ -->
-        <div class="field full section-divider">
-            <span>1. Name of Occupier (of factory)</span>
-        </div>
-
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>1. Name of Occupier (of factory)</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['nameOfOccupier'] === true"
-                (click)="setFieldToggle('nameOfOccupier', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['nameOfOccupier'] === false"
-                (click)="setFieldToggle('nameOfOccupier', false)">No</button>
-            </div>
-            </div>
-            <input [(ngModel)]="liftingForm.nameOfOccupier"
-            [disabled]="fieldToggles['nameOfOccupier'] !== true"
-            [class.field-disabled]="fieldToggles['nameOfOccupier'] !== true">
-        </div>
-
-
-        <!-- ══════════════════════════════════════════════════════
-            2. Address of Factory
-        ══════════════════════════════════════════════════════ -->
-        <div class="field full section-divider">
-            <span>2. Address of Factory</span>
-        </div>
-
-        <div class="field full toggle-field">
-            <div class="toggle-field-header">
-            <label>2. Address of Factory</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['addressOfFactory'] === true"
-                (click)="setFieldToggle('addressOfFactory', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['addressOfFactory'] === false"
-                (click)="setFieldToggle('addressOfFactory', false)">No</button>
-            </div>
-            </div>
-            <textarea [(ngModel)]="liftingForm.addressOfFactory"
-            [disabled]="fieldToggles['addressOfFactory'] !== true"
-            [class.field-disabled]="fieldToggles['addressOfFactory'] !== true"></textarea>
-        </div>
-
-
-        <!-- ══════════════════════════════════════════════════════
-            3. Distinguishing number or mark / description
-                sufficient to identify the lifting machine,
-                chain, rope or lifting tackle
-        ══════════════════════════════════════════════════════ -->
-        <div class="field full section-divider">
-            <span>3. Distinguishing number or mark if any, description sufficient to identify the lifting machine, chain, rope or the lifting tackle</span>
-        </div>
-
-        <!-- 3a. Distinguishing Marks Description -->
-        <div class="field full toggle-field">
-            <div class="toggle-field-header">
-            <label>3. Distinguishing Marks / Description</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['distinguishingMarksDescription'] === true"
-                (click)="setFieldToggle('distinguishingMarksDescription', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['distinguishingMarksDescription'] === false"
-                (click)="setFieldToggle('distinguishingMarksDescription', false)">No</button>
-            </div>
-            </div>
-            <textarea [(ngModel)]="liftingForm.distinguishingMarksDescription"
-            [disabled]="fieldToggles['distinguishingMarksDescription'] !== true"
-            [class.field-disabled]="fieldToggles['distinguishingMarksDescription'] !== true"></textarea>
-        </div>
-
-        <!-- Model Number -->
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>Model Number</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['modelNumber'] === true"
-                (click)="setFieldToggle('modelNumber', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['modelNumber'] === false"
-                (click)="setFieldToggle('modelNumber', false)">No</button>
-            </div>
-            </div>
-            <input [(ngModel)]="liftingForm.modelNumber"
-            [disabled]="fieldToggles['modelNumber'] !== true"
-            [class.field-disabled]="fieldToggles['modelNumber'] !== true">
-        </div>
-
-        <!-- Serial Number -->
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>Serial Number</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['srNo'] === true"
-                (click)="setFieldToggle('srNo', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['srNo'] === false"
-                (click)="setFieldToggle('srNo', false)">No</button>
-            </div>
-            </div>
-            <input [(ngModel)]="liftingForm.srNo"
-            [disabled]="fieldToggles['srNo'] !== true"
-            [class.field-disabled]="fieldToggles['srNo'] !== true">
-        </div>
-
-        <!-- ID Number -->
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>ID Number</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['idNumber'] === true"
-                (click)="setFieldToggle('idNumber', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['idNumber'] === false"
-                (click)="setFieldToggle('idNumber', false)">No</button>
-            </div>
-            </div>
-            <input [(ngModel)]="liftingForm.idNumber"
-            [disabled]="fieldToggles['idNumber'] !== true"
-            [class.field-disabled]="fieldToggles['idNumber'] !== true">
-        </div>
-
-        <!-- Manufacturer Name -->
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>Manufacturer Name</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['manufacturerName'] === true"
-                (click)="setFieldToggle('manufacturerName', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['manufacturerName'] === false"
-                (click)="setFieldToggle('manufacturerName', false)">No</button>
-            </div>
-            </div>
-            <input [(ngModel)]="liftingForm.manufacturerName"
-            [disabled]="fieldToggles['manufacturerName'] !== true"
-            [class.field-disabled]="fieldToggles['manufacturerName'] !== true">
-        </div>
-
-        <!-- Manufacturer Year -->
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>Manufacturer Year</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['manufacturerYear'] === true"
-                (click)="setFieldToggle('manufacturerYear', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['manufacturerYear'] === false"
-                (click)="setFieldToggle('manufacturerYear', false)">No</button>
-            </div>
-            </div>
-            <input [(ngModel)]="liftingForm.manufacturerYear"
-            [disabled]="fieldToggles['manufacturerYear'] !== true"
-            [class.field-disabled]="fieldToggles['manufacturerYear'] !== true">
-        </div>
-
-        <!-- Capacity -->
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>Capacity</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['capacity'] === true"
-                (click)="setFieldToggle('capacity', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['capacity'] === false"
-                (click)="setFieldToggle('capacity', false)">No</button>
-            </div>
-            </div>
-            <input [(ngModel)]="liftingForm.capacity"
-            [disabled]="fieldToggles['capacity'] !== true"
-            [class.field-disabled]="fieldToggles['capacity'] !== true">
-        </div>
-
-        <!-- Safe Working Load -->
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>Safe Working Load (SWL)</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['safeWorkingLoad'] === true"
-                (click)="setFieldToggle('safeWorkingLoad', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['safeWorkingLoad'] === false"
-                (click)="setFieldToggle('safeWorkingLoad', false)">No</button>
-            </div>
-            </div>
-            <input [(ngModel)]="liftingForm.safeWorkingLoad"
-            [disabled]="fieldToggles['safeWorkingLoad'] !== true"
-            [class.field-disabled]="fieldToggles['safeWorkingLoad'] !== true">
-        </div>
-
-        <!-- Location -->
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>Location</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['location'] === true"
-                (click)="setFieldToggle('location', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['location'] === false"
-                (click)="setFieldToggle('location', false)">No</button>
-            </div>
-            </div>
-            <input [(ngModel)]="liftingForm.location"
-            [disabled]="fieldToggles['location'] !== true"
-            [class.field-disabled]="fieldToggles['location'] !== true">
-        </div>
-
-
-        <!-- ══════════════════════════════════════════════════════
-            4. Date when first taken into use in the factory
-        ══════════════════════════════════════════════════════ -->
-        <div class="field full section-divider">
-            <span>4. Date when the lifting machine, chain, rope or lifting tackle was first taken into use in the factory</span>
-        </div>
-
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>4. Year First Taken Into Use in the Factory</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['yearFirstTakenIntoUse'] === true"
-                (click)="setFieldToggle('yearFirstTakenIntoUse', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['yearFirstTakenIntoUse'] === false"
-                (click)="setFieldToggle('yearFirstTakenIntoUse', false)">No</button>
-            </div>
-            </div>
-            <input [(ngModel)]="liftingForm.yearFirstTakenIntoUse"
-            [disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true"
-            [class.field-disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true">
-        </div>
-
-
-        <!-- ══════════════════════════════════════════════════════
-            5. Previous Certificate Details
-        ══════════════════════════════════════════════════════ -->
-        <div class="field full section-divider">
-            <span>5. Date and number of the certificate relating to any test and examination made under sub-rules (1) and (7) together with the name and address of the person who issued the certificate</span>
-        </div>
-
-        <div class="field full toggle-field">
-            <div class="toggle-field-header">
-            <label>5. Previous Certificate Details</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['previousCertificateDetails'] === true"
-                (click)="setFieldToggle('previousCertificateDetails', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['previousCertificateDetails'] === false"
-                (click)="setFieldToggle('previousCertificateDetails', false)">No</button>
-            </div>
-            </div>
-            <textarea [(ngModel)]="liftingForm.previousCertificateDetails"
-            [disabled]="fieldToggles['previousCertificateDetails'] !== true"
-            [class.field-disabled]="fieldToggles['previousCertificateDetails'] !== true"></textarea>
-        </div>
-
-
-        <!-- ══════════════════════════════════════════════════════
-            6. Date of each periodical thorough examination
-                under Section 29 / sub-rule (6) and by whom
-        ══════════════════════════════════════════════════════ -->
-        <div class="field full section-divider">
-            <span>6. Date of each periodical thorough examination made under clause (iii) of clause 'a' of sub-section (1) of Section 29 of the Act and sub-rule (6) and by whom it was carried out</span>
-        </div>
-
-        <!-- 6. Periodical Examination Details -->
-        <div class="field full toggle-field">
-            <div class="toggle-field-header">
-            <label>6. Periodical Examination Details &amp; By Whom Carried Out</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['periodicalExaminationDetails'] === true"
-                (click)="setFieldToggle('periodicalExaminationDetails', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['periodicalExaminationDetails'] === false"
-                (click)="setFieldToggle('periodicalExaminationDetails', false)">No</button>
-            </div>
-            </div>
-            <textarea [(ngModel)]="liftingForm.periodicalExaminationDetails"
-            [disabled]="fieldToggles['periodicalExaminationDetails'] !== true"
-            [class.field-disabled]="fieldToggles['periodicalExaminationDetails'] !== true"></textarea>
-        </div>
-
-        <!-- 6a. Hydraulic / Electrical System Status -->
-        <div class="field full toggle-field">
-            <div class="toggle-field-header">
-            <label>6a. Hydraulic / Electrical System Status</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['hydraulicSystemStatus'] === true"
-                (click)="setFieldToggle('hydraulicSystemStatus', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['hydraulicSystemStatus'] === false"
-                (click)="setFieldToggle('hydraulicSystemStatus', false)">No</button>
-            </div>
-            </div>
-            <textarea [(ngModel)]="liftingForm.hydraulicSystemStatus"
-            [disabled]="fieldToggles['hydraulicSystemStatus'] !== true"
-            [class.field-disabled]="fieldToggles['hydraulicSystemStatus'] !== true"></textarea>
-        </div>
-
-        <!-- 6b. Frame, Girder & Structural Condition -->
-        <div class="field full toggle-field">
-            <div class="toggle-field-header">
-            <label>6b. Frame, Girder &amp; Structural Condition</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['frameAndForkCondition'] === true"
-                (click)="setFieldToggle('frameAndForkCondition', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['frameAndForkCondition'] === false"
-                (click)="setFieldToggle('frameAndForkCondition', false)">No</button>
-            </div>
-            </div>
-            <textarea [(ngModel)]="liftingForm.frameAndForkCondition"
-            [disabled]="fieldToggles['frameAndForkCondition'] !== true"
-            [class.field-disabled]="fieldToggles['frameAndForkCondition'] !== true"></textarea>
-        </div>
-
-        <!-- 6c. Overall Inspection Result -->
-        <div class="field full toggle-field">
-            <div class="toggle-field-header">
-            <label>6c. Overall Inspection Result</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['overallResult'] === true"
-                (click)="setFieldToggle('overallResult', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['overallResult'] === false"
-                (click)="setFieldToggle('overallResult', false)">No</button>
-            </div>
-            </div>
-            <textarea [(ngModel)]="liftingForm.overallResult"
-            [disabled]="fieldToggles['overallResult'] !== true"
-            [class.field-disabled]="fieldToggles['overallResult'] !== true"></textarea>
-        </div>
-
-
-        <!-- ══════════════════════════════════════════════════════
-            7. Annealing / Heat Treatment of Chain or
-                Lifting Tackle under sub-rule (5)
-        ══════════════════════════════════════════════════════ -->
-        <div class="field full section-divider">
-            <span>7. Date of annealing or other heat treatment of the chain, other lifting tackle made under sub-rule (5) and by whom it was carried out</span>
-        </div>
-
-        <div class="field full toggle-field">
-            <div class="toggle-field-header">
-            <label>7. Annealing / Heat Treatment Details &amp; By Whom Carried Out</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['annealingOrHeatTreatmentDetails'] === true"
-                (click)="setFieldToggle('annealingOrHeatTreatmentDetails', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['annealingOrHeatTreatmentDetails'] === false"
-                (click)="setFieldToggle('annealingOrHeatTreatmentDetails', false)">No</button>
-            </div>
-            </div>
-            <textarea [(ngModel)]="liftingForm.annealingOrHeatTreatmentDetails"
-            [disabled]="fieldToggles['annealingOrHeatTreatmentDetails'] !== true"
-            [class.field-disabled]="fieldToggles['annealingOrHeatTreatmentDetails'] !== true"></textarea>
-        </div>
-
-
-        <!-- ══════════════════════════════════════════════════════
-            8. Particulars of any defect affecting the safe
-                working load & steps taken to remedy
-        ══════════════════════════════════════════════════════ -->
-        <div class="field full section-divider">
-            <span>8. Particulars of any defect affecting the safe working load found at any such thorough examination or after annealing and steps taken to remedy such defects</span>
-        </div>
-
-        <div class="field full toggle-field">
-            <div class="toggle-field-header">
-            <label>8. Defects Particulars &amp; Steps Taken to Remedy</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['defectsParticulars'] === true"
-                (click)="setFieldToggle('defectsParticulars', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['defectsParticulars'] === false"
-                (click)="setFieldToggle('defectsParticulars', false)">No</button>
-            </div>
-            </div>
-            <textarea [(ngModel)]="liftingForm.defectsParticulars"
-            [disabled]="fieldToggles['defectsParticulars'] !== true"
-            [class.field-disabled]="fieldToggles['defectsParticulars'] !== true"></textarea>
-        </div>
-
-
-        <!-- ══════════════════════════════════════════════════════
-            9. Safe Working Load Assessed
-        ══════════════════════════════════════════════════════ -->
-        <div class="field full section-divider">
-            <span>9. Safe Working Load Assessed</span>
-        </div>
-
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>9. Safe Working Load Assessed</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['safeWorkingLoadAssessed'] === true"
-                (click)="setFieldToggle('safeWorkingLoadAssessed', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['safeWorkingLoadAssessed'] === false"
-                (click)="setFieldToggle('safeWorkingLoadAssessed', false)">No</button>
-            </div>
-            </div>
-            <input [(ngModel)]="liftingForm.safeWorkingLoadAssessed"
-            [disabled]="fieldToggles['safeWorkingLoadAssessed'] !== true"
-            [class.field-disabled]="fieldToggles['safeWorkingLoadAssessed'] !== true">
-        </div>
-
-
-        <!-- ══════════════════════════════════════════════════════
-            10. Remarks
-        ══════════════════════════════════════════════════════ -->
-        <div class="field full section-divider">
-            <span>10. Remarks</span>
-        </div>
-
-        <div class="field full">
-            <label>10. Remarks</label>
-            <textarea [(ngModel)]="liftingForm.remarks"></textarea>
-        </div>
-
-
-        <!-- ══════════════════════════════════════════════════════
-            FOOTER / CERTIFICATION
-        ══════════════════════════════════════════════════════ -->
-        <div class="field full section-divider">
-            <span>Footer / Certification</span>
-        </div>
-
-        <!-- Certified Date -->
-        <div class="field toggle-field">
-            <div class="toggle-field-header">
-            <label>Certified Date</label>
-            <div class="yes-no-group">
-                <button type="button" class="yn-btn yes"
-                [class.active]="fieldToggles['certifiedDate'] === true"
-                (click)="setFieldToggle('certifiedDate', true)">Yes</button>
-                <button type="button" class="yn-btn no"
-                [class.active]="fieldToggles['certifiedDate'] === false"
-                (click)="setFieldToggle('certifiedDate', false)">No</button>
-            </div>
-            </div>
-            <input type="date" [(ngModel)]="liftingForm.certifiedDate"
-            [disabled]="fieldToggles['certifiedDate'] !== true"
-            [class.field-disabled]="fieldToggles['certifiedDate'] !== true">
-        </div>
-
-        </div><!-- /form-grid -->
-
-        <div class="modal-footer">
-        <button class="btn-secondary" (click)="closeLiftingModal()">Cancel</button>
-        <button class="btn-primary" (click)="saveLifting()">Save Record</button>
-        
-        </div>
-
-    </div>
-    </div>
-
- <div id="print-section" *ngIf="selectedItem">
-
-  <!-- TITLE -->
-<h3 class="print-title">
-  {{ selectedItem.testName?.split('(')[0] }}
-  <span class="sub-text" *ngIf="selectedItem.testName?.includes('(')">
-    ({{ selectedItem.testName.split('(')[1] }}
-  </span>
-</h3>
-
-<!-- TOP ROW -->
-<div class="cert-top-row">
-  <div class="left">
-    <h5>Report No: {{ selectedItem.certificateNo }}</h5>
+  <!-- ── Loading ── -->
+  <div class="state-box" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading report…</p>
   </div>
 
-  <div class="right">
-    <h5>Date of Examination:
-    {{ selectedItem.dateOfExamination | date:'dd MMM yyyy' }} </h5>
+  <!-- ── Error ── -->
+  <div class="state-box" *ngIf="error && !loading">
+    <p class="error-text">Failed to load company details.</p>
+    <button class="btn-back" (click)="goBack()">← Go Back</button>
+  </div>
+
+  <!-- ── MAIN CONTENT ── -->
+  <ng-container *ngIf="!loading && !error && company">
+
+    <!-- HEADER -->
+    <div class="report-header">
+      <div>
+        <button class="btn-back" (click)="goBack()">← Back</button>
+        <h2>Company Report</h2>
+        <p>Company Profile &amp; Inspection Records</p>
+      </div>
+      <div class="header-right">
+        <div class="avatar">{{ company.companyName?.charAt(0)?.toUpperCase() }}</div>
+        <div>
+          <h3>{{ company.companyName }}</h3>
+          <small>{{ company.createdAt | date:'dd MMM yyyy' }}</small>
+        </div>
+        <button class="btn-primary" (click)="printReport()">🖨 Print</button>
+      </div>
+    </div>
+
+    <!-- COMPANY DETAIL CARDS -->
+    <div class="cards-grid">
+
+      <!-- General Information -->
+      <div class="report-card">
+        <div class="card-header">
+          <h4>General Information</h4>
+        </div>
+        <div class="info-row"><span>Company Name</span><strong>{{ company.companyName }}</strong></div>
+        <div class="info-row"><span>Contact Person</span><strong>{{ company.contactPerson }}</strong></div>
+        <div class="info-row"><span>Mobile</span><strong>{{ company.mobileNumber }}</strong></div>
+        <div class="info-row"><span>Email</span><strong>{{ company.email }}</strong></div>
+      </div>
+
+      <!-- Location -->
+      <div class="report-card">
+        <div class="card-header">
+          <h4>Location</h4>
+        </div>
+        <div class="info-row"><span>City</span><strong>{{ company.city }}</strong></div>
+        <div class="info-row"><span>State</span><strong>{{ company.state }}</strong></div>
+        <div class="info-row"><span>Pincode</span><strong>{{ company.pincode }}</strong></div>
+        <div class="info-row"><span>Factory Address</span><strong>{{ company.factoryAddress }}</strong></div>
+      </div>
+
+      <!-- LIFTING REPORTS TABLE -->
+      <div class="report-card full-width">
+        <div class="card-header section-header">
+          <h4>Lifting Equipment Inspection Reports</h4>
+          <button class="btn-primary" (click)="openAddLifting()">+ Add Record</button>
+        </div>
+
+        <!-- Filter -->
+        <div class="table-filter-bar">
+          <div class="filter-group">
+            <label>Filter by Machine</label>
+            <select [(ngModel)]="selectedTestName" (change)="filterByTestName()">
+              <option value="">All Machines</option>
+              <option *ngFor="let item of liftingTestOptions" [value]="item">{{ item }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div *ngIf="liftingReports.length; else noLifting">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Certificate No</th>
+                  <th>Equipment</th>
+                  <th>Model</th>
+                  <th>Serial No</th>
+                  <th>Manufacturer</th>
+                  <th>Capacity</th>
+                  <th>SWL Assessed</th>
+                  <th>Inspector</th>
+                  <th>Next Due</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of liftingReports; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td><span style="font-family:var(--font-mono);font-size:12px;">{{ item.certificateNo || '—' }}</span></td>
+                  <td>{{ item.equipmentName || '—' }}</td>
+                  <td>{{ item.modelNumber || '—' }}</td>
+                  <td>{{ item.srNo || '—' }}</td>
+                  <td>{{ item.manufacturerName || '—' }}</td>
+                  <td>{{ item.capacity || '—' }}</td>
+                  <td>{{ item.safeWorkingLoadAssessed || '—' }}</td>
+                  <td>{{ item.inspectorName || '—' }}</td>
+                  <td>{{ item.nextDueDate | date:'dd MMM yyyy' }}</td>
+                  <td>
+                    <div class="row-actions">
+                      <button class="btn-sm edit" (click)="openEditLifting(item)">Edit</button>
+                      <button class="btn-sm print" (click)="openPrintModal(item)">Print</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <ng-template #noLifting>
+          <div class="empty-block">No Lifting Records Found</div>
+        </ng-template>
+      </div>
+
+    </div>
+  </ng-container>
+</div>
+
+
+<!-- ============================================================
+     LIFTING MODAL
+============================================================ -->
+<div class="overlay" [class.open]="showLiftingModal" (click)="closeLiftingModal()">
+  <div class="modal modal-lg" (click)="$event.stopPropagation()">
+
+    <button class="close-btn" (click)="closeLiftingModal()">✕</button>
+    <h3>{{ liftingModalMode === 'add' ? 'Add Lifting Record' : 'Update Lifting Record' }}</h3>
+
+    <div class="form-grid">
+
+      <!-- ── Always-on fields ── -->
+
+      <div class="field">
+        <label>Test Name</label>
+        <select [(ngModel)]="liftingForm.testName" (change)="generateCertificateNo()">
+          <option value="">Select Test Name</option>
+          <option *ngFor="let item of liftingTestOptions" [value]="item">{{ item }}</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Equipment Name</label>
+        <select [(ngModel)]="liftingForm.equipmentName" (change)="generateCertificateNo()">
+          <option value="">Select Equipment</option>
+          <option *ngFor="let item of equipmentList" [value]="item">{{ item }}</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Certificate No</label>
+        <input [(ngModel)]="liftingForm.certificateNo" readonly placeholder="Auto-generated">
+      </div>
+
+      <div class="field">
+        <label>Date of Examination</label>
+        <input type="date" [(ngModel)]="liftingForm.dateOfExamination" (change)="onExaminationDateChange()">
+      </div>
+
+      <div class="field">
+        <label>Next Due Date</label>
+        <div class="due-date-group">
+          <div class="duration-btn-group">
+            <button type="button" class="duration-btn"
+              [class.active]="selectedDuration === '6months'"
+              (click)="setDuration('6months')">6 Months</button>
+            <button type="button" class="duration-btn"
+              [class.active]="selectedDuration === '1year'"
+              (click)="setDuration('1year')">1 Year</button>
+            <button type="button" class="duration-btn"
+              [class.active]="selectedDuration === '2years'"
+              (click)="setDuration('2years')">2 Years</button>
+          </div>
+          <input type="date" [(ngModel)]="liftingForm.nextDueDate" class="due-date-input">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Inspector Name</label>
+        <select [(ngModel)]="liftingForm.inspectorName">
+          <option value="">Select Inspector</option>
+          <option *ngFor="let inspector of inspectorList" [value]="inspector">{{ inspector }}</option>
+        </select>
+      </div>
+
+      <!-- ── Section 1 ── -->
+      <div class="field full section-divider"><span>1. Name of Occupier (of factory)</span></div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>1. Name of Occupier (of factory)</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['nameOfOccupier'] === true" (click)="setFieldToggle('nameOfOccupier', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['nameOfOccupier'] === false" (click)="setFieldToggle('nameOfOccupier', false)">No</button>
+          </div>
+        </div>
+        <input [(ngModel)]="liftingForm.nameOfOccupier"
+          [disabled]="fieldToggles['nameOfOccupier'] !== true"
+          [class.field-disabled]="fieldToggles['nameOfOccupier'] !== true">
+      </div>
+
+      <!-- ── Section 2 ── -->
+      <div class="field full section-divider"><span>2. Address of Factory</span></div>
+
+      <div class="field full toggle-field">
+        <div class="toggle-field-header">
+          <label>2. Address of Factory</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['addressOfFactory'] === true" (click)="setFieldToggle('addressOfFactory', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['addressOfFactory'] === false" (click)="setFieldToggle('addressOfFactory', false)">No</button>
+          </div>
+        </div>
+        <textarea [(ngModel)]="liftingForm.addressOfFactory"
+          [disabled]="fieldToggles['addressOfFactory'] !== true"
+          [class.field-disabled]="fieldToggles['addressOfFactory'] !== true"></textarea>
+      </div>
+
+      <!-- ── Section 3 ── -->
+      <div class="field full section-divider"><span>3. Distinguishing number or mark / description sufficient to identify the lifting machine, chain, rope or lifting tackle</span></div>
+
+      <div class="field full toggle-field">
+        <div class="toggle-field-header">
+          <label>3. Distinguishing Marks / Description</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['distinguishingMarksDescription'] === true" (click)="setFieldToggle('distinguishingMarksDescription', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['distinguishingMarksDescription'] === false" (click)="setFieldToggle('distinguishingMarksDescription', false)">No</button>
+          </div>
+        </div>
+        <textarea [(ngModel)]="liftingForm.distinguishingMarksDescription"
+          [disabled]="fieldToggles['distinguishingMarksDescription'] !== true"
+          [class.field-disabled]="fieldToggles['distinguishingMarksDescription'] !== true"></textarea>
+      </div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>Model Number</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['modelNumber'] === true" (click)="setFieldToggle('modelNumber', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['modelNumber'] === false" (click)="setFieldToggle('modelNumber', false)">No</button>
+          </div>
+        </div>
+        <input [(ngModel)]="liftingForm.modelNumber"
+          [disabled]="fieldToggles['modelNumber'] !== true"
+          [class.field-disabled]="fieldToggles['modelNumber'] !== true">
+      </div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>Serial Number</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['srNo'] === true" (click)="setFieldToggle('srNo', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['srNo'] === false" (click)="setFieldToggle('srNo', false)">No</button>
+          </div>
+        </div>
+        <input [(ngModel)]="liftingForm.srNo"
+          [disabled]="fieldToggles['srNo'] !== true"
+          [class.field-disabled]="fieldToggles['srNo'] !== true">
+      </div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>ID Number</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['idNumber'] === true" (click)="setFieldToggle('idNumber', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['idNumber'] === false" (click)="setFieldToggle('idNumber', false)">No</button>
+          </div>
+        </div>
+        <input [(ngModel)]="liftingForm.idNumber"
+          [disabled]="fieldToggles['idNumber'] !== true"
+          [class.field-disabled]="fieldToggles['idNumber'] !== true">
+      </div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>Manufacturer Name</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['manufacturerName'] === true" (click)="setFieldToggle('manufacturerName', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['manufacturerName'] === false" (click)="setFieldToggle('manufacturerName', false)">No</button>
+          </div>
+        </div>
+        <input [(ngModel)]="liftingForm.manufacturerName"
+          [disabled]="fieldToggles['manufacturerName'] !== true"
+          [class.field-disabled]="fieldToggles['manufacturerName'] !== true">
+      </div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>Manufacturer Year</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['manufacturerYear'] === true" (click)="setFieldToggle('manufacturerYear', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['manufacturerYear'] === false" (click)="setFieldToggle('manufacturerYear', false)">No</button>
+          </div>
+        </div>
+        <input [(ngModel)]="liftingForm.manufacturerYear"
+          [disabled]="fieldToggles['manufacturerYear'] !== true"
+          [class.field-disabled]="fieldToggles['manufacturerYear'] !== true">
+      </div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>Capacity</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['capacity'] === true" (click)="setFieldToggle('capacity', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['capacity'] === false" (click)="setFieldToggle('capacity', false)">No</button>
+          </div>
+        </div>
+        <input [(ngModel)]="liftingForm.capacity"
+          [disabled]="fieldToggles['capacity'] !== true"
+          [class.field-disabled]="fieldToggles['capacity'] !== true">
+      </div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>Safe Working Load (SWL)</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['safeWorkingLoad'] === true" (click)="setFieldToggle('safeWorkingLoad', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['safeWorkingLoad'] === false" (click)="setFieldToggle('safeWorkingLoad', false)">No</button>
+          </div>
+        </div>
+        <input [(ngModel)]="liftingForm.safeWorkingLoad"
+          [disabled]="fieldToggles['safeWorkingLoad'] !== true"
+          [class.field-disabled]="fieldToggles['safeWorkingLoad'] !== true">
+      </div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>Location</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['location'] === true" (click)="setFieldToggle('location', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['location'] === false" (click)="setFieldToggle('location', false)">No</button>
+          </div>
+        </div>
+        <input [(ngModel)]="liftingForm.location"
+          [disabled]="fieldToggles['location'] !== true"
+          [class.field-disabled]="fieldToggles['location'] !== true">
+      </div>
+
+      <!-- ── Section 4 ── -->
+      <div class="field full section-divider"><span>4. Date when the lifting machine was first taken into use in the factory</span></div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>4. Year First Taken Into Use</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['yearFirstTakenIntoUse'] === true" (click)="setFieldToggle('yearFirstTakenIntoUse', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['yearFirstTakenIntoUse'] === false" (click)="setFieldToggle('yearFirstTakenIntoUse', false)">No</button>
+          </div>
+        </div>
+        <input [(ngModel)]="liftingForm.yearFirstTakenIntoUse"
+          [disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true"
+          [class.field-disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true">
+      </div>
+
+      <!-- ── Section 5 ── -->
+      <div class="field full section-divider"><span>5. Date and number of certificate relating to previous test / examination</span></div>
+
+      <div class="field full toggle-field">
+        <div class="toggle-field-header">
+          <label>5. Previous Certificate Details</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['previousCertificateDetails'] === true" (click)="setFieldToggle('previousCertificateDetails', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['previousCertificateDetails'] === false" (click)="setFieldToggle('previousCertificateDetails', false)">No</button>
+          </div>
+        </div>
+        <textarea [(ngModel)]="liftingForm.previousCertificateDetails"
+          [disabled]="fieldToggles['previousCertificateDetails'] !== true"
+          [class.field-disabled]="fieldToggles['previousCertificateDetails'] !== true"></textarea>
+      </div>
+
+      <!-- ── Section 6 ── -->
+      <div class="field full section-divider"><span>6. Date of each periodical thorough examination (Section 29 / sub-rule 6)</span></div>
+
+      <div class="field full toggle-field">
+        <div class="toggle-field-header">
+          <label>6. Periodical Examination Details &amp; By Whom Carried Out</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['periodicalExaminationDetails'] === true" (click)="setFieldToggle('periodicalExaminationDetails', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['periodicalExaminationDetails'] === false" (click)="setFieldToggle('periodicalExaminationDetails', false)">No</button>
+          </div>
+        </div>
+        <textarea [(ngModel)]="liftingForm.periodicalExaminationDetails"
+          [disabled]="fieldToggles['periodicalExaminationDetails'] !== true"
+          [class.field-disabled]="fieldToggles['periodicalExaminationDetails'] !== true"></textarea>
+      </div>
+
+      <div class="field full toggle-field">
+        <div class="toggle-field-header">
+          <label>6a. Hydraulic / Electrical System Status</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['hydraulicSystemStatus'] === true" (click)="setFieldToggle('hydraulicSystemStatus', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['hydraulicSystemStatus'] === false" (click)="setFieldToggle('hydraulicSystemStatus', false)">No</button>
+          </div>
+        </div>
+        <textarea [(ngModel)]="liftingForm.hydraulicSystemStatus"
+          [disabled]="fieldToggles['hydraulicSystemStatus'] !== true"
+          [class.field-disabled]="fieldToggles['hydraulicSystemStatus'] !== true"></textarea>
+      </div>
+
+      <div class="field full toggle-field">
+        <div class="toggle-field-header">
+          <label>6b. Frame, Girder &amp; Structural Condition</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['frameAndForkCondition'] === true" (click)="setFieldToggle('frameAndForkCondition', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['frameAndForkCondition'] === false" (click)="setFieldToggle('frameAndForkCondition', false)">No</button>
+          </div>
+        </div>
+        <textarea [(ngModel)]="liftingForm.frameAndForkCondition"
+          [disabled]="fieldToggles['frameAndForkCondition'] !== true"
+          [class.field-disabled]="fieldToggles['frameAndForkCondition'] !== true"></textarea>
+      </div>
+
+      <div class="field full toggle-field">
+        <div class="toggle-field-header">
+          <label>6c. Overall Inspection Result</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['overallResult'] === true" (click)="setFieldToggle('overallResult', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['overallResult'] === false" (click)="setFieldToggle('overallResult', false)">No</button>
+          </div>
+        </div>
+        <textarea [(ngModel)]="liftingForm.overallResult"
+          [disabled]="fieldToggles['overallResult'] !== true"
+          [class.field-disabled]="fieldToggles['overallResult'] !== true"></textarea>
+      </div>
+
+      <!-- ── Section 7 ── -->
+      <div class="field full section-divider"><span>7. Annealing / Heat Treatment (sub-rule 5)</span></div>
+
+      <div class="field full toggle-field">
+        <div class="toggle-field-header">
+          <label>7. Annealing / Heat Treatment Details &amp; By Whom Carried Out</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['annealingOrHeatTreatmentDetails'] === true" (click)="setFieldToggle('annealingOrHeatTreatmentDetails', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['annealingOrHeatTreatmentDetails'] === false" (click)="setFieldToggle('annealingOrHeatTreatmentDetails', false)">No</button>
+          </div>
+        </div>
+        <textarea [(ngModel)]="liftingForm.annealingOrHeatTreatmentDetails"
+          [disabled]="fieldToggles['annealingOrHeatTreatmentDetails'] !== true"
+          [class.field-disabled]="fieldToggles['annealingOrHeatTreatmentDetails'] !== true"></textarea>
+      </div>
+
+      <!-- ── Section 8 ── -->
+      <div class="field full section-divider"><span>8. Particulars of any defect affecting the safe working load &amp; steps taken to remedy</span></div>
+
+      <div class="field full toggle-field">
+        <div class="toggle-field-header">
+          <label>8. Defects Particulars &amp; Steps Taken to Remedy</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['defectsParticulars'] === true" (click)="setFieldToggle('defectsParticulars', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['defectsParticulars'] === false" (click)="setFieldToggle('defectsParticulars', false)">No</button>
+          </div>
+        </div>
+        <textarea [(ngModel)]="liftingForm.defectsParticulars"
+          [disabled]="fieldToggles['defectsParticulars'] !== true"
+          [class.field-disabled]="fieldToggles['defectsParticulars'] !== true"></textarea>
+      </div>
+
+      <!-- ── Section 9 ── -->
+      <div class="field full section-divider"><span>9. Safe Working Load Assessed</span></div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>9. Safe Working Load Assessed</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['safeWorkingLoadAssessed'] === true" (click)="setFieldToggle('safeWorkingLoadAssessed', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['safeWorkingLoadAssessed'] === false" (click)="setFieldToggle('safeWorkingLoadAssessed', false)">No</button>
+          </div>
+        </div>
+        <input [(ngModel)]="liftingForm.safeWorkingLoadAssessed"
+          [disabled]="fieldToggles['safeWorkingLoadAssessed'] !== true"
+          [class.field-disabled]="fieldToggles['safeWorkingLoadAssessed'] !== true">
+      </div>
+
+      <!-- ── Section 10 ── -->
+      <div class="field full section-divider"><span>10. Remarks</span></div>
+
+      <div class="field full">
+        <label>10. Remarks</label>
+        <textarea [(ngModel)]="liftingForm.remarks"></textarea>
+      </div>
+
+      <!-- ── Footer / Certification ── -->
+      <div class="field full section-divider"><span>Footer / Certification</span></div>
+
+      <div class="field toggle-field">
+        <div class="toggle-field-header">
+          <label>Certified Date</label>
+          <div class="yes-no-group">
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['certifiedDate'] === true" (click)="setFieldToggle('certifiedDate', true)">Yes</button>
+            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['certifiedDate'] === false" (click)="setFieldToggle('certifiedDate', false)">No</button>
+          </div>
+        </div>
+        <input type="date" [(ngModel)]="liftingForm.certifiedDate"
+          [disabled]="fieldToggles['certifiedDate'] !== true"
+          [class.field-disabled]="fieldToggles['certifiedDate'] !== true">
+      </div>
+
+    </div><!-- /form-grid -->
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeLiftingModal()">Cancel</button>
+      <button class="btn-primary" (click)="saveLifting()">Save Record</button>
+    </div>
+
   </div>
 </div>
 
+
+<!-- ============================================================
+     PRINT SECTION
+============================================================ -->
+<div id="print-section" *ngIf="selectedItem">
+
+  <h3 class="print-title">
+    {{ selectedItem.testName?.split('(')[0] }}
+    <span class="sub-text" *ngIf="selectedItem.testName?.includes('(')">
+      ({{ selectedItem.testName.split('(')[1] }}
+    </span>
+  </h3>
+
+  <div class="cert-top-row">
+    <div class="left"><h5>Report No: {{ selectedItem.certificateNo }}</h5></div>
+    <div class="right"><h5>Date of Examination: {{ selectedItem.dateOfExamination | date:'dd MMM yyyy' }}</h5></div>
+  </div>
+
   <table class="print-table cert-table">
     <tbody>
-
       <tr>
         <td class="cn">1</td>
         <td class="cd">Name of Occupier (Factory)</td>
         <td class="cv">{{ selectedItem.nameOfOccupier }}</td>
       </tr>
-
       <tr>
         <td class="cn">2</td>
         <td class="cd">Address of the Factory</td>
         <td class="cv">{{ selectedItem.addressOfFactory }}</td>
       </tr>
-
       <tr>
         <td class="cn">3</td>
-        <td class="cd">
-         Distinguishing number of mark if any and description sufficient to identify the lifting machine.
-        </td>
+        <td class="cd">Distinguishing number or mark if any and description sufficient to identify the lifting machine.</td>
         <td class="cv">
           {{ selectedItem.equipmentName }}<br>
           Model: {{ selectedItem.modelNumber }}<br>
@@ -714,104 +556,71 @@
           Location: {{ selectedItem.location }}
         </td>
       </tr>
-
       <tr>
         <td class="cn">4</td>
         <td class="cd">Date when lifting machine was first taken in use in the factory.</td>
         <td class="cv">{{ selectedItem.yearFirstTakenIntoUse }}</td>
       </tr>
-
       <tr>
         <td class="cn">5</td>
-        <td class="cd">Date and number of certificate relating to any test or examination made under sub – rules (1) & (7) together with name & address of the person who issued the certificate. </td>
+        <td class="cd">Date and number of certificate relating to any test or examination made under sub-rules (1) &amp; (7) together with name &amp; address of the person who issued the certificate.</td>
         <td class="cv">{{ selectedItem.previousCertificateDetails }}</td>
       </tr>
-
       <tr>
         <td class="cn">6</td>
-        <td class="cd">
-         Date of each periodical thorough examination made under clause (a) (iii) sub section (i) of Section 29 of  the act and sub rule (6) and by who it was carried out. 
-        </td>
+        <td class="cd">Date of each periodical thorough examination made under clause (a)(iii) sub section (i) of Section 29 of the act and sub rule (6) and by whom it was carried out.</td>
         <td class="cv">
           {{ selectedItem.periodicalExaminationDetails }}<br>
           Inspector: {{ selectedItem.inspectorName }}<br>
           Date: {{ selectedItem.dateOfExamination | date:'dd MMM yyyy' }}
         </td>
       </tr>
-
       <tr>
         <td class="cn">7</td>
-        <td class="cd">
-         Date of annealing of other heat treatment of the chain and other lifting tackle made under sub rule (5) and by whom it was carried out.  
-        </td>
+        <td class="cd">Date of annealing or other heat treatment of the chain and other lifting tackle made under sub rule (5) and by whom it was carried out.</td>
         <td class="cv">
           Hydraulic: {{ selectedItem.hydraulicSystemStatus }}<br>
           Frame: {{ selectedItem.frameAndForkCondition }}<br>
           Result: {{ selectedItem.overallResult }}
         </td>
       </tr>
-
       <tr>
         <td class="cn">8</td>
-        <td class="cd">Particulars of any defect affecting the safe working load found at any such examination or after annealing and of the steps taken to remedy such defects.  </td>
+        <td class="cd">Particulars of any defect affecting the safe working load found at any such examination or after annealing and of the steps taken to remedy such defects.</td>
         <td class="cv">{{ selectedItem.annealingOrHeatTreatmentDetails }}</td>
       </tr>
-
       <tr>
         <td class="cn">9</td>
-        <td class="cd">Defects & Remedies</td>
+        <td class="cd">Defects &amp; Remedies</td>
         <td class="cv">{{ selectedItem.defectsParticulars }}</td>
       </tr>
-
       <tr>
         <td class="cn">10</td>
         <td class="cd">Safe Working Load Assessed</td>
         <td class="cv">{{ selectedItem.safeWorkingLoadAssessed }}</td>
       </tr>
-
     </tbody>
   </table>
 
-  <!-- FOOTER TEXT -->
-
-
-  <!-- FOOTER TEXT -->
-<div class="cert-footer">
-
-  <p>
-    I certify that on {{ selectedItem.certifiedDate | date:'dd MMM yyyy' }},
-    I have thoroughly examined the lifting equipment and found it safe.
-  </p>
-
-  <h6 class="next-due">
-    Next Due Date: {{ selectedItem.nextDueDate | date:'dd MMM yyyy' }}
-  </h6>
-
-  <!-- SPACE FOR STAMP -->
-  <div class="stamp-space"></div>
-
-  <!-- SIGNATURE SECTION -->
-  <div class="cert-signature-row">
-
-    <!-- LEFT SIDE -->
-    <div class="sign-left">
-      <p><b> {{ selectedItem.inspectorName }} (Competent Person)</b></p>
-      <p>Competent Person U/s 21(2), 28, 29, 31, 65 (C)</p>
-      <p>Approved by the CIF&B, Jaipur</p>
-      <p>Lic No. CMP-883/2025 dt. 22.12.2025</p>
+  <div class="cert-footer">
+    <p>I certify that on {{ selectedItem.certifiedDate | date:'dd MMM yyyy' }}, I have thoroughly examined the lifting equipment and found it safe.</p>
+    <h6 class="next-due">Next Due Date: {{ selectedItem.nextDueDate | date:'dd MMM yyyy' }}</h6>
+    <div class="stamp-space"></div>
+    <div class="cert-signature-row">
+      <div class="sign-left">
+        <p><b>{{ selectedItem.inspectorName }} (Competent Person)</b></p>
+        <p>Competent Person U/s 21(2), 28, 29, 31, 65 (C)</p>
+        <p>Approved by the CIF&amp;B, Jaipur</p>
+        <p>Lic No. CMP-883/2025 dt. 22.12.2025</p>
+      </div>
+      <div class="sign-right">
+        <p><b>Counter Sign</b></p>
+      </div>
     </div>
-
-    <!-- RIGHT SIDE -->
-    <div class="sign-right">
-      <p><b>Counter Sign</b></p>
+    <div class="cert-disclaimer">
+      Disclaimer:- This report of examination reflects the conditions of the machine/equipment as on date.
+      We accept no liability/responsibility whatsoever in case of any accidents/mishap on/with/due to this machine/equipment.
     </div>
   </div>
-  <!-- DISCLAIMER -->
-  <div class="cert-disclaimer">
-    Disclaimer:- This report of examination reflects the conditions of the
-    machine/equipment as on date. We accept no liability/responsibility
-    whatsoever in case of any accidents/mishap on/with/due to this
-    machine/equipment.
-  </div>
-</div>
+
 </div>
