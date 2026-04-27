@@ -87,20 +87,136 @@ export interface LiftingEquipmentInspectionRecord {
   nextDueDate?: string;
 }
 
+/* =========================================================
+   PRESSURE VESSEL CERTIFICATE — full model matching API
+========================================================= */
 export interface PressureVesselCertificate {
   id?: number;
+
+  /* =========================================================
+     COMMON FIELDS
+  ========================================================= */
   companyId: number;
-  vesselName: string;
-  serialNumber: string;
-  manufacturer: string;
-  capacity: string;
-  workingPressure: string;
-  certificateNumber: string;
-  issueDate: string;
-  expiryDate: string;
-  inspectorName: string;
-  status: string;
+
+  /* =========================================================
+     HEADER DETAILS
+  ========================================================= */
+  certificateNo: string;
+  formNo: string;
+  ruleNumber: string;
+
+  /* =========================================================
+     1. Name of Occupier (or Factory)
+  ========================================================= */
+  nameOfOccupier: string;
+
+  /* =========================================================
+     2. Situation & Address of the Factory
+  ========================================================= */
+  addressOfFactory: string;
+
+  /* =========================================================
+     3. Name, Description and Distinctive Number
+        of Pressure Vessel
+  ========================================================= */
+  vesselDescription: string;
+  vesselCapacity: string;
+  vesselIdNo: string;
+  vesselLocation: string;
+
+  /* =========================================================
+     4. Name and Address of Manufacturer
+  ========================================================= */
+  manufacturerName: string;
+
+  /* =========================================================
+     5. Nature of Process
+  ========================================================= */
+  natureOfProcess: string;
+
+  /* =========================================================
+     6. Particulars of Pressure Vessel or Plant
+  ========================================================= */
+  dateOfConstruction: string;
+  thicknessOfWalls: string;
+  dateFirstTakenIntoUse: string;
+  maxPermissibleWorkingPressureByManufacturer: string;
+  designPressure: string;
+  previousHistoryAndLastReportSeen: string;
+
+  /* =========================================================
+     7. Hydrostatic Test Details
+  ========================================================= */
+  dateOfLastHydrostaticTest: string;
+  pressureAppliedLastHydrostatic: string;
+
+  /* =========================================================
+     8. Exposed to Weather
+  ========================================================= */
+  exposedToWeather: string;
+
+  /* =========================================================
+     9. Parts Inaccessible
+  ========================================================= */
+  partsInaccessible: string;
+
+  /* =========================================================
+     10. Examination and Tests Made
+  ========================================================= */
+  examinationAndTestsMade: string;
+
+  /* =========================================================
+     11. Condition of Pressure Vessel
+  ========================================================= */
+  conditionExternal: string;
+  conditionInternal: string;
+
+  /* =========================================================
+     12. Fittings Provided
+  ========================================================= */
+  fittingsProvided: string;
+
+  /* =========================================================
+     13. Fittings Maintained and Checked
+  ========================================================= */
+  fittingsMaintainedAndChecked: string;
+
+  /* =========================================================
+     14. Repairs Required
+  ========================================================= */
+  repairsRequired: string;
+
+  /* =========================================================
+     15. Maximum Permissible Working Pressure Calculated
+  ========================================================= */
+  maxPermissibleWorkingPressureCalculated: string;
+
+  /* =========================================================
+     16. Repairs Affecting Working Pressure
+  ========================================================= */
+  beforeExpirationPeriod: string;
+  afterExpirationIfNotCompleted: string;
+  afterCompletionOfRepairs: string;
+
+  /* =========================================================
+     17. Other Observations
+  ========================================================= */
+  otherObservations: string;
+
+  /* =========================================================
+     CERTIFICATION DETAILS
+  ========================================================= */
+  dateOfExamination: string;
+  nextDueDateForExamination: string;
+  competentPersonName: string;
+
+  /* =========================================================
+     SYSTEM FIELDS
+  ========================================================= */
+  createdAt?: string;
+  updatedAt?: string;
 }
+
 
 export interface RestApiResponse {
   code: string;
@@ -123,4 +239,36 @@ export interface RestApiResponse {
 export interface AdminLogInRequest {
   email: string;
   password: string;
+}
+
+export interface PowerPress {
+  id?: number;
+  companyId: number;
+  certificateNo: string;
+  dateOfExamination: string;        // maps to LocalDate
+  // Factory
+  occupierName: string;
+  factoryAddress: string;
+  // Machine
+  machineType: string;
+  serialNo: string;
+  modelNo: string;
+  capacity: string;
+  manufacturerName: string;
+  yearOfManufacture: string;
+  location: string;
+  dateFirstUse: string;             // maps to LocalDate
+  // Examination
+  lastExaminedBy: string;
+  lastExaminationDate: string;      // maps to LocalDate
+  defectsObservation: string;
+  // Certification
+  certifiedBy: string;
+  designation: string;
+  licenseNo: string;
+  approvalDetails: string;
+  // Schedule
+  nextDueDate: string;              // maps to LocalDate
+  createdAt?: string;
+  updatedAt?: string;
 }

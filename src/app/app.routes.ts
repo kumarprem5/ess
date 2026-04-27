@@ -40,6 +40,8 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'login'
-  }
+  },
+
+  // { path: 'verify', loadComponent: () => import('..../verify-component').then(m => m.VerifyComponent) }
 
 ];

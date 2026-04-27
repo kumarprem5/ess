@@ -4,7 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
   RestApiResponse, AdminLogInRequest, CompanyProfile,
-  LiftingEquipmentInspectionRecord, PressureVesselCertificate
+  LiftingEquipmentInspectionRecord, PressureVesselCertificate,
+  PowerPress
 } from "../model/models.model";
  
 @Injectable({ providedIn: 'root' })
@@ -90,5 +91,27 @@ export class ApiService {
   }
   deletePressureCertificate(id: number, companyId: number): Observable<RestApiResponse> {
     return this.http.delete<RestApiResponse>(`${this.base}/pressure-vessel/${id}?companyId=${companyId}`, { headers: this.headers() });
+  }
+
+  // ══════════════════════════════════════════════════════════
+// ADD THESE METHODS TO: src/app/shared/service/api-service.ts
+// (import PowerPress from models.model first)
+// ══════════════════════════════════════════════════════════
+
+  // Power Press
+  createPowerPress(r: PowerPress): Observable<RestApiResponse> {
+    return this.http.post<RestApiResponse>(`${this.base}/power-press`, r, { headers: this.headers() });
+  }
+  updatePowerPress(id: number, r: PowerPress): Observable<RestApiResponse> {
+    return this.http.put<RestApiResponse>(`${this.base}/power-press/${id}`, r, { headers: this.headers() });
+  }
+  getPowerPressById(id: number, companyId: number): Observable<RestApiResponse> {
+    return this.http.get<RestApiResponse>(`${this.base}/power-press/${id}?companyId=${companyId}`, { headers: this.headers() });
+  }
+  getAllPowerPressByCompany(companyId: number): Observable<RestApiResponse> {
+    return this.http.get<RestApiResponse>(`${this.base}/power-press/company/${companyId}`, { headers: this.headers() });
+  }
+  deletePowerPress(id: number, companyId: number): Observable<RestApiResponse> {
+    return this.http.delete<RestApiResponse>(`${this.base}/power-press/${id}?companyId=${companyId}`, { headers: this.headers() });
   }
 }

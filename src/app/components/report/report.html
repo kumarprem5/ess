@@ -1,21 +1,24 @@
+<!-- ══════════════════════════════════════════════════════════
+     REPORT PAGE
+══════════════════════════════════════════════════════════ -->
 <div class="report-page">
 
-  <!-- ── Loading ── -->
+  <!-- Loading -->
   <div class="state-box" *ngIf="loading">
     <div class="spinner"></div>
     <p>Loading report…</p>
   </div>
 
-  <!-- ── Error ── -->
+  <!-- Error -->
   <div class="state-box" *ngIf="error && !loading">
     <p class="error-text">Failed to load company details.</p>
     <button class="btn-back" (click)="goBack()">← Go Back</button>
   </div>
 
-  <!-- ── MAIN CONTENT ── -->
+  <!-- MAIN CONTENT -->
   <ng-container *ngIf="!loading && !error && company">
 
-    <!-- HEADER -->
+    <!-- ── HEADER ── -->
     <div class="report-header">
       <div>
         <button class="btn-back" (click)="goBack()">← Back</button>
@@ -26,13 +29,12 @@
         <div class="avatar">{{ company.companyName?.charAt(0)?.toUpperCase() }}</div>
         <div>
           <h3>{{ company.companyName }}</h3>
-          <small>{{ company.createdAt | date:'dd MMM yyyy' }}</small>
+          <small>{{ company.createdAt | date:'dd-MM-yyyy' }}</small>
         </div>
-        <button class="btn-primary" (click)="printReport()">🖨 Print</button>
       </div>
     </div>
 
-    <!-- COMPANY DETAIL CARDS -->
+    <!-- ── DETAIL CARDS ── -->
     <div class="cards-grid">
 
       <!-- General Information -->
@@ -49,7 +51,7 @@
       <!-- Location -->
       <div class="report-card">
         <div class="card-header">
-          <h4>Location</h4>
+          <h4>Factory Location</h4>
         </div>
         <div class="info-row"><span>City</span><strong>{{ company.city }}</strong></div>
         <div class="info-row"><span>State</span><strong>{{ company.state }}</strong></div>
@@ -57,55 +59,49 @@
         <div class="info-row"><span>Factory Address</span><strong>{{ company.factoryAddress }}</strong></div>
       </div>
 
-      <!-- LIFTING REPORTS TABLE -->
+      <!-- ── LIFTING REPORTS TABLE ── -->
       <div class="report-card full-width">
         <div class="card-header section-header">
           <h4>Lifting Equipment Inspection Reports</h4>
           <button class="btn-primary" (click)="openAddLifting()">+ Add Record</button>
         </div>
-
-        <!-- Filter -->
-        <div class="table-filter-bar">
-          <div class="filter-group">
-            <label>Filter by Machine</label>
-            <select [(ngModel)]="selectedTestName" (change)="filterByTestName()">
-              <option value="">All Machines</option>
-              <option *ngFor="let item of liftingTestOptions" [value]="item">{{ item }}</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Table -->
         <div *ngIf="liftingReports.length; else noLifting">
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th style="width:36px;">
+                    <input type="checkbox" class="bulk-checkbox"
+                      [checked]="selectedLiftingIds.size === liftingReports.length && liftingReports.length > 0"
+                      [indeterminate]="selectedLiftingIds.size > 0 && selectedLiftingIds.size < liftingReports.length"
+                      (change)="selectAllLifting()">
+                  </th>
+                  <th>Sr.No</th>
                   <th>Certificate No</th>
                   <th>Equipment</th>
                   <th>Model</th>
                   <th>Serial No</th>
                   <th>Manufacturer</th>
                   <th>Capacity</th>
-                  <th>SWL Assessed</th>
-                  <th>Inspector</th>
                   <th>Next Due</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of liftingReports; let i = index">
+                <tr *ngFor="let item of liftingReports; let i = index"
+                  [class.row-selected]="selectedLiftingIds.has(item.id!)">
+                  <td>
+                    <input type="checkbox" class="bulk-checkbox" [checked]="selectedLiftingIds.has(item.id!)"
+                      (change)="toggleLiftingSelection(item.id!)">
+                  </td>
                   <td>{{ i + 1 }}</td>
-                  <td><span style="font-family:var(--font-mono);font-size:12px;">{{ item.certificateNo || '—' }}</span></td>
+                  <td><span style="font-family:monospace;font-size:12px;">{{ item.certificateNo || '—' }}</span></td>
                   <td>{{ item.equipmentName || '—' }}</td>
                   <td>{{ item.modelNumber || '—' }}</td>
                   <td>{{ item.srNo || '—' }}</td>
                   <td>{{ item.manufacturerName || '—' }}</td>
                   <td>{{ item.capacity || '—' }}</td>
-                  <td>{{ item.safeWorkingLoadAssessed || '—' }}</td>
-                  <td>{{ item.inspectorName || '—' }}</td>
-                  <td>{{ item.nextDueDate | date:'dd MMM yyyy' }}</td>
+                  <td>{{ item.nextDueDate | date:'dd-MM-yyyy' }}</td>
                   <td>
                     <div class="row-actions">
                       <button class="btn-sm edit" (click)="openEditLifting(item)">Edit</button>
@@ -117,29 +113,166 @@
             </table>
           </div>
         </div>
-
         <ng-template #noLifting>
           <div class="empty-block">No Lifting Records Found</div>
         </ng-template>
       </div>
 
-    </div>
+      <!-- ── PRESSURE VESSEL REPORTS TABLE ── -->
+      <div class="report-card full-width">
+        <div class="card-header section-header">
+          <h4>Pressure Vessel Inspection Reports</h4>
+          <button class="btn-primary" (click)="openAddPressure()">+ Add Record</button>
+        </div>
+        <div *ngIf="pressureReports.length; else noPressure">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:36px;">
+                    <input type="checkbox" class="bulk-checkbox"
+                      [checked]="selectedPvIds.size === pressureReports.length && pressureReports.length > 0"
+                      [indeterminate]="selectedPvIds.size > 0 && selectedPvIds.size < pressureReports.length"
+                      (change)="selectAllPv()">
+                  </th>
+                  <th>Sr.No</th>
+                  <th>Certificate No</th>
+                  <th>Vessel</th>
+                  <th>Capacity</th>
+                  <th>Vessel ID</th>
+                  <th>Location</th>
+                  <th>Manufacturer</th>
+                  <th>Next Due</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let pv of pressureReports; let i = index" [class.row-selected]="selectedPvIds.has(pv.id!)">
+                  <td>
+                    <input type="checkbox" class="bulk-checkbox" [checked]="selectedPvIds.has(pv.id!)"
+                      (change)="togglePvSelection(pv.id!)">
+                  </td>
+                  <td>{{ i + 1 }}</td>
+                  <td><span style="font-family:monospace;font-size:12px;">{{ pv.certificateNo || '—' }}</span></td>
+                  <td>{{ pv.vesselDescription || '—' }}</td>
+                  <td>{{ pv.vesselCapacity || '—' }}</td>
+                  <td>{{ pv.vesselIdNo || '—' }}</td>
+                  <td>{{ pv.vesselLocation || '—' }}</td>
+                  <td>{{ pv.manufacturerName || '—' }}</td>
+                  <td>{{ safeDateFormat(pv.nextDueDateForExamination) }}</td>
+                  <td>
+                    <div class="row-actions">
+                      <button class="btn-sm edit" (click)="openEditPressure(pv)">Edit</button>
+                      <button class="btn-sm print" (click)="openPrintPressure(pv)">Print</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <ng-template #noPressure>
+          <div class="empty-block">No Pressure Vessel Records Found</div>
+        </ng-template>
+      </div>
+
+      <!-- ── POWER PRESS REPORTS TABLE ── -->
+      <div class="report-card full-width">
+        <div class="card-header section-header">
+          <h4>Power Press / Dangerous Machine Inspection Reports</h4>
+          <button class="btn-primary" (click)="openAddPowerPress()">+ Add Record</button>
+        </div>
+        <div *ngIf="powerPressReports.length; else noPowerPress">
+          <div class="table-wrap">
+            <table>
+<thead>
+  <tr>
+    <th style="width:36px;">
+      <input type="checkbox" class="bulk-checkbox"
+        [checked]="selectedPpIds.size === powerPressReports.length && powerPressReports.length > 0"
+        [indeterminate]="selectedPpIds.size > 0 && selectedPpIds.size < powerPressReports.length"
+        (change)="selectAllPp()">
+    </th>
+    <th>Sr.No</th>
+    <th>Certificate No</th>
+    <th>Machine Type</th>
+    <th>Serial No</th>
+    <th>Capacity</th>
+    <th>Location</th>
+    <th>Manufacturer</th>
+    <th>Next Due</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+<tbody>
+  <tr *ngFor="let pp of powerPressReports; let i = index"
+    [class.row-selected]="selectedPpIds.has(pp.id!)">
+    <td>
+      <input type="checkbox" class="bulk-checkbox"
+        [checked]="selectedPpIds.has(pp.id!)"
+        (change)="togglePpSelection(pp.id!)">
+    </td>
+    <td>{{ i + 1 }}</td>
+    <td><span style="font-family:monospace;font-size:12px;">{{ pp.certificateNo || '—' }}</span></td>
+    <td>{{ pp.machineType || '—' }}</td>
+    <td>{{ pp.serialNo || '—' }}</td>
+    <td>{{ pp.capacity || '—' }}</td>
+    <td>{{ pp.location || '—' }}</td>
+    <td>{{ pp.manufacturerName || '—' }}</td>
+    <td>{{ safeDateFormat(pp.nextDueDate) }}</td>
+    <td>
+      <div class="row-actions">
+        <button class="btn-sm edit" (click)="openEditPowerPress(pp)">Edit</button>
+        <button class="btn-sm print" (click)="openPrintPowerPress(pp)">Print</button>
+      </div>
+    </td>
+  </tr>
+</tbody>
+            </table>
+          </div>
+        </div>
+        <ng-template #noPowerPress>
+          <div class="empty-block">No Power Press / Dangerous Machine Records Found</div>
+        </ng-template>
+      </div>
+
+    </div><!-- /cards-grid -->
   </ng-container>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════
+     BULK PRINT FLOATING BAR
+══════════════════════════════════════════════════════════ -->
+<div class="bulk-print-bar" *ngIf="totalSelected > 0">
+  <div class="bulk-print-bar-info">
+    <span class="bulk-count-badge">{{ totalSelected }}</span>
+    <span>record{{ totalSelected > 1 ? 's' : '' }} selected</span>
+    <span class="bulk-breakdown"
+      *ngIf="selectedLiftingIds.size > 0 || selectedPvIds.size > 0 || selectedPpIds.size > 0">
+      (
+      <ng-container *ngIf="selectedLiftingIds.size > 0">{{ selectedLiftingIds.size }} Lifting</ng-container>
+      <ng-container *ngIf="selectedLiftingIds.size > 0 && (selectedPvIds.size > 0 || selectedPpIds.size > 0)"> · </ng-container>
+      <ng-container *ngIf="selectedPvIds.size > 0">{{ selectedPvIds.size }} PV</ng-container>
+      <ng-container *ngIf="selectedPvIds.size > 0 && selectedPpIds.size > 0"> · </ng-container>
+      <ng-container *ngIf="selectedPpIds.size > 0">{{ selectedPpIds.size }} PP</ng-container>
+      )
+    </span>
+  </div>
+  <div class="bulk-print-bar-actions">
+    <button class="btn-bulk-clear" (click)="clearAllSelections()">✕ Clear</button>
+    <button class="btn-bulk-print" (click)="printSelected()">🖨 Print Selected</button>
+  </div>
+</div>
 
-<!-- ============================================================
-     LIFTING MODAL
-============================================================ -->
-<div class="overlay" [class.open]="showLiftingModal" (click)="closeLiftingModal()">
+
+<!-- ══════════════════════════════════════════════════════════
+     LIFTING MODAL  (unchanged)
+══════════════════════════════════════════════════════════ -->
+<div class="overlay" [class.open]="showLiftingModal">
   <div class="modal modal-lg" (click)="$event.stopPropagation()">
-
     <button class="close-btn" (click)="closeLiftingModal()">✕</button>
     <h3>{{ liftingModalMode === 'add' ? 'Add Lifting Record' : 'Update Lifting Record' }}</h3>
-
     <div class="form-grid">
-
-      <!-- ── Always-on fields ── -->
 
       <div class="field">
         <label>Test Name</label>
@@ -148,7 +281,13 @@
           <option *ngFor="let item of liftingTestOptions" [value]="item">{{ item }}</option>
         </select>
       </div>
-
+      <div class="field">
+        <label>Rules &amp; Section</label>
+        <select [(ngModel)]="liftingForm.sectionRule">
+          <option value="">Select Rules &amp; Section</option>
+          <option *ngFor="let item of sectionRuleOptions" [value]="item">{{ item }}</option>
+        </select>
+      </div>
       <div class="field">
         <label>Equipment Name</label>
         <select [(ngModel)]="liftingForm.equipmentName" (change)="generateCertificateNo()">
@@ -156,471 +295,1231 @@
           <option *ngFor="let item of equipmentList" [value]="item">{{ item }}</option>
         </select>
       </div>
-
       <div class="field">
         <label>Certificate No</label>
         <input [(ngModel)]="liftingForm.certificateNo" readonly placeholder="Auto-generated">
       </div>
-
       <div class="field">
         <label>Date of Examination</label>
         <input type="date" [(ngModel)]="liftingForm.dateOfExamination" (change)="onExaminationDateChange()">
       </div>
-
       <div class="field">
         <label>Next Due Date</label>
         <div class="due-date-group">
           <div class="duration-btn-group">
-            <button type="button" class="duration-btn"
-              [class.active]="selectedDuration === '6months'"
-              (click)="setDuration('6months')">6 Months</button>
-            <button type="button" class="duration-btn"
-              [class.active]="selectedDuration === '1year'"
-              (click)="setDuration('1year')">1 Year</button>
-            <button type="button" class="duration-btn"
-              [class.active]="selectedDuration === '2years'"
-              (click)="setDuration('2years')">2 Years</button>
+            <button type="button" class="duration-btn" [class.active]="selectedDuration === '6months'" (click)="setDuration('6months')">6 Months</button>
+            <button type="button" class="duration-btn" [class.active]="selectedDuration === '1year'" (click)="setDuration('1year')">1 Year</button>
+            <button type="button" class="duration-btn" [class.active]="selectedDuration === '2years'" (click)="setDuration('2years')">2 Years</button>
           </div>
           <input type="date" [(ngModel)]="liftingForm.nextDueDate" class="due-date-input">
         </div>
       </div>
-
       <div class="field">
         <label>Inspector Name</label>
-        <select [(ngModel)]="liftingForm.inspectorName">
+        <select [(ngModel)]="liftingForm.inspectorName" (ngModelChange)="updatePeriodicalDetails()">
           <option value="">Select Inspector</option>
           <option *ngFor="let inspector of inspectorList" [value]="inspector">{{ inspector }}</option>
         </select>
       </div>
 
-      <!-- ── Section 1 ── -->
       <div class="field full section-divider"><span>1. Name of Occupier (of factory)</span></div>
-
       <div class="field toggle-field">
         <div class="toggle-field-header">
           <label>1. Name of Occupier (of factory)</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['nameOfOccupier'] === true" (click)="setFieldToggle('nameOfOccupier', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['nameOfOccupier'] === false" (click)="setFieldToggle('nameOfOccupier', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['nameOfOccupier'] === false" (click)="setFieldToggle('nameOfOccupier', false)">No</button>
           </div>
         </div>
-        <input [(ngModel)]="liftingForm.nameOfOccupier"
-          [disabled]="fieldToggles['nameOfOccupier'] !== true"
-          [class.field-disabled]="fieldToggles['nameOfOccupier'] !== true">
+        <input [(ngModel)]="liftingForm.nameOfOccupier" [disabled]="fieldToggles['nameOfOccupier'] !== true" [class.field-disabled]="fieldToggles['nameOfOccupier'] !== true">
       </div>
 
-      <!-- ── Section 2 ── -->
       <div class="field full section-divider"><span>2. Address of Factory</span></div>
-
       <div class="field full toggle-field">
         <div class="toggle-field-header">
           <label>2. Address of Factory</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['addressOfFactory'] === true" (click)="setFieldToggle('addressOfFactory', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['addressOfFactory'] === false" (click)="setFieldToggle('addressOfFactory', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['addressOfFactory'] === false" (click)="setFieldToggle('addressOfFactory', false)">No</button>
           </div>
         </div>
-        <textarea [(ngModel)]="liftingForm.addressOfFactory"
-          [disabled]="fieldToggles['addressOfFactory'] !== true"
-          [class.field-disabled]="fieldToggles['addressOfFactory'] !== true"></textarea>
+        <textarea [(ngModel)]="liftingForm.addressOfFactory" [disabled]="fieldToggles['addressOfFactory'] !== true" [class.field-disabled]="fieldToggles['addressOfFactory'] !== true"></textarea>
       </div>
 
-      <!-- ── Section 3 ── -->
       <div class="field full section-divider"><span>3. Distinguishing number or mark / description sufficient to identify the lifting machine, chain, rope or lifting tackle</span></div>
-
-      <div class="field full toggle-field">
-        <div class="toggle-field-header">
-          <label>3. Distinguishing Marks / Description</label>
-          <div class="yes-no-group">
-            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['distinguishingMarksDescription'] === true" (click)="setFieldToggle('distinguishingMarksDescription', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['distinguishingMarksDescription'] === false" (click)="setFieldToggle('distinguishingMarksDescription', false)">No</button>
-          </div>
-        </div>
-        <textarea [(ngModel)]="liftingForm.distinguishingMarksDescription"
-          [disabled]="fieldToggles['distinguishingMarksDescription'] !== true"
-          [class.field-disabled]="fieldToggles['distinguishingMarksDescription'] !== true"></textarea>
-      </div>
-
       <div class="field toggle-field">
         <div class="toggle-field-header">
           <label>Model Number</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['modelNumber'] === true" (click)="setFieldToggle('modelNumber', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['modelNumber'] === false" (click)="setFieldToggle('modelNumber', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['modelNumber'] === false" (click)="setFieldToggle('modelNumber', false)">No</button>
           </div>
         </div>
-        <input [(ngModel)]="liftingForm.modelNumber"
-          [disabled]="fieldToggles['modelNumber'] !== true"
-          [class.field-disabled]="fieldToggles['modelNumber'] !== true">
+        <input [(ngModel)]="liftingForm.modelNumber" [disabled]="fieldToggles['modelNumber'] !== true" [class.field-disabled]="fieldToggles['modelNumber'] !== true">
       </div>
-
       <div class="field toggle-field">
         <div class="toggle-field-header">
           <label>Serial Number</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['srNo'] === true" (click)="setFieldToggle('srNo', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['srNo'] === false" (click)="setFieldToggle('srNo', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['srNo'] === false" (click)="setFieldToggle('srNo', false)">No</button>
           </div>
         </div>
-        <input [(ngModel)]="liftingForm.srNo"
-          [disabled]="fieldToggles['srNo'] !== true"
-          [class.field-disabled]="fieldToggles['srNo'] !== true">
+        <input [(ngModel)]="liftingForm.srNo" [disabled]="fieldToggles['srNo'] !== true" [class.field-disabled]="fieldToggles['srNo'] !== true">
       </div>
-
       <div class="field toggle-field">
         <div class="toggle-field-header">
           <label>ID Number</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['idNumber'] === true" (click)="setFieldToggle('idNumber', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['idNumber'] === false" (click)="setFieldToggle('idNumber', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['idNumber'] === false" (click)="setFieldToggle('idNumber', false)">No</button>
           </div>
         </div>
-        <input [(ngModel)]="liftingForm.idNumber"
-          [disabled]="fieldToggles['idNumber'] !== true"
-          [class.field-disabled]="fieldToggles['idNumber'] !== true">
+        <input [(ngModel)]="liftingForm.idNumber" [disabled]="fieldToggles['idNumber'] !== true" [class.field-disabled]="fieldToggles['idNumber'] !== true">
       </div>
-
       <div class="field toggle-field">
         <div class="toggle-field-header">
           <label>Manufacturer Name</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['manufacturerName'] === true" (click)="setFieldToggle('manufacturerName', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['manufacturerName'] === false" (click)="setFieldToggle('manufacturerName', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['manufacturerName'] === false" (click)="setFieldToggle('manufacturerName', false)">No</button>
           </div>
         </div>
-        <input [(ngModel)]="liftingForm.manufacturerName"
-          [disabled]="fieldToggles['manufacturerName'] !== true"
-          [class.field-disabled]="fieldToggles['manufacturerName'] !== true">
+        <input [(ngModel)]="liftingForm.manufacturerName" [disabled]="fieldToggles['manufacturerName'] !== true" [class.field-disabled]="fieldToggles['manufacturerName'] !== true">
       </div>
-
       <div class="field toggle-field">
         <div class="toggle-field-header">
           <label>Manufacturer Year</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['manufacturerYear'] === true" (click)="setFieldToggle('manufacturerYear', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['manufacturerYear'] === false" (click)="setFieldToggle('manufacturerYear', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['manufacturerYear'] === false" (click)="setFieldToggle('manufacturerYear', false)">No</button>
           </div>
         </div>
-        <input [(ngModel)]="liftingForm.manufacturerYear"
-          [disabled]="fieldToggles['manufacturerYear'] !== true"
-          [class.field-disabled]="fieldToggles['manufacturerYear'] !== true">
+        <input [(ngModel)]="liftingForm.manufacturerYear" [disabled]="fieldToggles['manufacturerYear'] !== true" [class.field-disabled]="fieldToggles['manufacturerYear'] !== true">
       </div>
-
       <div class="field toggle-field">
         <div class="toggle-field-header">
           <label>Capacity</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['capacity'] === true" (click)="setFieldToggle('capacity', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['capacity'] === false" (click)="setFieldToggle('capacity', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['capacity'] === false" (click)="setFieldToggle('capacity', false)">No</button>
           </div>
         </div>
-        <input [(ngModel)]="liftingForm.capacity"
-          [disabled]="fieldToggles['capacity'] !== true"
-          [class.field-disabled]="fieldToggles['capacity'] !== true">
+        <input [(ngModel)]="liftingForm.capacity" [disabled]="fieldToggles['capacity'] !== true" [class.field-disabled]="fieldToggles['capacity'] !== true">
       </div>
-
       <div class="field toggle-field">
         <div class="toggle-field-header">
           <label>Safe Working Load (SWL)</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['safeWorkingLoad'] === true" (click)="setFieldToggle('safeWorkingLoad', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['safeWorkingLoad'] === false" (click)="setFieldToggle('safeWorkingLoad', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['safeWorkingLoad'] === false" (click)="setFieldToggle('safeWorkingLoad', false)">No</button>
           </div>
         </div>
-        <input [(ngModel)]="liftingForm.safeWorkingLoad"
-          [disabled]="fieldToggles['safeWorkingLoad'] !== true"
-          [class.field-disabled]="fieldToggles['safeWorkingLoad'] !== true">
+        <input [(ngModel)]="liftingForm.safeWorkingLoad" [disabled]="fieldToggles['safeWorkingLoad'] !== true" [class.field-disabled]="fieldToggles['safeWorkingLoad'] !== true">
       </div>
-
       <div class="field toggle-field">
         <div class="toggle-field-header">
-          <label>Location</label>
+          <label>Equipment Location</label>
           <div class="yes-no-group">
-            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['location'] === true" (click)="setFieldToggle('location', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['location'] === false" (click)="setFieldToggle('location', false)">No</button>
+            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['equipmentLocation'] === true" (click)="setFieldToggle('equipmentLocation', true)">Yes</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['equipmentLocation'] === false" (click)="setFieldToggle('equipmentLocation', false)">No</button>
           </div>
         </div>
-        <input [(ngModel)]="liftingForm.location"
-          [disabled]="fieldToggles['location'] !== true"
-          [class.field-disabled]="fieldToggles['location'] !== true">
+        <input [(ngModel)]="liftingForm.equipmentLocation" [disabled]="fieldToggles['equipmentLocation'] !== true" [class.field-disabled]="fieldToggles['equipmentLocation'] !== true">
       </div>
 
-      <!-- ── Section 4 ── -->
       <div class="field full section-divider"><span>4. Date when the lifting machine was first taken into use in the factory</span></div>
-
       <div class="field toggle-field">
         <div class="toggle-field-header">
           <label>4. Year First Taken Into Use</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['yearFirstTakenIntoUse'] === true" (click)="setFieldToggle('yearFirstTakenIntoUse', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['yearFirstTakenIntoUse'] === false" (click)="setFieldToggle('yearFirstTakenIntoUse', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['yearFirstTakenIntoUse'] === false" (click)="setFieldToggle('yearFirstTakenIntoUse', false)">No</button>
           </div>
         </div>
-        <input [(ngModel)]="liftingForm.yearFirstTakenIntoUse"
-          [disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true"
-          [class.field-disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true">
+        <input [(ngModel)]="liftingForm.yearFirstTakenIntoUse" [disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true" [class.field-disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true">
       </div>
 
-      <!-- ── Section 5 ── -->
       <div class="field full section-divider"><span>5. Date and number of certificate relating to previous test / examination</span></div>
-
       <div class="field full toggle-field">
         <div class="toggle-field-header">
           <label>5. Previous Certificate Details</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['previousCertificateDetails'] === true" (click)="setFieldToggle('previousCertificateDetails', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['previousCertificateDetails'] === false" (click)="setFieldToggle('previousCertificateDetails', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['previousCertificateDetails'] === false" (click)="setFieldToggle('previousCertificateDetails', false)">No</button>
           </div>
         </div>
-        <textarea [(ngModel)]="liftingForm.previousCertificateDetails"
-          [disabled]="fieldToggles['previousCertificateDetails'] !== true"
-          [class.field-disabled]="fieldToggles['previousCertificateDetails'] !== true"></textarea>
+        <textarea [(ngModel)]="liftingForm.previousCertificateDetails" [disabled]="fieldToggles['previousCertificateDetails'] !== true" [class.field-disabled]="fieldToggles['previousCertificateDetails'] !== true"></textarea>
       </div>
 
-      <!-- ── Section 6 ── -->
       <div class="field full section-divider"><span>6. Date of each periodical thorough examination (Section 29 / sub-rule 6)</span></div>
-
       <div class="field full toggle-field">
         <div class="toggle-field-header">
           <label>6. Periodical Examination Details &amp; By Whom Carried Out</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['periodicalExaminationDetails'] === true" (click)="setFieldToggle('periodicalExaminationDetails', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['periodicalExaminationDetails'] === false" (click)="setFieldToggle('periodicalExaminationDetails', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['periodicalExaminationDetails'] === false" (click)="setFieldToggle('periodicalExaminationDetails', false)">No</button>
           </div>
         </div>
-        <textarea [(ngModel)]="liftingForm.periodicalExaminationDetails"
-          [disabled]="fieldToggles['periodicalExaminationDetails'] !== true"
-          [class.field-disabled]="fieldToggles['periodicalExaminationDetails'] !== true"></textarea>
+        <textarea [(ngModel)]="liftingForm.periodicalExaminationDetails" [disabled]="fieldToggles['periodicalExaminationDetails'] !== true" [class.field-disabled]="fieldToggles['periodicalExaminationDetails'] !== true"></textarea>
       </div>
 
-      <div class="field full toggle-field">
-        <div class="toggle-field-header">
-          <label>6a. Hydraulic / Electrical System Status</label>
-          <div class="yes-no-group">
-            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['hydraulicSystemStatus'] === true" (click)="setFieldToggle('hydraulicSystemStatus', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['hydraulicSystemStatus'] === false" (click)="setFieldToggle('hydraulicSystemStatus', false)">No</button>
-          </div>
-        </div>
-        <textarea [(ngModel)]="liftingForm.hydraulicSystemStatus"
-          [disabled]="fieldToggles['hydraulicSystemStatus'] !== true"
-          [class.field-disabled]="fieldToggles['hydraulicSystemStatus'] !== true"></textarea>
-      </div>
-
-      <div class="field full toggle-field">
-        <div class="toggle-field-header">
-          <label>6b. Frame, Girder &amp; Structural Condition</label>
-          <div class="yes-no-group">
-            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['frameAndForkCondition'] === true" (click)="setFieldToggle('frameAndForkCondition', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['frameAndForkCondition'] === false" (click)="setFieldToggle('frameAndForkCondition', false)">No</button>
-          </div>
-        </div>
-        <textarea [(ngModel)]="liftingForm.frameAndForkCondition"
-          [disabled]="fieldToggles['frameAndForkCondition'] !== true"
-          [class.field-disabled]="fieldToggles['frameAndForkCondition'] !== true"></textarea>
-      </div>
-
-      <div class="field full toggle-field">
-        <div class="toggle-field-header">
-          <label>6c. Overall Inspection Result</label>
-          <div class="yes-no-group">
-            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['overallResult'] === true" (click)="setFieldToggle('overallResult', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['overallResult'] === false" (click)="setFieldToggle('overallResult', false)">No</button>
-          </div>
-        </div>
-        <textarea [(ngModel)]="liftingForm.overallResult"
-          [disabled]="fieldToggles['overallResult'] !== true"
-          [class.field-disabled]="fieldToggles['overallResult'] !== true"></textarea>
-      </div>
-
-      <!-- ── Section 7 ── -->
       <div class="field full section-divider"><span>7. Annealing / Heat Treatment (sub-rule 5)</span></div>
-
       <div class="field full toggle-field">
         <div class="toggle-field-header">
           <label>7. Annealing / Heat Treatment Details &amp; By Whom Carried Out</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['annealingOrHeatTreatmentDetails'] === true" (click)="setFieldToggle('annealingOrHeatTreatmentDetails', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['annealingOrHeatTreatmentDetails'] === false" (click)="setFieldToggle('annealingOrHeatTreatmentDetails', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['annealingOrHeatTreatmentDetails'] === false" (click)="setFieldToggle('annealingOrHeatTreatmentDetails', false)">No</button>
           </div>
         </div>
-        <textarea [(ngModel)]="liftingForm.annealingOrHeatTreatmentDetails"
-          [disabled]="fieldToggles['annealingOrHeatTreatmentDetails'] !== true"
-          [class.field-disabled]="fieldToggles['annealingOrHeatTreatmentDetails'] !== true"></textarea>
+        <textarea [(ngModel)]="liftingForm.annealingOrHeatTreatmentDetails" [disabled]="fieldToggles['annealingOrHeatTreatmentDetails'] !== true" [class.field-disabled]="fieldToggles['annealingOrHeatTreatmentDetails'] !== true"></textarea>
       </div>
 
-      <!-- ── Section 8 ── -->
       <div class="field full section-divider"><span>8. Particulars of any defect affecting the safe working load &amp; steps taken to remedy</span></div>
-
       <div class="field full toggle-field">
         <div class="toggle-field-header">
           <label>8. Defects Particulars &amp; Steps Taken to Remedy</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['defectsParticulars'] === true" (click)="setFieldToggle('defectsParticulars', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['defectsParticulars'] === false" (click)="setFieldToggle('defectsParticulars', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['defectsParticulars'] === false" (click)="setFieldToggle('defectsParticulars', false)">No</button>
           </div>
         </div>
-        <textarea [(ngModel)]="liftingForm.defectsParticulars"
-          [disabled]="fieldToggles['defectsParticulars'] !== true"
-          [class.field-disabled]="fieldToggles['defectsParticulars'] !== true"></textarea>
+        <textarea [(ngModel)]="liftingForm.defectsParticulars" [disabled]="fieldToggles['defectsParticulars'] !== true" [class.field-disabled]="fieldToggles['defectsParticulars'] !== true"></textarea>
       </div>
 
-      <!-- ── Section 9 ── -->
-      <div class="field full section-divider"><span>9. Safe Working Load Assessed</span></div>
-
-      <div class="field toggle-field">
-        <div class="toggle-field-header">
-          <label>9. Safe Working Load Assessed</label>
-          <div class="yes-no-group">
-            <button type="button" class="yn-btn yes" [class.active]="fieldToggles['safeWorkingLoadAssessed'] === true" (click)="setFieldToggle('safeWorkingLoadAssessed', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['safeWorkingLoadAssessed'] === false" (click)="setFieldToggle('safeWorkingLoadAssessed', false)">No</button>
-          </div>
-        </div>
-        <input [(ngModel)]="liftingForm.safeWorkingLoadAssessed"
-          [disabled]="fieldToggles['safeWorkingLoadAssessed'] !== true"
-          [class.field-disabled]="fieldToggles['safeWorkingLoadAssessed'] !== true">
-      </div>
-
-      <!-- ── Section 10 ── -->
       <div class="field full section-divider"><span>10. Remarks</span></div>
-
       <div class="field full">
         <label>10. Remarks</label>
         <textarea [(ngModel)]="liftingForm.remarks"></textarea>
       </div>
 
-      <!-- ── Footer / Certification ── -->
       <div class="field full section-divider"><span>Footer / Certification</span></div>
-
       <div class="field toggle-field">
         <div class="toggle-field-header">
           <label>Certified Date</label>
           <div class="yes-no-group">
             <button type="button" class="yn-btn yes" [class.active]="fieldToggles['certifiedDate'] === true" (click)="setFieldToggle('certifiedDate', true)">Yes</button>
-            <button type="button" class="yn-btn no"  [class.active]="fieldToggles['certifiedDate'] === false" (click)="setFieldToggle('certifiedDate', false)">No</button>
+            <button type="button" class="yn-btn no" [class.active]="fieldToggles['certifiedDate'] === false" (click)="setFieldToggle('certifiedDate', false)">No</button>
           </div>
         </div>
-        <input type="date" [(ngModel)]="liftingForm.certifiedDate"
-          [disabled]="fieldToggles['certifiedDate'] !== true"
-          [class.field-disabled]="fieldToggles['certifiedDate'] !== true">
+        <input type="date" [(ngModel)]="liftingForm.certifiedDate" [disabled]="fieldToggles['certifiedDate'] !== true" [class.field-disabled]="fieldToggles['certifiedDate'] !== true">
+      </div>
+
+    </div><!-- /form-grid -->
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeLiftingModal()">Cancel</button>
+      <button class="btn-primary" (click)="saveLifting()">Save Record</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     PRESSURE VESSEL MODAL  (unchanged)
+══════════════════════════════════════════════════════════ -->
+<div class="overlay" [class.open]="showPressureModal">
+  <div class="modal modal-lg" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closePressureModal()">✕</button>
+    <h3>{{ pressureModalMode === 'add' ? 'Add Pressure Vessel Record' : 'Update Pressure Vessel Record' }}</h3>
+    <div class="form-grid">
+      <div class="field">
+        <label>Certificate No</label>
+        <input [(ngModel)]="pvForm.certificateNo" readonly placeholder="Auto-generated">
+      </div>
+      <div class="field">
+        <label>Form No</label>
+        <input [(ngModel)]="pvForm.formNo" placeholder="Form No. 8">
+      </div>
+      <div class="field">
+        <label>Rule Number</label>
+        <input [(ngModel)]="pvForm.ruleNumber" placeholder="Rule 61">
+      </div>
+      <div class="field">
+        <label>Date of Examination</label>
+        <input type="date" [(ngModel)]="pvForm.dateOfExamination">
+      </div>
+      <div class="field full">
+        <label>Next Due Date for Examination</label>
+        <div class="due-date-group">
+          <div class="duration-btn-group">
+            <button type="button" class="duration-btn" [class.active]="pvDuration === '6months'" (click)="setPvDuration('6months')">6 Months</button>
+            <button type="button" class="duration-btn" [class.active]="pvDuration === '1year'" (click)="setPvDuration('1year')">1 Year</button>
+            <button type="button" class="duration-btn" [class.active]="pvDuration === '2years'" (click)="setPvDuration('2years')">2 Years</button>
+          </div>
+          <input type="date" class="due-date-input" [(ngModel)]="pvForm.nextDueDateForExamination">
+        </div>
+      </div>
+      <div class="field">
+        <label>Competent Person</label>
+        <select [(ngModel)]="pvForm.competentPersonName">
+          <option value="">Select Inspector</option>
+          <option *ngFor="let inspector of inspectorList" [value]="inspector">{{ inspector }}</option>
+        </select>
+      </div>
+
+      <div class="field full section-divider"><span>1. Name of Occupier (of Factory)</span></div>
+      <div class="field full"><label>Name of Occupier</label><input [(ngModel)]="pvForm.nameOfOccupier"></div>
+
+      <div class="field full section-divider"><span>2. Address of factory</span></div>
+      <div class="field full"><label>Address of Factory</label><textarea rows="3" [(ngModel)]="pvForm.addressOfFactory"></textarea></div>
+
+      <div class="field full section-divider"><span>3. Name, Description &amp; Distinctive Number of Pressure Vessel</span></div>
+      <div class="field">
+        <label>Vessel Description</label>
+        <select [(ngModel)]="pvForm.vesselDescription" (change)="generatePvCertificateNo()">
+          <option value="">Select Vessel</option>
+          <option *ngFor="let item of vesselDescriptionOptions" [value]="item">{{ item }}</option>
+        </select>
+      </div>
+      <div class="field"><label>Sr. No.</label><input [(ngModel)]="pvForm.vesselSrNo" placeholder="e.g. SR-001"></div>
+      <div class="field"><label>Capacity</label><input [(ngModel)]="pvForm.vesselCapacity" placeholder="e.g. 5000 Ltr"></div>
+      <div class="field"><label>ID No.</label><input [(ngModel)]="pvForm.vesselIdNo" placeholder="e.g. PV-01"></div>
+      <div class="field"><label>Location</label><input [(ngModel)]="pvForm.vesselLocation" placeholder="e.g. Plant outside DG area"></div>
+
+      <div class="field full section-divider"><span>4. Name and Address of Manufacturer</span></div>
+      <div class="field full"><label>Manufacturer Name</label><input [(ngModel)]="pvForm.manufacturerName" placeholder="NA if unknown"></div>
+
+      <div class="field full section-divider"><span>5. Nature of Process in Which It Is Used</span></div>
+      <div class="field full"><label>Nature of Process</label><input [(ngModel)]="pvForm.natureOfProcess"></div>
+
+      <div class="field full section-divider"><span>6. Particulars of Vessel</span></div>
+      <div class="field"><label>(a) Date of Construction</label><input [(ngModel)]="pvForm.dateOfConstruction" placeholder="e.g. 2023"></div>
+      <div class="field"><label>(b) Thickness of Walls</label><input [(ngModel)]="pvForm.thicknessOfWalls"></div>
+      <div class="field"><label>(c) Date First Taken Into Use</label><input [(ngModel)]="pvForm.dateFirstTakenIntoUse" placeholder="e.g. 2023"></div>
+      <div class="field">
+        <label>(d) Safe Working Pressure by Manufacturer</label>
+        <input [(ngModel)]="pvForm.maxPermissibleWorkingPressureByManufacturer" (ngModelChange)="onManufacturerPressureChange($event)">
+      </div>
+      <div class="field"><label>(e) Design Pressure</label><input [(ngModel)]="pvForm.designPressure" placeholder="NA if unknown"></div>
+      <div class="field"><label>(f) Previous History &amp; Last Report Seen</label><input [(ngModel)]="pvForm.previousHistoryAndLastReportSeen" placeholder="NA / First time tested by us"></div>
+
+      <div class="field full section-divider"><span>7. Is the Vessel Exposed to Weather or Damp?</span></div>
+      <div class="field">
+        <label>Exposed to Weather</label>
+        <select [(ngModel)]="pvForm.exposedToWeather">
+          <option value="Yes">Open / Exposed</option>
+          <option value="No">In Shed / Not Exposed</option>
+        </select>
+      </div>
+
+      <div class="field full section-divider"><span>8. Date of Last Hydrostatic Test &amp; Pressure Applied</span></div>
+      <div class="field"><label>Date of Last Hydrostatic Test</label><input type="date" [(ngModel)]="pvForm.dateOfLastHydrostaticTest"></div>
+      <div class="field"><label>Pressure Applied</label><input [(ngModel)]="pvForm.pressureAppliedLastHydrostatic" placeholder="e.g. 10.0 Kg/cm²"></div>
+
+      <div class="field full section-divider"><span>9. Details of Examination Made and Tests Conducted</span></div>
+      <div class="field full"><label>Examination &amp; Tests Made</label><textarea rows="3" [(ngModel)]="pvForm.examinationAndTestsMade"></textarea></div>
+
+      <div class="field full section-divider"><span>10. What Parts (If Any) Were Inaccessible?</span></div>
+      <div class="field full"><label>Parts Inaccessible</label><input [(ngModel)]="pvForm.partsInaccessible" placeholder="e.g. Internal inaccessible"></div>
+
+      <div class="field full section-divider"><span>11. Condition of Vessel</span></div>
+      <div class="field"><label>External Condition</label><input [(ngModel)]="pvForm.conditionExternal" placeholder="e.g. OK"></div>
+      <div class="field"><label>Internal Condition</label><input [(ngModel)]="pvForm.conditionInternal" placeholder="e.g. Inaccessible"></div>
+
+      <div class="field full section-divider"><span>12. Required Fittings Provided &amp; Pressure Settings Checked?</span></div>
+      <div class="field full"><label>Fittings Provided</label><input [(ngModel)]="pvForm.fittingsProvided" placeholder="Yes / No / details"></div>
+
+      <div class="field full section-divider"><span>13. Are All Fittings Properly Maintained and in Good Condition?</span></div>
+      <div class="field full"><label>Fittings Maintained &amp; Checked</label><input [(ngModel)]="pvForm.fittingsMaintainedAndChecked" placeholder="e.g. Safety Valve, Pressure Gauge &amp; Drain Valve: O.K"></div>
+
+      <div class="field full section-divider"><span>14. Repairs Required</span></div>
+      <div class="field full"><label>Repairs Required</label><input [(ngModel)]="pvForm.repairsRequired" placeholder="Nil"></div>
+
+      <div class="field full"><label>Calculated Max Working Pressure</label><input [value]="computedMaxWorkingPressure" readonly></div>
+
+      <div class="field full section-divider"><span>16. Working Pressure Where Repairs Are Required</span></div>
+      <div class="field full"><label>(a) Before Expiration of Period in (14)</label><input [(ngModel)]="pvForm.beforeExpirationPeriod" placeholder="Nill"></div>
+      <div class="field full"><label>(b) After Expiration if Repairs Not Completed</label><input [(ngModel)]="pvForm.afterExpirationIfNotCompleted" placeholder="Nill"></div>
+      <div class="field full"><label>(c) After Completion of Repairs</label><input [(ngModel)]="pvForm.afterCompletionOfRepairs" placeholder="Nill"></div>
+
+      <div class="field full section-divider"><span>17. Other Observations</span></div>
+      <div class="field full"><label>Other Observations</label><textarea rows="2" [(ngModel)]="pvForm.otherObservations" placeholder="e.g. Pressure Safety Valve and Pressure Gauge must be calibrated on time"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closePressureModal()">Cancel</button>
+      <button class="btn-primary" (click)="savePressure()">Save Record</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     POWER PRESS MODAL
+══════════════════════════════════════════════════════════ -->
+<div class="overlay" [class.open]="showPowerPressModal">
+  <div class="modal modal-lg" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closePowerPressModal()">✕</button>
+    <h3>{{ powerPressModalMode === 'add' ? 'Add Power Press Record' : 'Update Power Press Record' }}</h3>
+
+    <div class="form-grid">
+
+      <!-- ── CERTIFICATE DETAILS ── -->
+      <div class="field full section-divider"><span>Certificate Details</span></div>
+
+      <div class="field">
+        <label>Certificate No</label>
+        <input [(ngModel)]="ppForm.certificateNo" readonly placeholder="Auto-generated">
+      </div>
+      <div class="field">
+        <label>Date of Examination</label>
+        <input type="date" [(ngModel)]="ppForm.dateOfExamination" (change)="generatePpCertificateNo()">
+      </div>
+
+      <!-- ── NEXT DUE DATE ── -->
+      <div class="field full">
+        <label>Next Due Date</label>
+        <div class="due-date-group">
+          <div class="duration-btn-group">
+            <button type="button" class="duration-btn" [class.active]="ppDuration === '6months'" (click)="setPpDuration('6months')">6 Months</button>
+            <button type="button" class="duration-btn" [class.active]="ppDuration === '1year'" (click)="setPpDuration('1year')">1 Year</button>
+            <button type="button" class="duration-btn" [class.active]="ppDuration === '2years'" (click)="setPpDuration('2years')">2 Years</button>
+          </div>
+          <input type="date" class="due-date-input" [(ngModel)]="ppForm.nextDueDate">
+        </div>
+      </div>
+
+      <!-- ── FACTORY DETAILS ── -->
+      <div class="field full section-divider"><span>1. Factory Details</span></div>
+
+      <div class="field full">
+        <label>Name of Occupier (of Factory)</label>
+        <input [(ngModel)]="ppForm.occupierName">
+      </div>
+      <div class="field full">
+        <label>Address of Factory</label>
+        <textarea rows="2" [(ngModel)]="ppForm.factoryAddress"></textarea>
+      </div>
+
+      <!-- ── MACHINE DETAILS ── -->
+      <div class="field full section-divider"><span>2. Machine Details</span></div>
+
+      <div class="field">
+        <label>Machine Type</label>
+        <select [(ngModel)]="ppForm.machineType">
+          <option value="">Select Machine</option>
+          <option *ngFor="let item of powerPressMachineList" [value]="item">{{ item }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Serial No.</label>
+        <input [(ngModel)]="ppForm.serialNo" placeholder="e.g. SR-001">
+      </div>
+      <div class="field">
+        <label>Model No.</label>
+        <input [(ngModel)]="ppForm.modelNo" placeholder="e.g. N/A">
+      </div>
+      <div class="field">
+        <label>Capacity</label>
+        <input [(ngModel)]="ppForm.capacity" placeholder="e.g. 100 Ton">
+      </div>
+      <div class="field">
+        <label>Manufacturer Name</label>
+        <input [(ngModel)]="ppForm.manufacturerName" placeholder="NA if unknown">
+      </div>
+      <div class="field">
+        <label>Year of Manufacture</label>
+        <input [(ngModel)]="ppForm.yearOfManufacture" placeholder="e.g. 2018">
+      </div>
+      <div class="field">
+        <label>Location</label>
+        <input [(ngModel)]="ppForm.location" placeholder="e.g. Shop Floor-1">
+      </div>
+      <div class="field">
+        <label>Date First Taken Into Use</label>
+        <input [(ngModel)]="ppForm.dateFirstUse" placeholder="e.g. 2018">
+      </div>
+
+      <!-- ── EXAMINATION DETAILS ── -->
+      <div class="field full section-divider"><span>3. Examination Details</span></div>
+
+      <div class="field">
+        <label>Last Examined By</label>
+        <select [(ngModel)]="ppForm.lastExaminedBy">
+          <option value="">Select Inspector</option>
+          <option *ngFor="let inspector of inspectorList" [value]="inspector">{{ inspector }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Last Examination Date</label>
+        <input type="date" [(ngModel)]="ppForm.lastExaminationDate">
+      </div>
+      <div class="field full">
+        <label>Defects / Observations</label>
+        <textarea rows="3" [(ngModel)]="ppForm.defectsObservation" placeholder="Nil / details of defects and steps taken"></textarea>
+      </div>
+
+      <!-- ── CERTIFICATION DETAILS ── -->
+      <div class="field full section-divider"><span>4. Certification Details</span></div>
+
+      <div class="field">
+        <label>Certified By</label>
+        <select [(ngModel)]="ppForm.certifiedBy">
+          <option value="">Select Inspector</option>
+          <option *ngFor="let inspector of inspectorList" [value]="inspector">{{ inspector }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>License No.</label>
+        <input [(ngModel)]="ppForm.licenseNo" placeholder="e.g. 2986">
+      </div>
+      <div class="field full">
+        <label>Designation</label>
+        <input [(ngModel)]="ppForm.designation" placeholder="e.g. Competent Person U/s 21(2), 28, 29, 31">
+      </div>
+      <div class="field full">
+        <label>Approval Details</label>
+        <textarea rows="2" [(ngModel)]="ppForm.approvalDetails" placeholder="e.g. Approved by CIF Haryana Vide Lic. No. 2968 dated 27.06.2019"></textarea>
       </div>
 
     </div><!-- /form-grid -->
 
     <div class="modal-footer">
-      <button class="btn-secondary" (click)="closeLiftingModal()">Cancel</button>
-      <button class="btn-primary" (click)="saveLifting()">Save Record</button>
+      <button class="btn-secondary" (click)="closePowerPressModal()">Cancel</button>
+      <button class="btn-primary" (click)="savePowerPress()">Save Record</button>
     </div>
-
   </div>
 </div>
 
 
-<!-- ============================================================
-     PRINT SECTION
-============================================================ -->
-<div id="print-section" *ngIf="selectedItem">
+<!-- ══════════════════════════════════════════════════════════
+     SINGLE POWER PRESS PRINT
+══════════════════════════════════════════════════════════ -->
+<div id="pp-print-section" *ngIf="selectedPpItem && selectedItemsForPrint.length === 0" class="pp-print-container">
 
-  <h3 class="print-title">
-    {{ selectedItem.testName?.split('(')[0] }}
-    <span class="sub-text" *ngIf="selectedItem.testName?.includes('(')">
-      ({{ selectedItem.testName.split('(')[1] }}
-    </span>
-  </h3>
-
-  <div class="cert-top-row">
-    <div class="left"><h5>Report No: {{ selectedItem.certificateNo }}</h5></div>
-    <div class="right"><h5>Date of Examination: {{ selectedItem.dateOfExamination | date:'dd MMM yyyy' }}</h5></div>
+  <div class="pp-print-header">
+    <div class="pv-header-title-row">
+      <div class="pv-header-title-block">
+        <div class="pv-title-main">Report of Examination of Dangerous Machine / Power Press / Centrifugal Machine</div>
+        <div class="pv-title-sub">Under Section 21(2) of Factories Act 1948</div>
+      </div>
+      <div class="pv-header-qr-block">
+        <img [src]="generateQrSvg(selectedPpItem.certificateNo + '|' + companyId + '|pp')" class="pv-header-qr-img" alt="QR Code">
+        <div class="pv-header-qr-label">Scan to Download</div>
+      </div>
+    </div>
+    <div class="pv-cert-date-row">
+      <span><strong>Certificate No: {{ selectedPpItem.certificateNo }}</strong></span>
+      <span><strong>Date of Examination: {{ selectedPpItem.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
+    </div>
   </div>
 
-  <table class="print-table cert-table">
+  <table class="pp-form-table">
     <tbody>
       <tr>
-        <td class="cn">1</td>
-        <td class="cd">Name of Occupier (Factory)</td>
-        <td class="cv">{{ selectedItem.nameOfOccupier }}</td>
+        <td class="col-num">1)</td>
+        <td class="col-desc">Name of Occupier (of Factory)</td>
+        <td class="col-val">{{ selectedPpItem.occupierName || '—' }}</td>
       </tr>
       <tr>
-        <td class="cn">2</td>
-        <td class="cd">Address of the Factory</td>
-        <td class="cv">{{ selectedItem.addressOfFactory }}</td>
+        <td class="col-num">2)</td>
+        <td class="col-desc">Situation and address of factory</td>
+        <td class="col-val">{{ selectedPpItem.factoryAddress || '—' }}</td>
       </tr>
       <tr>
-        <td class="cn">3</td>
-        <td class="cd">Distinguishing number or mark if any and description sufficient to identify the lifting machine.</td>
-        <td class="cv">
-          {{ selectedItem.equipmentName }}<br>
-          Model: {{ selectedItem.modelNumber }}<br>
-          Serial: {{ selectedItem.srNo }}<br>
-          Manufacturer: {{ selectedItem.manufacturerName }}<br>
-          Capacity: {{ selectedItem.capacity }}<br>
-          Location: {{ selectedItem.location }}
+        <td class="col-num">3)</td>
+        <td class="col-desc">Identification number of mark sufficient to identify the dangerous machine / power press / centrifugal machine or the safety device.</td>
+        <td class="col-val">
+          <div class="equipment-main">{{ selectedPpItem.machineType || '—' }}</div>
+          <div class="eq-meta">
+            <span>Sr. No.: {{ selectedPpItem.serialNo || '—' }}</span>
+            <span>Model No.: {{ selectedPpItem.modelNo || '—' }}</span>
+            <span>Capacity: {{ selectedPpItem.capacity || '—' }}</span>
+            <span>Location: {{ selectedPpItem.location || '—' }}</span>
+            <span>Mfg. Name: {{ selectedPpItem.manufacturerName || '—' }}</span>
+            <span>Year: {{ selectedPpItem.yearOfManufacture || '—' }}</span>
+          </div>
         </td>
       </tr>
       <tr>
-        <td class="cn">4</td>
-        <td class="cd">Date when lifting machine was first taken in use in the factory.</td>
-        <td class="cv">{{ selectedItem.yearFirstTakenIntoUse }}</td>
+        <td class="col-num">4)</td>
+        <td class="col-desc">Date on which the dangerous machine/power press centrifugal machine or the safety device was first taken into use in the factory</td>
+        <td class="col-val">{{ selectedPpItem.dateFirstUse || '—' }}</td>
       </tr>
       <tr>
-        <td class="cn">5</td>
-        <td class="cd">Date and number of certificate relating to any test or examination made under sub-rules (1) &amp; (7) together with name &amp; address of the person who issued the certificate.</td>
-        <td class="cv">{{ selectedItem.previousCertificateDetails }}</td>
-      </tr>
-      <tr>
-        <td class="cn">6</td>
-        <td class="cd">Date of each periodical thorough examination made under clause (a)(iii) sub section (i) of Section 29 of the act and sub rule (6) and by whom it was carried out.</td>
-        <td class="cv">
-          {{ selectedItem.periodicalExaminationDetails }}<br>
-          Inspector: {{ selectedItem.inspectorName }}<br>
-          Date: {{ selectedItem.dateOfExamination | date:'dd MMM yyyy' }}
+        <td class="col-num">5)</td>
+        <td class="col-desc">Date on which the dangerous machine/power press centrifugal machine or the safety device was first taken into use iDate of each periodical thorough examination carried out as per requirements of sub - paragraph (2) aboven the factory</td>
+        <td class="col-val">
+          {{ selectedPpItem.lastExaminationDate | date:'dd-MM-yyyy' }}
+          <ng-container *ngIf="selectedPpItem.lastExaminedBy">
+            &nbsp;— Examined by {{ selectedPpItem.lastExaminedBy }}
+          </ng-container>
         </td>
       </tr>
       <tr>
-        <td class="cn">7</td>
-        <td class="cd">Date of annealing or other heat treatment of the chain and other lifting tackle made under sub rule (5) and by whom it was carried out.</td>
-        <td class="cv">
-          Hydraulic: {{ selectedItem.hydraulicSystemStatus }}<br>
-          Frame: {{ selectedItem.frameAndForkCondition }}<br>
-          Result: {{ selectedItem.overallResult }}
+        <td class="col-num">6)</td>
+        <td class="col-desc">Particulars of any defects affecting safely working of Tested and found in satisfactory condition the dangerous machine / power press / centrifugal for safe operation. machine or the safety device found at any such thorough examination and steps taken to remedy such defects</td>
+        <td class="col-val">
+          <div class="row8-block">
+            <div class="row8-status">{{ selectedPpItem.defectsObservation || 'NIL' }}</div>
+          </div>
         </td>
-      </tr>
-      <tr>
-        <td class="cn">8</td>
-        <td class="cd">Particulars of any defect affecting the safe working load found at any such examination or after annealing and of the steps taken to remedy such defects.</td>
-        <td class="cv">{{ selectedItem.annealingOrHeatTreatmentDetails }}</td>
-      </tr>
-      <tr>
-        <td class="cn">9</td>
-        <td class="cd">Defects &amp; Remedies</td>
-        <td class="cv">{{ selectedItem.defectsParticulars }}</td>
-      </tr>
-      <tr>
-        <td class="cn">10</td>
-        <td class="cd">Safe Working Load Assessed</td>
-        <td class="cv">{{ selectedItem.safeWorkingLoadAssessed }}</td>
       </tr>
     </tbody>
   </table>
 
   <div class="cert-footer">
-    <p>I certify that on {{ selectedItem.certifiedDate | date:'dd MMM yyyy' }}, I have thoroughly examined the lifting equipment and found it safe.</p>
-    <h6 class="next-due">Next Due Date: {{ selectedItem.nextDueDate | date:'dd MMM yyyy' }}</h6>
-    <div class="stamp-space"></div>
+    <div class="cert-certify">
+      I certify that on <strong>{{ selectedPpItem.dateOfExamination | date:'dd-MM-yyyy' }}</strong>, I thoroughly examined the above machine and that the above is a true report of the result of the examination.
+    </div>
+    <div class="cert-next-due"><strong>NEXT EXAMINATION DUE:</strong> {{ selectedPpItem.nextDueDate | date:'dd-MM-yyyy' }}</div>
     <div class="cert-signature-row">
       <div class="sign-left">
-        <p><b>{{ selectedItem.inspectorName }} (Competent Person)</b></p>
-        <p>Competent Person U/s 21(2), 28, 29, 31, 65 (C)</p>
-        <p>Approved by the CIF&amp;B, Jaipur</p>
-        <p>Lic No. CMP-883/2025 dt. 22.12.2025</p>
+        <div class="signature-name">{{ selectedPpItem.certifiedBy }}</div>
+        <div class="signature-title">{{ selectedPpItem.designation }}</div>
+        <div class="signature-title">License No.: {{ selectedPpItem.licenseNo }}</div>
+        <div class="signature-title">{{ selectedPpItem.approvalDetails }}</div>
       </div>
-      <div class="sign-right">
-        <p><b>Counter Sign</b></p>
-      </div>
+      <div class="sign-right"><div class="signature-title">Counter Signed</div></div>
     </div>
-    <div class="cert-disclaimer">
-      Disclaimer:- This report of examination reflects the conditions of the machine/equipment as on date.
-      We accept no liability/responsibility whatsoever in case of any accidents/mishap on/with/due to this machine/equipment.
+    <div class="cert-bottom-row">
+      <div class="cert-disclaimer">
+        DISCLAIMER: This report reflects conditions as observed on the date of examination. No liability accepted for accidents/mishaps after examination date.
+      </div>
+      <div class="cert-qr-block">
+        <img [src]="generateQrSvg(selectedPpItem.certificateNo + '|' + companyId + '|pp')" class="cert-qr-img" alt="QR Code">
+        <div class="cert-qr-label">Scan to Download</div>
+      </div>
     </div>
   </div>
 
+</div><!-- /#pp-print-section -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SINGLE PRESSURE VESSEL PRINT — FORM 8
+══════════════════════════════════════════════════════════ -->
+<div id="pv-print-section" *ngIf="selectedPvItem && selectedItemsForPrint.length === 0" class="pv-print-container">
+  <div class="pv-print-header">
+    <div class="pv-header-title-row">
+      <div class="pv-header-title-block">
+        <div class="pv-title-main">Report of Examination of Pressure Vessel or Plant</div>
+        <div class="pv-title-sub">Form No. 8 Section 31 (See Rule 61)</div>
+      </div>
+      <div class="pv-header-qr-block">
+        <img [src]="generateQrSvg(selectedPvItem.certificateNo + '|' + companyId + '|pv')" class="pv-header-qr-img" alt="QR Code">
+        <div class="pv-header-qr-label">Scan to Download</div>
+      </div>
+    </div>
+    <div class="pv-cert-date-row">
+      <span><strong>Certificate No: {{ selectedPvItem.certificateNo }}</strong></span>
+      <span><strong>Date of Examination: {{ selectedPvItem.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
+    </div>
+  </div>
+  <table class="pv-form-table">
+    <tbody>
+      <tr><td class="col-num">1)</td><td class="col-desc">Name of Occupier (of factory)</td><td class="col-val">{{ selectedPvItem.nameOfOccupier || '—' }}</td></tr>
+      <tr><td class="col-num">2)</td><td class="col-desc">Situation and address of factory</td><td class="col-val">{{ selectedPvItem.addressOfFactory || '—' }}</td></tr>
+      <tr>
+        <td class="col-num">3)</td>
+        <td class="col-desc">Name, description and distinctive number of pressure vessel/Plant.</td>
+        <td class="col-val">{{ selectedPvItem.vesselDescription || '—' }}<br>Cap : {{ selectedPvItem.vesselCapacity || '—' }} &nbsp;&nbsp;Sr. No. {{ selectedPvItem.vesselSrNo || '—' }} &nbsp;&nbsp;ID. No. {{ selectedPvItem.vesselIdNo || '—' }}<br>Location : {{ selectedPvItem.vesselLocation || '—' }}</td>
+      </tr>
+      <tr><td class="col-num">4)</td><td class="col-desc">Name &amp; address of manufacturer &amp; Reference to the Test Certificate of Competent Person</td><td class="col-val">{{ selectedPvItem.manufacturerName || '—' }}</td></tr>
+      <tr><td class="col-num">5)</td><td class="col-desc">Nature of process in which it is used</td><td class="col-val">{{ selectedPvItem.natureOfProcess || '—' }}</td></tr>
+      <tr>
+        <td class="col-num">6)</td>
+        <td class="col-desc">
+          <div class="main-title">Particulars of Pressure Vessel or Plant</div>
+          <div class="sub-lbl">(a) Date of construction</div>
+          <div class="sub-lbl">(b) Thickness of walls</div>
+          <div class="sub-lbl">(c) Date on which the Pressure Vessel or Plant was first taken into use</div>
+          <div class="sub-lbl">(d) Maximum permissible working pressure recommended by the manufacturer</div>
+          <div class="sub-lbl">(e) Design Pressure, if known</div>
+          <div class="sub-lbl">(f) The history should be briefly given and the examiner should state whether he has seen the last previous report</div>
+        </td>
+        <td class="col-val">
+          <div class="pv-sub-items">
+            <div><strong>{{ safeDateFormat(selectedPvItem.dateOfConstruction) }}</strong></div>
+            <div><strong>{{ selectedPvItem.thicknessOfWalls || '—' }}</strong></div>
+            <div><strong>{{ safeDateFormat(selectedPvItem.dateFirstTakenIntoUse) }}</strong></div>
+            <div><strong>{{ selectedPvItem.maxPermissibleWorkingPressureByManufacturer || '—' }}</strong></div>
+            <div><strong>{{ selectedPvItem.designPressure || '—' }}</strong></div>
+            <div><strong>{{ selectedPvItem.previousHistoryAndLastReportSeen || '—' }}</strong></div>
+          </div>
+        </td>
+      </tr>
+      <tr><td class="col-num">7)</td><td class="col-desc">Date of last hydrostatic test (if any) and pressure applied</td><td class="col-val">{{ selectedPvItem.pressureAppliedLastHydrostatic || '—' }} by us Dt. {{ safeDateFormat(selectedPvItem.dateOfLastHydrostaticTest) }}</td></tr>
+      <tr><td class="col-num">8)</td><td class="col-desc">Is the Pressure vessel or Plant in open, or otherwise exposed to weather or to damp?</td><td class="col-val">{{ selectedPvItem.exposedToWeather || '—' }}</td></tr>
+      <tr><td class="col-num">9)</td><td class="col-desc">What parts (if any were inaccessible)?</td><td class="col-val">{{ selectedPvItem.partsInaccessible || '—' }}</td></tr>
+      <tr><td class="col-num">10)</td><td class="col-desc">What examination and test were made?(Specify pressure if hydrostatic test was carried out)</td><td class="col-val">{{ selectedPvItem.examinationAndTestsMade || '—' }}</td></tr>
+      <tr><td class="col-num">11)</td><td class="col-desc">Condition of vessel (State any defect materially affecting the safe working pressure of the vessel or plant)</td><td class="col-val">External: {{ selectedPvItem.conditionExternal || '—' }}<br>Internal: {{ selectedPvItem.conditionInternal || '—' }}</td></tr>
+      <tr><td class="col-num">12)</td><td class="col-desc">Are the required fittings and appliances provided in accordance with the rules? Have the pressure settings been checked and corrected?</td><td class="col-val">{{ selectedPvItem.fittingsProvided || '—' }}</td></tr>
+      <tr><td class="col-num">13)</td><td class="col-desc">Are all fitting and appliances properly maintained and in good condition?</td><td class="col-val">{{ selectedPvItem.fittingsMaintainedAndChecked || '—' }}</td></tr>
+      <tr><td class="col-num">14)</td><td class="col-desc">Repairs (if any) required and period within which they should be executed and any other condition which the person making the examination thinks it necessary to specify for securing safe working</td><td class="col-val">{{ selectedPvItem.repairsRequired || 'Nil' }}</td></tr>
+      <tr><td class="col-num">15)</td><td class="col-desc">Maximum permissible working pressure, calculated from dimensions and from the thickness and other data ascertained by the present examination, due allowance being made for conditions of working. If unusual or exceptionally severe (state minimum thickness of walls measured during the examination)</td><td class="col-val"><strong>{{ selectedPvItem.maxPermissibleWorkingPressureCalculated || '—' }}</strong><br><span *ngIf="selectedPvItem.thicknessOfWalls">Thickness {{ selectedPvItem.thicknessOfWalls }}</span></td></tr>
+      <tr>
+        <td class="col-num">16)</td>
+        <td class="col-desc">Where repairs affecting the safe working pressure are required, state the working pressure :-<br>(a) Before expiration of the period specified in (14)<br>(b) After expiration of such period if required repairs have not been completed<br>(c) After the completion of the required repairs.</td>
+        <td class="col-val">
+          <div><strong>(a)</strong> {{ selectedPvItem.beforeExpirationPeriod || '—' }}</div>
+          <div><strong>(b)</strong> {{ selectedPvItem.afterExpirationIfNotCompleted || '—' }}</div>
+          <div><strong>(c)</strong> {{ selectedPvItem.afterCompletionOfRepairs || '—' }}</div>
+        </td>
+      </tr>
+      <tr><td class="col-num">17)</td><td class="col-desc">Other observations</td><td class="col-val">{{ selectedPvItem.otherObservations || 'OK' }}</td></tr>
+    </tbody>
+  </table>
+  <div class="pv-cert-footer">
+    <div class="pv-certify-text">I certify that on <strong>{{ selectedPvItem.dateOfExamination | date:'dd.MM.yyyy' }}</strong> the pressure plant/vessel described above was thoroughly cleaned and (so far its construction permits) made accessible for thorough examination and for such tests as were necessary for thorough examination and that on the said date, thoroughly examined this pressure plant/vessel including its fittings, and that the above is a true report of my examination.</div>
+    <div class="pv-next-due"><strong>Next Due Date for Inspection: &nbsp;{{ selectedPvItem.nextDueDateForExamination | date:'dd.MM.yyyy' }}</strong></div>
+    <div class="pv-signature-row">
+      <div class="pv-sign-left">
+        <div class="pv-sign-name">{{ selectedPvItem.competentPersonName }}</div>
+        <div>Competent Person U/S 21(2), 28, 29,</div>
+        <div>Approved by the Dir. Fac. Kanpur Vide Lic. No.177/F/C.P.U.P./Org.2023 DT. 12.01.2023, Valid 31.12.2024</div>
+      </div>
+      <div class="pv-sign-right">
+        <div class="pv-countersign-label">Counter Signed</div>
+        <div class="cert-qr-block" style="margin-top:8px;">
+          <img [src]="generateQrSvg(selectedPvItem.certificateNo + '|' + companyId + '|pv')" class="cert-qr-img" alt="QR Code">
+          <div class="cert-qr-label">Scan to Download</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SINGLE POWER PRESS PRINT  (NEW)
+══════════════════════════════════════════════════════════ -->
+<div id="pp-print-section" *ngIf="selectedPpItem && selectedItemsForPrint.length === 0" class="pp-print-container">
+
+  <!-- HEADER -->
+ <div class="pp-print-header">
+  <div class="pv-header-title-row">
+    <div class="pv-header-title-block">
+      <div class="pv-title-main">Report of Examination of Dangerous Machine / Power Press / Centrifugal Machine</div>
+      <div class="pv-title-sub">Under Section 21(2) of Factories Act 1948</div>
+    </div>
+    <div class="pv-header-qr-block">
+      <img [src]="generateQrSvg(selectedPpItem.certificateNo + '|' + companyId + '|pp')" class="pv-header-qr-img" alt="QR Code">
+      <div class="pv-header-qr-label">Scan to Download</div>
+    </div>
+  </div>
+  <div class="pv-cert-date-row">
+    <span> <strong>Certificate No: {{ selectedPpItem.certificateNo }}</strong></span>
+    <span> <strong>Date of Examination: {{ selectedPpItem.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
+  </div>
+</div>
+  <!-- MAIN TABLE -->
+  <table class="pp-form-table">
+
+  <tbody>
+    <tr>
+      <td class="col-num">1)</td>
+      <td class="col-desc">Name of Occupier (of Factory)</td>
+      <td class="col-val">{{ selectedPpItem.occupierName || '—' }}</td>
+    </tr>
+    <tr>
+      <td class="col-num">2)</td>
+      <td class="col-desc">Situation and address of factory</td>
+      <td class="col-val">{{ selectedPpItem.factoryAddress || '—' }}</td>
+    </tr>
+    <tr>
+      <td class="col-num">3)</td>
+      <td class="col-desc">Identification number of mark sufficient to identify the dangerous machine / power press / centrifugal machine or the safety device.</td>
+      <td class="col-val">
+        <div class="equipment-main">{{ selectedPpItem.machineType || '—' }}</div>
+        <div class="eq-meta">
+          <span>Sr. No.: {{ selectedPpItem.serialNo || '—' }}</span>
+          <span>Model No.: {{ selectedPpItem.modelNo || '—' }}</span>
+          <span>Capacity: {{ selectedPpItem.capacity || '—' }}</span>
+          <span>Location: {{ selectedPpItem.location || '—' }}</span>
+          <span>Mfg. Name: {{ selectedPpItem.manufacturerName || '—' }}</span>
+          <span>Year: {{ selectedPpItem.yearOfManufacture || '—' }}</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-num">4)</td>
+      <td class="col-desc">Date on which the dangerous machine/power press centrifugal machine or the safety device was first taken into use in the factory</td>
+      <td class="col-val">{{ selectedPpItem.dateFirstUse || '—' }}</td>
+    </tr>
+    <tr>
+      <td class="col-num">5)</td>
+      <td class="col-desc">Date on which the dangerous machine/power press centrifugal machine or the safety device was first taken into use iDate of each periodical thorough examination carried out as per requirements of sub - paragraph (2) aboven the factory</td>
+      <td class="col-val">
+        {{ selectedPpItem.lastExaminationDate | date:'dd-MM-yyyy' }}
+        <ng-container *ngIf="selectedPpItem.lastExaminedBy">
+          &nbsp;— Examined by {{ selectedPpItem.lastExaminedBy }}
+        </ng-container>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-num">6)</td>
+      <td class="col-desc">Particulars of any defects affecting safely working of Tested and found in satisfactory condition the dangerous machine / power press / centrifugal for safe operation. machine or the safety device found at any such thorough examination and steps taken to remedy such defects</td>
+      <td class="col-val">
+        <div class="row8-block">
+          <div class="row8-status">{{ selectedPpItem.defectsObservation || 'NIL' }}</div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- FOOTER -->
+<!-- <div class="cert-footer">
+  <div class="cert-certify">
+    I certify that on <strong>{{ selectedPpItem.dateOfExamination | date:'dd-MM-yyyy' }}</strong>,
+    I thoroughly examined the above machine and that the above is a true report of the result of the examination.
+  </div>
+  <div class="cert-next-due">
+    <strong>NEXT EXAMINATION DUE:</strong> {{ selectedPpItem.nextDueDate | date:'dd-MM-yyyy' }}
+  </div>
+  <div class="cert-signature-row">
+    <div class="sign-left">
+      <div class="signature-name">{{ selectedPpItem.certifiedBy }}</div>
+      <div class="signature-title">{{ selectedPpItem.designation }}</div>
+      <div class="signature-title">License No.: {{ selectedPpItem.licenseNo }}</div>
+      <div class="signature-title">{{ selectedPpItem.approvalDetails }}</div>
+    </div>
+    <div class="sign-right">
+      <div class="signature-title">Counter Signed</div>
+    </div>
+  </div>
+  <div class="cert-bottom-row">
+    <div class="cert-disclaimer">
+      DISCLAIMER: This report reflects conditions as observed on the date of examination.
+      No liability accepted for accidents/mishaps after examination date.
+    </div>
+    <div class="cert-qr-block">
+      <img [src]="generateQrSvg(selectedPpItem.certificateNo + '|' + companyId + '|pp')"
+           class="cert-qr-img" alt="QR Code">
+      <div class="cert-qr-label">Scan to Download</div>
+    </div>
+  </div>
+</div> -->
+
+
+  <!-- FOOTER -->
+<div class="cert-footer">
+  <div class="cert-certify">
+    I certify that on <strong>{{ selectedPpItem.dateOfExamination | date:'dd-MM-yyyy' }}</strong>,
+    I thoroughly examined the above machine and that the above is a true report of the result of the examination.
+  </div>
+  <div class="cert-next-due">
+    <strong>NEXT EXAMINATION DUE:</strong> {{ selectedPpItem.nextDueDate | date:'dd-MM-yyyy' }}
+  </div>
+  <div class="cert-signature-row">
+    <div class="sign-left">
+      <div class="signature-name">{{ selectedPpItem.certifiedBy }}</div>
+      <div class="signature-title">{{ selectedPpItem.designation }}</div>
+      <div class="signature-title">License No.: {{ selectedPpItem.licenseNo }}</div>
+      <div class="signature-title">{{ selectedPpItem.approvalDetails }}</div>
+    </div>
+    <div class="sign-right">
+      <div class="signature-title">Counter Signed</div>
+    </div>
+  </div>
+  <div class="cert-bottom-row">
+    <div class="cert-disclaimer">
+      DISCLAIMER: This report reflects conditions as observed on the date of examination.
+      No liability accepted for accidents/mishaps after examination date.
+    </div>
+    <!-- <div class="cert-qr-block">
+      <img [src]="generateQrSvg(selectedPpItem.certificateNo + '|' + companyId + '|pp')"
+           class="cert-qr-img" alt="QR Code">
+      <div class="cert-qr-label">Scan to Download</div>
+    </div> -->
+  </div>
+</div>
+
+</div><!-- /#pp-print-section -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     BULK PRINT SECTION — one page per selected record
+══════════════════════════════════════════════════════════ -->
+<div id="bulk-print-section" *ngIf="selectedItemsForPrint.length > 0">
+
+  <!-- ── INDEX PAGE ── -->
+  <div class="bulk-index-page">
+    <div class="index-header">
+      <div class="index-title">Inspection Records — Index</div>
+      <div class="index-subtitle">Summary of Inspection Reports</div>
+    </div>
+    <table class="index-table">
+      <thead>
+        <tr>
+          <th>Sl No.</th>
+          <th>Type</th>
+          <th>Certificate No</th>
+          <th>ID No.</th>
+          <th>Equipment / Machine / Vessel</th>
+          <th>Sr.No</th>
+          <th>Manufacturer</th>
+          <th>Year</th>
+          <th>Capacity / SWL / SWP</th>
+          <th>Location</th>
+          <th>Testing Date</th>
+          <th>Due Date</th>
+          <th>Remark</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of selectedItemsForPrint; let i = index">
+
+          <!-- LIFTING ROW -->
+          <ng-container *ngIf="item.type === 'lifting'">
+            <td>{{ i + 1 }}</td>
+            <td class="index-type-badge index-type-lifting">Lifting</td>
+            <td class="index-cert-no">{{ item.data.certificateNo || '—' }}</td>
+            <td>{{ item.data.identificationNo || item.data.idNumber || '—' }}</td>
+            <td>{{ item.data.equipmentName || '—' }}</td>
+            <td>{{ item.data.srNo || '—' }}</td>
+            <td>{{ item.data.manufacturerName || '—' }}</td>
+            <td>{{ item.data.manufacturerYear || item.data.yearOfManufacture || '—' }}</td>
+            <td>{{ item.data.capacity || item.data.safeWorkingLoad || '—' }}</td>
+            <td>{{ item.data.equipmentLocation || item.data.location || '—' }}</td>
+            <td>{{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</td>
+            <td>{{ item.data.nextDueDate | date:'dd-MM-yyyy' }}</td>
+            <td>
+              <div class="remark-qr-cell">
+                <!-- <div>{{ item.data.remarks || '—' }}</div> -->
+                <div class="index-qr-block" *ngIf="item.data.qrCodeUrl">
+                  <img [src]="item.data.qrCodeUrl" alt="QR Code" class="index-qr-img" />
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- PRESSURE VESSEL ROW -->
+          <ng-container *ngIf="item.type === 'pv'">
+            <td>{{ i + 1 }}</td>
+            <td class="index-type-badge index-type-pv">PV</td>
+            <td class="index-cert-no">{{ item.data.certificateNo || '—' }}</td>
+            <td>{{ item.data.vesselIdNo || '—' }}</td>
+            <td>{{ item.data.vesselDescription || '—' }}</td>
+            <td>{{ item.data.vesselSrNo || item.data.vesselIdNo || '—' }}</td>
+            <td>{{ item.data.manufacturerName || '—' }}</td>
+            <td>{{ item.data.dateOfConstruction || '—' }}</td>
+            <td>{{ item.data.vesselCapacity || '—' }}</td>
+            <td>{{ item.data.vesselLocation || '—' }}</td>
+            <td>{{ safeDateFormat(item.data.dateOfExamination) }}</td>
+            <td>{{ safeDateFormat(item.data.nextDueDateForExamination) }}</td>
+            <td>
+              <div class="remark-qr-cell">
+                <!-- <div>{{ item.data.otherObservations || '—' }}</div> -->
+                <div class="index-qr-block" *ngIf="item.data.qrCodeUrl">
+                  <img [src]="item.data.qrCodeUrl" alt="QR Code" class="index-qr-img" />
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- POWER PRESS ROW -->
+     <!-- POWER PRESS ROW -->
+<ng-container *ngIf="item.type === 'pp'">
+  <td>{{ i + 1 }}</td>
+  <td class="index-type-badge index-type-pp">PP</td>
+  <td class="index-cert-no">{{ item.data.certificateNo || '—' }}</td>
+  <td>{{ item.data.serialNo || '—' }}</td>
+  <td>{{ item.data.machineType || '—' }}</td>
+  <td>{{ item.data.serialNo || '—' }}</td>
+  <td>{{ item.data.manufacturerName || '—' }}</td>
+  <td>{{ item.data.yearOfManufacture || '—' }}</td>
+  <td>{{ item.data.capacity || '—' }}</td>
+  <td>{{ item.data.location || '—' }}</td>
+  <td>{{ safeDateFormat(item.data.dateOfExamination) }}</td>
+  <td>{{ safeDateFormat(item.data.nextDueDate) }}</td>
+  <td>
+    <div class="remark-qr-cell">
+      <!-- <div>{{ item.data.defectsObservation || '—' }}</div> -->
+      <div class="index-qr-block" *ngIf="item.data.qrCodeUrl">
+        <img [src]="item.data.qrCodeUrl" alt="QR Code" class="index-qr-img" />
+      </div>
+    </div>
+  </td>
+</ng-container>
+
+        </tr>
+      </tbody>
+    </table>
+    <div class="index-footer">
+      Total Records: {{ selectedItemsForPrint.length }} &nbsp;&nbsp;|&nbsp;&nbsp;
+      Lifting: {{ getLiftingCount() }} &nbsp;&nbsp;|&nbsp;&nbsp;
+      Pressure Vessel: {{ getPvCount() }} &nbsp;&nbsp;|&nbsp;&nbsp;
+      Power Press: {{ getPpCount() }}
+    </div>
+  </div>
+
+  <!-- Page break after index -->
+  <div class="bulk-page-break"></div>
+
+  <ng-container *ngFor="let item of selectedItemsForPrint; let i = index; let last = last">
+
+    <!-- ── LIFTING PAGE ── -->
+    <div class="bulk-print-page" *ngIf="item.type === 'lifting'">
+      <div class="print-header-row">
+        <div class="print-title-group">
+          <p class="print-title">{{ item.data.testName?.split('(')[0]?.trim() }}</p>
+          <p class="print-sub" *ngIf="item.data.testName?.includes('(')">
+            ({{ item.data.testName.split('(')[1]?.replace(')', '') }})
+          </p>
+        </div>
+      </div>
+      <div class="cert-top-row">
+        <span class="print-label">Report No: {{ item.data.certificateNo }}</span>
+        <span class="print-label">Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</span>
+      </div>
+      <table class="print-table">
+        <tbody>
+          <tr><td class="cn">1</td><td class="cd">Name of Occupier (of the Factory)</td><td class="cv">{{ item.data.nameOfOccupier || '—' }}</td></tr>
+          <tr><td class="cn">2</td><td class="cd">Address of the Factory</td><td class="cv">{{ item.data.addressOfFactory || '—' }}</td></tr>
+          <tr>
+            <td class="cn">3</td>
+            <td class="cd">Distinguishing number or mark if any and description sufficient to identify the lifting machine, chain, rope or lifting tackle. EOT crane Elect. Hoist/Jib/crane/Chain Pulley Block</td>
+            <td class="cv">
+              <div class="equipment-main">{{ item.data.equipmentName || '—' }}</div>
+              <div class="eq-meta">
+                <span>Model No.: {{ item.data.modelNumber || '—' }}</span>
+                <span>Sr.No.: {{ item.data.srNo || '—' }}</span>
+                <span>ID No: {{ item.data.idNumber || '—' }}</span>
+                <span>Mfg Name: {{ item.data.manufacturerName || '—' }}</span>
+                <span>Year: {{ item.data.manufacturerYear || '—' }}</span>
+                <span>Capacity: {{ item.data.capacity || '—' }}</span>
+                <span>SWL: {{ item.data.safeWorkingLoad || '—' }}</span>
+                <span>Equipment Location: {{ item.data.equipmentLocation || '—' }}</span>
+              </div>
+            </td>
+          </tr>
+          <tr><td class="cn">4</td><td class="cd">Date when the lifting machine was first taken into use in the factory</td><td class="cv">{{ item.data.yearFirstTakenIntoUse || '—' }}</td></tr>
+          <tr><td class="cn">5</td><td class="cd">Date and number of certificate relating to any test or examination made under sub-rules (1) &amp; (7) together with the name address of the person who issued the certificate</td><td class="cv">{{ item.data.previousCertificateDetails || '—' }}</td></tr>
+          <tr><td class="cn">6</td><td class="cd">Date of each periodically through examination made under clause (iii) of clause 'a' of sub section (1) of section 29 of the Act and sub rule (6) and by whom it was carried out</td><td class="cv">{{ item.data.periodicalExaminationDetails || '—' }}</td></tr>
+          <tr><td class="cn">7</td><td class="cd">Date of annealing or other heat treatment of the chain, other lifting tackle, made under sub-rule (5) and by whom it was carried out</td><td class="cv">{{ item.data.annealingOrHeatTreatmentDetails || '—' }}</td></tr>
+          <tr>
+            <td class="cn">8</td>
+            <td class="cd">Particulars of any defects affecting safe working load found at any such through examination or after annealing and steps taken to remedy such defects</td>
+            <td class="cv">
+              <div class="row8-block">
+                <div class="row8-status"><span>{{ item.data.defectsParticulars || 'NIL' }}</span></div>
+                <div class="row8-item" *ngIf="item.data.remarks"><span class="row8-label">Remarks:</span>{{ item.data.remarks }}</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+       <div class="cert-certify">I certify that on <strong>{{ item.data.certifiedDate | date:'dd-MM-yyyy' }}</strong>, I thoroughly examined the above Lifting Machine/Lifting Tackles and that the above is a true report of the result of the examination.</div>
+        <div class="cert-next-due"><strong>NEXT EXAMINATION DUE:</strong> {{ item.data.nextDueDate | date:'dd-MM-yyyy' }}</div>
+ 
+      <div class="cert-footer">
+              <div class="cert-signature-row">
+          <div class="sign-left">
+            <div class="signature-name">{{ item.data.inspectorName }}</div>
+            <div class="signature-title">Competent Person/Chartered Engineer</div>
+            <div class="signature-title">Factories Act, 1948 {{ getSectionText() }}</div>
+            <ng-container *ngFor="let line of getApprovalText().split('\n')">
+              <div class="signature-title">{{ line }}</div>
+            </ng-container>
+          </div>
+          <div class="sign-right"><div class="signature-title">Counter Signed</div></div>
+        </div>
+        <div class="cert-bottom-row">
+          <div class="cert-disclaimer">DISCLAIMER: This report reflects conditions as observed on the date of examination. No liability accepted for accidents/mishaps after examination date.</div>
+          <!-- <div class="cert-qr-block">
+            <img [src]="generateQrSvg(item.data.certificateNo + '|' + companyId + '|lifting')" class="cert-qr-img" alt="QR Code">
+            <div class="cert-qr-label">Scan to Download</div>
+          </div> -->
+        </div>
+      </div>
+    </div><!-- /bulk-print-page lifting -->
+
+    <!-- ── PV PAGE ── -->
+    <div class="bulk-print-page" *ngIf="item.type === 'pv'">
+      <div class="pv-bulk-header">
+        <div class="pv-header-title-row">
+          <div class="pv-header-title-block">
+            <div class="pv-title-main">Report of Examination of Pressure Vessel or Plant</div>
+            <div class="pv-title-sub">Form No. 8 Section 31 (See Rule 61)</div>
+          </div>
+          <div class="pv-header-qr-block">
+            <img [src]="generateQrSvg(item.data.certificateNo + '|' + companyId + '|pv')" class="pv-header-qr-img" alt="QR Code">
+            <div class="pv-header-qr-label">Scan to Download</div>
+          </div>
+        </div>
+        <div class="pv-cert-date-row">
+          <span> <strong> Certificate No: {{ item.data.certificateNo }}</strong></span>
+          <span> <strong>Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
+        </div>
+      </div>
+      <table class="pv-print-table">
+        <tbody>
+          <tr><td class="num">1)</td><td class="desc">Name of Occupier (of factory)</td><td class="value">{{ item.data.nameOfOccupier || '—' }}</td></tr>
+          <tr><td class="num">2)</td><td class="desc">Address of factory</td><td class="value">{{ item.data.addressOfFactory || '—' }}</td></tr>
+          <tr>
+            <td class="num">3)</td>
+            <td class="desc">Name, description and distinctive number of pressure vessel/Plant</td>
+            <td class="value">
+              <div class="vessel-main">{{ item.data.vesselDescription || '—' }}</div>
+              <div class="vessel-meta">Cap.: {{ item.data.vesselCapacity || '—' }} | Sr. No. {{ item.data.vesselSrNo || '—' }} | ID. No. {{ item.data.vesselIdNo || '—' }} | Location: {{ item.data.vesselLocation || '—' }}</div>
+            </td>
+          </tr>
+          <tr><td class="num">4)</td><td class="desc">Name and address of manufacture</td><td class="value">{{ item.data.manufacturerName || '—' }}</td></tr>
+          <tr><td class="num">5)</td><td class="desc">Name of process in which it is used</td><td class="value">{{ item.data.natureOfProcess || '—' }}</td></tr>
+          <tr><td class="num" rowspan="7">6)</td><td class="desc">Particulars of Pressure vessel or Plant</td><td class="value"></td></tr>
+          <tr><td class="desc">(a) Date of construction</td><td class="value">{{ safeDateFormat(item.data.dateOfConstruction) }}</td></tr>
+          <tr><td class="desc">(b) Thickness of walls</td><td class="value">{{ item.data.thicknessOfWalls || '—' }}</td></tr>
+          <tr><td class="desc">(c) Date first taken into use</td><td class="value">{{ safeDateFormat(item.data.dateFirstTakenIntoUse) }}</td></tr>
+          <tr><td class="desc">(d) Maximum Permissible working pressure recommended by manufacturer</td><td class="value">{{ item.data.maxPermissibleWorkingPressureByManufacturer || '—' }}</td></tr>
+          <tr><td class="desc">(e) Design Pressure, if known</td><td class="value">{{ item.data.designPressure || '—' }}</td></tr>
+          <tr><td class="desc">(f) Has the examiner seen the last examination and test report?</td><td class="value">{{ item.data.previousHistoryAndLastReportSeen || '—' }}</td></tr>
+          <tr><td class="num">7)</td><td class="desc">Is the vessel in open or otherwise exposed to weather or to damp?</td><td class="value">{{ item.data.pressureAppliedLastHydrostatic }} on Dated {{ safeDateFormat(item.data.dateOfLastHydrostaticTest) }}</td></tr>
+          <tr><td class="num">8)</td><td class="desc">Date of last hydrostatic test (if any) and pressure applied</td><td class="value">{{ item.data.exposedToWeather || '—' }}</td></tr>
+          <tr><td class="num">9)</td><td class="desc">What part (if any were inaccessible)?</td><td class="value">{{ item.data.partsInaccessible || '—' }}</td></tr>
+          <tr><td class="num">10)</td><td class="desc">What examination and test were made?</td><td class="value">{{ item.data.examinationAndTestsMade || '—' }}</td></tr>
+          <tr><td class="num">11)</td><td class="desc">Condition of vessel</td><td class="value"><div>External: {{ item.data.conditionExternal || '—' }}</div><div>Internal: {{ item.data.conditionInternal || item.data.conditionExternal || '—' }}</div></td></tr>
+          <tr><td class="num">12)</td><td class="desc">Are the required fittings and appliances provided in accordance with the rules?</td><td class="value">{{ item.data.fittingsProvided || '—' }}</td></tr>
+          <tr><td class="num">13)</td><td class="desc">Are all fitting and appliances properly maintained and in good condition?</td><td class="value">{{ item.data.fittingsMaintainedAndChecked || '—' }}</td></tr>
+          <tr><td class="num">14)</td><td class="desc">Repairs (if any) required</td><td class="value">{{ item.data.repairsRequired || 'Nil' }}</td></tr>
+          <tr>
+            <td class="num">15)</td>
+            <td class="desc">Maximum permissible working pressure, calculated from dimensions and from the thickness and other data ascertained by the present examination</td>
+            <td class="value" style="vertical-align:top;">
+              <div>{{ item.data.maxPermissibleWorkingPressureByManufacturer ? 'RSWP: ' + item.data.maxPermissibleWorkingPressureByManufacturer : '—' }}</div>
+              <div style="display:flex; flex-direction:column; gap:2px; margin-top:3px;">
+                <div style="display:flex; gap:4px;"><span style="min-width:36px;">Shell:</span><span>{{ getShellValue(item.data.thicknessOfWalls) }}</span></div>
+                <div style="display:flex; gap:4px;"><span style="min-width:36px;">Dish:</span><span>{{ getDishValue(item.data.thicknessOfWalls) }}</span></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="num" style="vertical-align:top;">16)</td>
+            <td class="desc" style="vertical-align:top;"><div>Where repairs affecting the safe working pressure are required, state the working pressure:-</div><div style="margin-top:4px;">(a) Before expiration of the period specified in (14)</div><div style="margin-top:4px;">(b) After expiration of such period if required repairs have not been completed</div><div style="margin-top:4px;">(c) After the completion of the required repairs.</div></td>
+            <td class="value" style="vertical-align:top;">
+              <div style="visibility:hidden;">Where repairs affecting</div>
+              <div style="margin-top:4px;">{{ item.data.beforeExpirationPeriod || '—' }}</div>
+              <div style="margin-top:4px;">{{ item.data.afterExpirationIfNotCompleted || '—' }}</div>
+              <div style="margin-top:4px;">{{ item.data.afterCompletionOfRepairs || '—' }}</div>
+            </td>
+          </tr>
+          <tr><td class="num">17)</td><td class="desc">Other observations</td><td class="value">{{ item.data.otherObservations || 'None' }}</td></tr>
+        </tbody>
+      </table>
+      <div class="cert-statement">I certify that on <strong>{{ item.data.dateOfExamination | date:'dd.MM.yyyy' }}</strong> the pressure plant/vessel described above was thoroughly cleaned and (so far its construction permits) made accessible for thorough examination and for such tests as were necessary for thorough examination and that on the said date, thoroughly examined this pressure plant/vessel including its fittings, and that the above is a true report of my examination.</div>
+        <div class="next-due"><strong>Next Due Date for Examination: {{ item.data.nextDueDateForExamination | date:'dd.MM.yyyy' }}</strong></div>
+     
+      <div class="cert-footer">
+           <div class="signature-section">
+          <div class="signature-left">
+            <div class="signature-name">{{ item.data.competentPersonName }}</div>
+            <div class="signature-title">Competent Person/Chartered Engineer</div>
+            <div class="signature-title">Factories Act, 1948 {{ getSectionText() }}</div>
+            <ng-container *ngFor="let line of getApprovalText().split('\n')">
+              <div class="signature-title">{{ line }}</div>
+            </ng-container>
+          </div>
+          <div class="signature-right"><div class="signature-title">Counter Signed</div></div>
+        </div>
+        <div class="cert-bottom-row">
+          <div class="cert-disclaimer">DISCLAIMER: This report reflects conditions as observed on the date of examination. No liability accepted for accidents/mishaps after examination date.</div>
+        </div>
+      </div>
+    </div><!-- /bulk-print-page pv -->
+
+    <!-- ── POWER PRESS PAGE ── (NEW) -->
+   <!-- ── POWER PRESS PAGE (BULK) ── -->
+<div class="bulk-print-page" *ngIf="item.type === 'pp'">
+  <div class="pv-bulk-header">
+    <div class="pv-header-title-row">
+      <div class="pv-header-title-block">
+        <div class="pv-title-main">Report of Examination of Dangerous Machine / Power Press / Centrifugal Machine</div>
+        <div class="pv-title-sub">Under Section 21(2) of Factories Act 1948</div>
+      </div>
+      <div class="pv-header-qr-block">
+        <img [src]="generateQrSvg(item.data.certificateNo + '|' + companyId + '|pp')" class="pv-header-qr-img" alt="QR Code">
+        <div class="pv-header-qr-label">Scan to Download</div>
+      </div>
+    </div>
+    <div class="pv-cert-date-row">
+      <span><strong>Certificate No: {{ item.data.certificateNo }}</strong></span>
+      <span><strong>Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
+    </div>
+  </div>
+  <table class="pv-print-table">
+    <tbody>
+      <tr>
+        <td class="num">1)</td>
+        <td class="desc">Name of Occupier (of factory)</td>
+        <td class="value">{{ item.data.occupierName || '—' }}</td>
+      </tr>
+      <tr>
+        <td class="num">2)</td>
+        <td class="desc">Situation and address of factory</td>
+        <td class="value">{{ item.data.factoryAddress || '—' }}</td>
+      </tr>
+      <tr>
+        <td class="num">3)</td>
+        <td class="desc">Identification number of mark sufficient to identify the dangerous machine / power press / centrifugal machine or the safety device.</td>
+        <td class="value">
+          <div class="equipment-main">{{ item.data.machineType || '—' }}</div>
+          <div class="eq-meta">
+            <span>Sr. No.: {{ item.data.serialNo || '—' }}</span>
+            <span>Model No.: {{ item.data.modelNo || '—' }}</span>
+            <span>Capacity: {{ item.data.capacity || '—' }}</span>
+            <span>Location: {{ item.data.location || '—' }}</span>
+            <span>Mfg. Name: {{ item.data.manufacturerName || '—' }}</span>
+            <span>Year: {{ item.data.yearOfManufacture || '—' }}</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="num">4)</td>
+        <td class="desc">Date on which the dangerous machine/power press centrifugal machine or the safety device was first taken into use in the factory</td>
+        <td class="value">{{ item.data.dateFirstUse || '—' }}</td>
+      </tr>
+      <tr>
+        <td class="num">5)</td>
+        <td class="desc">Date on which the dangerous machine/power press centrifugal machine or the safety device was first taken into use iDate of each periodical thorough examination carried out as per requirements of sub - paragraph (2) aboven the factory</td>
+        <td class="value">Last time tested by   <ng-container *ngIf="item.data.lastExaminedBy">
+            {{ item.data.lastExaminedBy }}
+          </ng-container> us on dated 
+          {{ safeDateFormat(item.data.lastExaminationDate) }}
+        
+        </td>
+      </tr>
+      <tr>
+        <td class="num">6)</td>
+        <td class="desc">Particulars of any defects affecting safely working of Tested and found in satisfactory condition the dangerous machine / power press / centrifugal for safe operation. machine or the safety device found at any such thorough examination and steps taken to remedy such defects</td>
+        <td class="value">
+          <div class="row8-block">
+            <div class="row8-status">{{ item.data.defectsObservation || 'NIL' }}</div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="cert-certify">
+      I certify that on <strong>{{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong>, I thoroughly examined the above machine and that the above is a true report of the result of the examination.
+    </div>
+    <div class="cert-next-due"><strong>NEXT EXAMINATION DUE:</strong> {{ item.data.nextDueDate | date:'dd-MM-yyyy' }}</div>
+ 
+  <div class="cert-footer">
+       <div class="cert-signature-row">
+      <div class="sign-left">
+        <div class="signature-name">{{ item.data.certifiedBy }}</div>
+        <div class="signature-title">{{ item.data.designation }}</div>
+        <div class="signature-title">License No.: {{ item.data.licenseNo }}</div>
+        <div class="signature-title">{{ item.data.approvalDetails }}</div>
+      </div>
+      <div class="sign-right"><div class="signature-title">Counter Signed</div></div>
+    </div>
+    <div class="cert-bottom-row">
+      <div class="cert-disclaimer">
+        DISCLAIMER: This report reflects conditions as observed on the date of examination. No liability accepted for accidents/mishaps after examination date.
+      </div>
+      <!-- <div class="cert-qr-block">
+        <img [src]="generateQrSvg(item.data.certificateNo + '|' + companyId + '|pp')" class="cert-qr-img" alt="QR Code">
+        <div class="cert-qr-label">Scan to Download</div>
+      </div> -->
+    </div>
+  </div>
+</div><!-- /bulk-print-page pp -->
+
+    <!-- Page break between records (not after last) -->
+    <div class="bulk-page-break" *ngIf="!last"></div>
+
+  </ng-container>
+</div><!-- /#bulk-print-section -->

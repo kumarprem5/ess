@@ -1,0 +1,157 @@
+<!-- LOADING -->
+<div class="verify-state" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Loading certificate…</p>
+</div>
+
+<!-- ERROR -->
+<div class="verify-state" *ngIf="error && !loading">
+  <p class="error-text">❌ Certificate not found or invalid QR code.</p>
+  <p style="font-size:12px;color:#666;">Cert: {{ certNo }} | Type: {{ recType }}</p>
+</div>
+
+<!-- ── LIFTING REPORT ── -->
+<div class="print-wrap" *ngIf="!loading && !error && recType === 'lifting' && record">
+
+  <div class="no-print verify-banner">
+    <span>✅ Verified Certificate</span>
+   <button (click)="printPage()">🖨 Print</button>
+  </div>
+
+  <div class="print-header-row">
+    <div class="print-title-group">
+      <p class="print-title">{{ record.testName?.split('(')[0]?.trim() }}</p>
+      <p class="print-sub" *ngIf="record.testName?.includes('(')">
+        ({{ record.testName.split('(')[1]?.replace(')', '') }})
+      </p>
+    </div>
+  </div>
+
+  <div class="cert-top-row">
+    <span class="print-label">Report No: {{ record.certificateNo }}</span>
+    <span class="print-label">Date of Examination: {{ record.dateOfExamination | date:'dd-MM-yyyy' }}</span>
+  </div>
+
+  <table class="print-table">
+    <tbody>
+      <tr><td class="cn">1</td><td class="cd">Name of Occupier (of the Factory)</td><td class="cv">{{ record.nameOfOccupier || '—' }}</td></tr>
+      <tr><td class="cn">2</td><td class="cd">Address of the Factory</td><td class="cv">{{ record.addressOfFactory || '—' }}</td></tr>
+      <tr>
+        <td class="cn">3</td>
+        <td class="cd">Distinguishing number or description sufficient to identify the lifting machine</td>
+        <td class="cv">
+          <div class="equipment-main">{{ record.equipmentName || '—' }}</div>
+          <div class="eq-meta">
+            <span>Model No.: {{ record.modelNumber || '—' }}</span>
+            <span>Sr.No.: {{ record.srNo || '—' }}</span>
+            <span>ID No: {{ record.idNumber || '—' }}</span>
+            <span>Mfg Name: {{ record.manufacturerName || '—' }}</span>
+            <span>Year: {{ record.manufacturerYear || '—' }}</span>
+            <span>Capacity: {{ record.capacity || '—' }}</span>
+            <span>SWL: {{ record.safeWorkingLoad || '—' }}</span>
+            <span>Location: {{ record.equipmentLocation || '—' }}</span>
+          </div>
+        </td>
+      </tr>
+      <tr><td class="cn">4</td><td class="cd">Date when first taken into use</td><td class="cv">{{ record.yearFirstTakenIntoUse || '—' }}</td></tr>
+      <tr><td class="cn">5</td><td class="cd">Previous Certificate Details</td><td class="cv">{{ record.previousCertificateDetails || '—' }}</td></tr>
+      <tr><td class="cn">6</td><td class="cd">Periodical Examination Details</td><td class="cv">{{ record.periodicalExaminationDetails || '—' }}</td></tr>
+      <tr><td class="cn">7</td><td class="cd">Annealing / Heat Treatment</td><td class="cv">{{ record.annealingOrHeatTreatmentDetails || '—' }}</td></tr>
+      <tr>
+        <td class="cn">8</td>
+        <td class="cd">Defects & steps taken to remedy</td>
+        <td class="cv">
+          {{ record.defectsParticulars || 'NIL' }}
+          <div *ngIf="record.remarks"><strong>Remarks:</strong> {{ record.remarks }}</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="cert-footer">
+    <div class="cert-certify">
+      I certify that on <strong>{{ record.certifiedDate | date:'dd-MM-yyyy' }}</strong>,
+      I thoroughly examined the above Lifting Machine/Lifting Tackles and that the above is a true report.
+    </div>
+    <div class="cert-next-due">
+      <strong>NEXT EXAMINATION DUE:</strong> {{ record.nextDueDate | date:'dd-MM-yyyy' }}
+    </div>
+    <div class="cert-signature-row">
+      <div class="sign-left">
+        <div class="signature-name">{{ record.inspectorName }}</div>
+        <div class="signature-title">Competent Person/Chartered Engineer</div>
+        <div class="signature-title">Factories Act, 1948 {{ getSectionText() }}</div>
+        <div class="signature-title">{{ getApprovalText() }}</div>
+      </div>
+      <div class="sign-right">
+        <div class="signature-title">Counter Signed</div>
+      </div>
+    </div>
+    <div class="cert-disclaimer">
+      <strong>DISCLAIMER:</strong> This report reflects conditions as observed on the date of examination.
+    </div>
+  </div>
+</div>
+
+<!-- ── PV REPORT ── -->
+<div class="print-wrap" *ngIf="!loading && !error && recType === 'pv' && record">
+
+  <div class="no-print verify-banner">
+    <span>✅ Verified Certificate</span>
+   <button (click)="printPage()">🖨 Print</button>
+  </div>
+  
+  <div class="pv-print-header">
+    <div class="pv-title-main">Report of Examination of Pressure Vessel or Plant</div>
+    <div class="pv-title-sub">Form No. 8 Section 31 (See Rule 61)</div>
+    <div class="pv-cert-date-row">
+      <span>Certificate No: <strong>{{ record.certificateNo }}</strong></span>
+      <span>Date of Examination: <strong>{{ record.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
+    </div>
+  </div>
+
+  <table class="pv-form-table">
+    <tbody>
+      <tr><td class="col-num">1)</td><td class="col-desc">Name of Occupier</td><td class="col-val">{{ record.nameOfOccupier || '—' }}</td></tr>
+      <tr><td class="col-num">2)</td><td class="col-desc">Address of Factory</td><td class="col-val">{{ record.addressOfFactory || '—' }}</td></tr>
+      <tr>
+        <td class="col-num">3)</td>
+        <td class="col-desc">Name, description and distinctive number of pressure vessel</td>
+        <td class="col-val">
+          {{ record.vesselDescription || '—' }}<br>
+          Cap: {{ record.vesselCapacity || '—' }} &nbsp; ID: {{ record.vesselIdNo || '—' }}<br>
+          Location: {{ record.vesselLocation || '—' }}
+        </td>
+      </tr>
+      <tr><td class="col-num">4)</td><td class="col-desc">Manufacturer Name</td><td class="col-val">{{ record.manufacturerName || '—' }}</td></tr>
+      <tr><td class="col-num">5)</td><td class="col-desc">Nature of Process</td><td class="col-val">{{ record.natureOfProcess || '—' }}</td></tr>
+      <tr><td class="col-num">6a)</td><td class="col-desc">Date of construction</td><td class="col-val">{{ safeDateFormat(record.dateOfConstruction) }}</td></tr>
+      <tr><td class="col-num">6b)</td><td class="col-desc">Thickness of walls</td><td class="col-val">{{ record.thicknessOfWalls || '—' }}</td></tr>
+      <tr><td class="col-num">6c)</td><td class="col-desc">Date first taken into use</td><td class="col-val">{{ safeDateFormat(record.dateFirstTakenIntoUse) }}</td></tr>
+      <tr><td class="col-num">6d)</td><td class="col-desc">Max pressure by manufacturer</td><td class="col-val">{{ record.maxPermissibleWorkingPressureByManufacturer || '—' }}</td></tr>
+      <tr><td class="col-num">7)</td><td class="col-desc">Last hydrostatic test</td><td class="col-val">{{ record.pressureAppliedLastHydrostatic || '—' }} Dt. {{ safeDateFormat(record.dateOfLastHydrostaticTest) }}</td></tr>
+      <tr><td class="col-num">11)</td><td class="col-desc">Condition of vessel</td><td class="col-val">External: {{ record.conditionExternal || '—' }}<br>Internal: {{ record.conditionInternal || '—' }}</td></tr>
+      <tr><td class="col-num">14)</td><td class="col-desc">Repairs required</td><td class="col-val">{{ record.repairsRequired || 'Nil' }}</td></tr>
+      <tr><td class="col-num">15)</td><td class="col-desc">Max permissible working pressure (calculated)</td><td class="col-val"><strong>{{ record.maxPermissibleWorkingPressureCalculated || '—' }}</strong></td></tr>
+      <tr><td class="col-num">17)</td><td class="col-desc">Other observations</td><td class="col-val">{{ record.otherObservations || 'OK' }}</td></tr>
+    </tbody>
+  </table>
+
+  <div class="pv-cert-footer">
+    <div class="pv-certify-text">
+      I certify that on <strong>{{ record.dateOfExamination | date:'dd.MM.yyyy' }}</strong>
+      the pressure plant/vessel was thoroughly examined and the above is a true report.
+    </div>
+    <div class="pv-next-due">
+      <strong>Next Due Date: {{ record.nextDueDateForExamination | date:'dd.MM.yyyy' }}</strong>
+    </div>
+    <div class="pv-signature-row">
+      <div>
+        <div class="pv-sign-name">{{ record.competentPersonName }}</div>
+        <div>Competent Person — Factories Act 1948</div>
+        <div>{{ getApprovalText() }}</div>
+      </div>
+      <div style="text-align:right">Counter Signed</div>
+    </div>
+  </div>
+</div>
