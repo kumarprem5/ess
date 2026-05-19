@@ -1,0 +1,230 @@
+<!-- ══════════════════════════════════════════════════════════
+     BULK PRINT — LIFTING PAGE
+     Self-contained: only Lifting records, no PV / PP logic
+══════════════════════════════════════════════════════════ -->
+
+<div id="bulk-print-lifting-section" *ngIf="liftingItems.length > 0" class="bpl-root">
+
+  <!-- ── INDEX PAGE ── -->
+  <div class="bpl-index-page">
+    <div class="bpl-index-header">
+      <div class="bpl-index-title">Lifting Equipment Inspection Records — Index</div>
+      <div class="bpl-index-subtitle">Summary of Lifting Equipment Inspection Reports</div>
+    </div>
+
+    <table class="bpl-index-table">
+      <thead>
+        <tr>
+          <th>Sl No.</th>
+          <th>Type</th>
+          <th>Certificate No</th>
+          <th>ID No.</th>
+          <th>Equipment</th>
+          <th>Sr.No</th>
+          <th>Manufacturer</th>
+          <th>Year</th>
+          <th>Capacity / SWL</th>
+          <th>Location</th>
+          <th>Testing Date</th>
+          <th>Due Date</th>
+          <th>Remark</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of liftingItems; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td class="bpl-badge">Lifting</td>
+          <td class="bpl-cert-no">{{ item.data.certificateNo || '—' }}</td>
+          <td>{{ item.data.idNumber || '—' }}</td>
+          <td>{{ item.data.equipmentName || '—' }}</td>
+          <td>{{ item.data.srNo || '—' }}</td>
+          <td>{{ item.data.manufacturerName || '—' }}</td>
+          <td>{{ item.data.manufacturerYear || '—' }}</td>
+          <td>{{ item.data.capacity || item.data.safeWorkingLoad || '—' }}</td>
+          <td>{{ item.data.equipmentLocation || item.data.location || '—' }}</td>
+          <td>{{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</td>
+          <td>{{ item.data.nextDueDate | date:'dd-MM-yyyy' }}</td>
+          <td>
+            <div class="bpl-remark-qr-cell">
+              <div class="bpl-index-qr-block" *ngIf="item.data.qrCodeUrl">
+                <img [src]="item.data.qrCodeUrl" alt="QR Code" class="bpl-index-qr-img" />
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="bpl-index-footer">
+      Total Lifting Records: {{ liftingItems.length }}
+    </div>
+  </div><!-- /bpl-index-page -->
+
+  <!-- Page break after index -->
+  <div class="bpl-page-break"></div>
+
+  <!-- ── ONE PAGE PER LIFTING RECORD ── -->
+  <ng-container *ngFor="let item of liftingItems; let last = last">
+    <div class="bpl-print-page">
+
+      <!-- Header
+      <div class="bpl-print-header-row">
+        <div class="bpl-print-title-group">
+          <p class="bpl-print-title">{{ item.data.testName?.split('(')[0]?.trim() }}</p>
+          <p class="bpl-print-sub" *ngIf="item.data.testName?.includes('(')">
+            ({{ item.data.testName.split('(')[1]?.replace(')', '') }})
+          </p>
+        </div>
+      </div> -->
+
+
+
+      <div class="bpl-print-header-row">
+        <div class="bpl-header-title-row">
+
+          <!-- Left spacer (mirrors QR width for centering) ] -->
+          <div class="bpl-header-qr-spacer"></div>
+
+          <!-- Centered title block -->
+          <div class="bpl-header-title-block">
+            <p class="bpl-print-title">{{ item.data.testName?.split('(')[0]?.trim() }}</p>
+            <p class="bpl-print-sub" *ngIf="item.data.testName?.includes('(')">
+              ({{ item.data.testName.split('(')[1]?.replace(')', '') }})
+            </p>
+          </div>
+
+          <!-- QR code on the right -->
+          <div class="bpl-header-qr-block">
+            <img [src]="generateQrSvg(item.data.certificateNo + '|' + companyId + '|lifting')" class="bpl-header-qr-img"
+              alt="QR Code">
+            <div class="bpl-header-qr-label">Scan to Download</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="bpl-cert-top-row">
+        <span class="bpl-print-label">Report No: {{ item.data.certificateNo }}</span>
+        <span class="bpl-print-label">Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</span>
+      </div>
+
+      <!-- Main table -->
+      <table class="bpl-print-table">
+        <tbody>
+          <tr>
+            <td class="bpl-cn">1</td>
+            <td class="bpl-cd">Name of Occupier (of the Factory)</td>
+            <td class="bpl-cv">{{ item.data.nameOfOccupier || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bpl-cn">2</td>
+            <td class="bpl-cd">Address of factory</td>
+            <td class="bpl-cv">{{ item.data.addressOfFactory || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bpl-cn">3</td>
+            <td class="bpl-cd">Distinguishing number or mark if any and description sufficient to identify the lifting
+              machine, chain, rope or lifting tackle. EOT crane Elect. Hoist/Jib/crane/Chain Pulley Block</td>
+            <td class="bpl-cv">
+              <div class="bpl-equipment-main">{{ item.data.equipmentName || '—' }}</div>
+              <div class="bpl-eq-meta">
+                <span>Model No.: {{ item.data.modelNumber || '—' }}</span>
+                <span>Sr.No.: {{ item.data.srNo || '—' }}</span>
+                <span>ID No: {{ item.data.idNumber || '—' }}</span>
+                <span>Mfg Name: {{ item.data.manufacturerName || '—' }}</span>
+                <span>Year: {{ item.data.manufacturerYear || '—' }}</span>
+                <span>Capacity: {{ item.data.capacity || '—' }}</span>
+                <span>SWL: {{ item.data.safeWorkingLoad || '—' }}</span>
+                <span>Equipment Location: {{ item.data.equipmentLocation || '—' }}</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="bpl-cn">4</td>
+            <td class="bpl-cd">Date when the lifting machine was first taken into use in the factory</td>
+            <td class="bpl-cv">{{ item.data.yearFirstTakenIntoUse || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bpl-cn">5</td>
+            <td class="bpl-cd">Date and number of certificate relating to any test or examination made under sub-rules
+              (1) &amp; (7) together with the name address of the person who issued the certificate</td>
+            <td class="bpl-cv">{{ item.data.previousCertificateDetails || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bpl-cn">6</td>
+            <td class="bpl-cd">Date of each periodically through examination made under clause (iii) of clause 'a' of
+              sub section (1) of section 29 of the Act and sub rule (6) and by whom it was carried out</td>
+            <td class="bpl-cv">{{ item.data.periodicalExaminationDetails || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bpl-cn">7</td>
+            <td class="bpl-cd">Date of annealing or other heat treatment of the chain, other lifting tackle, made under
+              sub-rule (5) and by whom it was carried out</td>
+            <td class="bpl-cv">{{ item.data.annealingOrHeatTreatmentDetails || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bpl-cn">8</td>
+            <td class="bpl-cd">Particulars of any defects affecting safe working load found at any such through
+              examination or after annealing and steps taken to remedy such defects</td>
+            <td class="bpl-cv">
+              <div class="bpl-row8-block">
+                <div class="bpl-row8-status"><span>{{ item.data.defectsParticulars || 'NIL' }}</span></div>
+                <div class="bpl-row8-item" *ngIf="item.data.remarks">
+                  <span class="bpl-row8-label">Remarks:</span>{{ item.data.remarks }}
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="bpl-cert-certify">
+        I certify that on <strong>{{ item.data.certifiedDate | date:'dd-MM-yyyy' }}</strong>,
+        I thoroughly examined the above Lifting Machine/Lifting Tackles and that the above is a true report of the
+        result of the examination.
+      </div>
+      <div class="bpl-cert-next-due">
+        <strong>NEXT EXAMINATION DUE:</strong> {{ item.data.nextDueDate | date:'dd-MM-yyyy' }}
+      </div>
+      <!-- Footer -->
+      <!-- Footer -->
+      <div class="bpl-cert-footer">
+        <div class="bpl-cert-signature-row">
+ <!-- LEFT: Inspector signature + stamp -->
+ <div class="bpl-sign-left">
+  <!-- Stamp overlays the text below -->
+  <div class="bpl-sign-text-wrap">
+    <div class="bpl-signature-name">{{ item.data.inspectorName }}</div>
+    <div class="bpl-signature-title">Competent Person/Chartered Engineer</div>
+    <div class="bpl-signature-title">Factories Act, 1948 {{ getSectionText() }}</div>
+    <ng-container *ngFor="let line of getApprovalText().split('\n')">
+      <div class="bpl-signature-title">{{ line }}</div>
+    </ng-container>
+    <!-- Stamp floats over the text -->
+    <img *ngIf="showStamp && stampImageUrl"
+         [src]="stampImageUrl"
+         class="bpl-stamp-overlay"
+         alt="Stamp">
+  </div>
+</div>
+<div class="bpl-sign-right">
+  <div class="bpl-counter-sig-wrap" *ngIf="showStamp && counterSignImageUrl">
+    <img [src]="counterSignImageUrl" class="bpl-counter-sig-img" alt="Counter Sign">
+  </div>
+  <div class="bpl-signature-title">Counter Signed</div>
+</div>
+        </div>
+        <div class="bpl-cert-bottom-row">
+          <div class="bpl-cert-disclaimer"> DISCLAIMER: This report reflects conditions as observed on the date of
+            examination. No liability accepted for accidents/mishaps after examination date. </div>
+        </div>
+      </div><!-- /bpl-cert-footer -->
+    
+    
+    </div><!-- /bpl-print-page -->
+
+    <!-- Page break between records (not after last) -->
+    <div class="bpl-page-break" *ngIf="!last"></div>
+  </ng-container>
+
+</div><!-- /#bulk-print-lifting-section -->

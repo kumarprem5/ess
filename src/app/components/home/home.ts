@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
@@ -60,7 +60,8 @@ export class LayoutComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private api: ApiService
+    private api: ApiService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -96,10 +97,13 @@ export class LayoutComponent implements OnInit {
         this.companies = res.data ?? [];
         this.stats.companies = this.companies.length;
         this.loading = false;
+        this.cdr.detectChanges();
       },
+
       error: (err) => {
         console.error('Load Company Error:', err);
         this.loading = false;
+         this.cdr.detectChanges();
       }
     });
   }

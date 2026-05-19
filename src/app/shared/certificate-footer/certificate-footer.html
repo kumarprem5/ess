@@ -1,0 +1,29 @@
+<div class="cert-footer-root">
+
+  <div class="cert-statement" *ngIf="statement">
+    {{ statement }}
+  </div>
+
+  <div class="cert-next-due" *ngIf="nextDueDate">
+    <strong>NEXT EXAMINATION DUE: {{ nextDueDate | date:'dd-MM-yyyy' }}</strong>
+  </div>
+
+  <div class="cert-signature-row">
+    <!-- Left: Certifier block -->
+    <div class="cert-sign-left">
+      <div class="cert-sign-name">{{ name || '—' }}</div>
+      <div class="cert-sign-line" *ngFor="let line of filteredLeftLines">{{ line }}</div>
+    </div>
+
+    <!-- Right: Counter-sign block -->
+    <div class="cert-sign-right">
+      <div class="cert-sign-label">Counter Signed</div>
+      <div class="cert-sign-box"></div>
+    </div>
+  </div>
+
+  <div class="cert-disclaimer">
+    {{ disclaimer }}
+  </div>
+
+</div>

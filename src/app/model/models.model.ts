@@ -93,6 +93,9 @@ export interface LiftingEquipmentInspectionRecord {
 export interface PressureVesselCertificate {
   id?: number;
 
+  
+  testName: string;
+
   /* =========================================================
      COMMON FIELDS
   ========================================================= */
@@ -272,3 +275,53 @@ export interface PowerPress {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface SafetyBeltInspection {
+   
+  id?: number;
+  companyId: number;
+  certificateNumber: string;  
+  dateOfExamination: string;
+  nextDueDate: string;
+  occupierName: string;
+  factoryAddress: string;
+  beltType: string;
+  serialNo: string;
+  modelNo: string;
+  make: string;
+  batchNo: string;
+  yearOfManufacture: string;
+  location: string;
+  dateFirstUse: string;
+  lastExaminedBy: string;
+  lastExaminationDate: string;
+  webbing: string;
+  buckles: string;
+  dRings: string;
+  lanyardCondition: string;
+  stitching: string;
+  hooks: string;
+  overallCondition: string;
+  defectsObservation: string;
+  certifiedBy: string;
+  designation: string;
+  licenseNo: string;
+  approvalDetails: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+/* ─────────────────────────────────────────────────────────
+   Belt-type master list — add to your component class
+───────────────────────────────────────────────────────── */
+export const safetyBeltTypeList: string[] = [
+  'Full Body Harness',
+  'Safety Belt (Waist)',
+  'Sit Harness',
+  'Chest Harness',
+  'Rescue Harness',
+  'Lineman Belt',
+  'Positioning Lanyard',
+  'Self-Retracting Lifeline (SRL)',
+  'Fall Arrester (Rope Grab)',
+  'Inertia Reel',
+];

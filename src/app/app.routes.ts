@@ -4,8 +4,12 @@ import { Dashboard } from './layout/dashboard/dashboard';
 import { LayoutComponent } from './components/home/home';
 import { Companies } from './components/companies/companies';
 import { CompanyReport } from './components/report/report';
+import { VerifyComponent } from './components/verify-component/verify-component';
 
 export const routes: Routes = [
+
+ { path: 'verify', component: VerifyComponent },
+
 
   {
     path: '',

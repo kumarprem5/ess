@@ -1,0 +1,303 @@
+<!-- ══════════════════════════════════════════════════════════
+     BULK PRINT — PRESSURE VESSEL PAGE
+     Self-contained: only PV records, no Lifting / PP logic
+══════════════════════════════════════════════════════════ -->
+
+<div id="bulk-print-pv-section"
+     *ngIf="pvItems.length > 0"
+     class="bppv-root">
+
+  <!-- ── INDEX PAGE ── -->
+  <div class="bppv-index-page">
+    <div class="bppv-index-header">
+      <div class="bppv-index-title">Pressure Vessel Inspection Records — Index</div>
+      <div class="bppv-index-subtitle">Summary of Pressure Vessel Inspection Reports</div>
+    </div>
+
+    <table class="bppv-index-table">
+      <thead>
+        <tr>
+          <th>Sl No.</th>
+          <th>Type</th>
+          <th>Certificate No</th>
+          <th>ID No.</th>
+          <th>Vessel</th>
+          <th>Sr.No</th>
+          <th>Manufacturer</th>
+          <th>Year</th>
+          <th>Capacity / SWP</th>
+          <th>Location</th>
+          <th>Testing Date</th>
+          <th>Due Date</th>
+          <th>Remark</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of pvItems; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td class="bppv-badge">PV</td>
+          <td class="bppv-cert-no">{{ item.data.certificateNo || '—' }}</td>
+          <td>{{ item.data.vesselIdNo || '—' }}</td>
+          <td>{{ item.data.vesselDescription || '—' }}</td>
+          <td>{{ item.data.vesselSrNo || item.data.vesselIdNo || '—' }}</td>
+          <td>{{ item.data.manufacturerName || '—' }}</td>
+          <td>{{ item.data.dateOfConstruction || '—' }}</td>
+          <td>{{ item.data.vesselCapacity || '—' }}</td>
+          <td>{{ item.data.vesselLocation || '—' }}</td>
+          <td>{{ safeDateFormat(item.data.dateOfExamination) }}</td>
+          <td>{{ safeDateFormat(item.data.nextDueDateForExamination) }}</td>
+          <td>
+            <div class="bppv-remark-qr-cell">
+              <div class="bppv-index-qr-block" *ngIf="item.data.qrCodeUrl">
+                <img [src]="item.data.qrCodeUrl" alt="QR Code" class="bppv-index-qr-img" />
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="bppv-index-footer">
+      Total Pressure Vessel Records: {{ pvItems.length }}
+    </div>
+  </div><!-- /bppv-index-page -->
+
+  <!-- Page break after index -->
+  <div class="bppv-page-break"></div>
+
+  <!-- ── ONE PAGE PER PV RECORD ── -->
+  <ng-container *ngFor="let item of pvItems; let last = last">
+    <div class="bppv-print-page">
+
+      <!-- Header -->
+      <div class="bppv-bulk-header">
+
+    <div class="bppv-header-title-row">
+  <div class="bppv-header-qr-spacer"></div>
+  <div class="bppv-header-title-block">
+  <div class="bppv-title-main">
+    {{ item.data.testName || 'REPORT OF EXAMINATION OR TEST OF PRESSURE VESSEL OR PLANT' }}
+  </div>
+  <ng-container *ngIf="item.data.testName?.includes('HYDRO-STATIC'); else normalSub">
+    <div class="bppv-title-sub">Form No. 9 (Prescribed Under Rule 58) </div>
+  </ng-container>
+  <ng-template #normalSub>
+    <div class="bppv-title-sub">
+      {{ item.data.formNo || 'Form No. 8' }} Section 31 {{ item.data.ruleNumber ? '(See ' + item.data.ruleNumber + ')' : '(See Rule 61)' }}
+    </div>
+  </ng-template>
+</div>  
+  
+  <div class="bppv-header-qr-block">
+    <img [src]="generateQrSvg(item.data.certificateNo + '|' + companyId + '|pv')"
+         class="bppv-header-qr-img" alt="QR Code">
+    <div class="bppv-header-qr-label">Scan to Download</div>
+  </div>
+  </div>
+        <div class="bppv-cert-date-row">
+          <span><strong>Certificate No: {{ item.data.certificateNo }}</strong></span>
+          <span><strong>Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
+        </div>
+      </div>
+
+      <!-- Main table -->
+      <table class="bppv-print-table">
+        <tbody>
+          <tr>
+            <td class="bppv-num">1)</td>
+            <td class="bppv-desc">Name of Occupier (of factory)</td>
+            <td class="bppv-value">{{ item.data.nameOfOccupier || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bppv-num">2)</td>
+            <td class="bppv-desc">Address of factory</td>
+            <td class="bppv-value">{{ item.data.addressOfFactory || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bppv-num">3)</td>
+            <td class="bppv-desc">Name, description and distinctive number of pressure vessel/Plant</td>
+            <td class="bppv-value">
+              <div class="bppv-vessel-main">{{ item.data.vesselDescription || '—' }}</div>
+              <div class="bppv-vessel-meta">Cap.: {{ item.data.vesselCapacity || '—' }} | Sr. No. {{ item.data.vesselSrNo || '—' }} | ID. No. {{ item.data.vesselIdNo || '—' }} | Location: {{ item.data.vesselLocation || '—' }}</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="bppv-num">4)</td>
+            <td class="bppv-desc">Name and address of manufacturer</td>
+            <td class="bppv-value">{{ item.data.manufacturerName || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bppv-num">5)</td>
+            <td class="bppv-desc">Name of process in which it is used</td>
+            <td class="bppv-value">{{ item.data.natureOfProcess || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bppv-num" rowspan="6">6)</td>
+            <td class="bppv-desc">Particulars of Pressure vessel or Plant</td>
+            <td class="bppv-value"></td>
+          </tr>
+          <tr>
+            <td class="bppv-desc">(a) Date of construction</td>
+            <td class="bppv-value">{{ safeDateFormat(item.data.dateOfConstruction) }}</td>
+          </tr>
+          <tr>
+            <td class="bppv-desc">(b) Thickness of walls</td>
+            <td class="bppv-value">{{ item.data.thicknessOfWalls || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bppv-desc">(c) Date on which the vessel was first taken into use</td>
+            <td class="bppv-value">{{ safeDateFormat(item.data.dateFirstTakenIntoUse) }}</td>
+          </tr>
+          <tr>
+            <td class="bppv-desc">(d) Safe working pressure recommended by manufacturer</td>
+            <td class="bppv-value">{{ item.data.maxPermissibleWorkingPressureByManufacturer || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bppv-desc">(e) Design Pressure, if known (The history should be briefly given and examiner should state whether he has been the last previous report)</td>
+            <td class="bppv-value">{{ item.data.designPressure || '—' }}</td>
+          </tr>
+          <!-- <tr>
+            <td class="bppv-desc">(f) Has the examiner seen the last examination and test report? Was the vessel subjected to hydrostatic test? if yes, the pressure applied.</td>
+            <td class="bppv-value">{{ item.data.previousHistoryAndLastReportSeen || '—' }}</td>
+          </tr> -->
+         
+          <tr>
+            <td class="bppv-num">7)</td>
+            <td class="bppv-desc">Date of last hydrostatic test (if any) and pressure applied</td>
+            <td class="bppv-value">{{ item.data.exposedToWeather || '—' }}</td>
+          </tr>
+
+           <tr>
+            <td class="bppv-num">8)</td>
+            <td class="bppv-desc">Is the vessel in open or otherwise exposed to weather or to damp?</td>
+            <td class="bppv-value">{{ item.data.pressureAppliedLastHydrostatic }} on Dated {{ safeDateFormat(item.data.dateOfLastHydrostaticTest) }}</td>
+          </tr>
+          
+          <tr>
+            <td class="bppv-num">9)</td>
+            <td class="bppv-desc">What part (if any were inaccessible)?</td>
+            <td class="bppv-value">{{ item.data.partsInaccessible || '—' }}</td>
+          </tr>
+
+
+          <tr>
+            <td class="bppv-num">10)</td>
+            <td class="bppv-desc">Details of examination made and test conducted by the examiner.</td>
+            <td class="bppv-value">{{ item.data.examinationAndTestsMade || '—' }}</td>
+          </tr>
+
+         
+
+          <tr>
+            <td class="bppv-num">11)</td>
+            <td class="bppv-desc">Condition of vessel (State any defect materially affecting the safe working pressure or the safe working of the vessel or plant)</td>
+            <td class="bppv-value">
+              <div>External: {{ item.data.conditionExternal || '—' }}</div>
+              <div>Internal: {{ item.data.conditionInternal || item.data.conditionExternal || '—' }}</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="bppv-num">12)</td>
+            <td class="bppv-desc">Are the required fittings and appliances provided in accordance with the rules? Have the pressure settings been checked and corrected?</td>
+            <td class="bppv-value">{{ item.data.fittingsProvided || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bppv-num">13)</td>
+            <td class="bppv-desc">Are all fitting and appliances properly maintained and in good condition?</td>
+            <td class="bppv-value">{{ item.data.fittingsMaintainedAndChecked || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bppv-num">14)</td>
+            <td class="bppv-desc">Repairs (if any) required and period within which they should be executed and any other condition which the person making the examination thinks it necessary to specify for securing safe working</td>
+            <td class="bppv-value">{{ item.data.repairsRequired || 'Nil' }}</td>
+          </tr>
+          <tr>
+            <td class="bppv-num">15)</td>
+            <td class="bppv-desc">Maximum permissible working pressure, calculated from dimensions and from the thickness and other data ascertained by the present examination, due allowance being made for conditions of working, if unusual or exceptionally severe (state minimum thickness of walls measured during the examination).</td>
+            <td class="bppv-value" style="vertical-align:top;">
+              <div>{{ item.data.maxPermissibleWorkingPressureByManufacturer ? 'RSWP: ' + item.data.maxPermissibleWorkingPressureByManufacturer : '—' }}</div>
+              <div style="display:flex; flex-direction:column; gap:2px; margin-top:3px;">
+                <div style="display:flex; gap:4px;"><span style="min-width:36px;">Shell:</span><span>{{ getShellValue(item.data.thicknessOfWalls) }}</span></div>
+                <div style="display:flex; gap:4px;"><span style="min-width:36px;">Dish:</span><span>{{ getDishValue(item.data.thicknessOfWalls) }}</span></div>
+              </div>
+            </td>
+          </tr>
+<tr>
+  <td class="bppv-num" style="vertical-align:top;">16)</td>
+  <td class="bppv-desc bppv-16-desc" style="vertical-align:top;">
+    <div class="bppv-16-header">Where repairs affecting the safe working pressure are required, state the working pressure:-</div>
+    <div class="bppv-16-item">(a) Before expiration of the period specified in (14)</div>
+    <div class="bppv-16-item">(b) After expiration of such period if required repairs have not been completed</div>
+    <div class="bppv-16-item">(c) After the completion of the required repairs.</div>
+  </td>
+  <td class="bppv-value bppv-16-values" style="vertical-align:top;">
+    <div class="bppv-16-header">&nbsp;</div>
+    <div class="bppv-16-header">&nbsp;</div>
+    <div>{{ item.data.beforeExpirationPeriod || '—' }}</div>
+    <div>{{ item.data.afterExpirationIfNotCompleted || '—' }}</div>
+    <div>{{ item.data.afterCompletionOfRepairs || '—' }}</div>
+  </td>
+</tr>
+          <tr>
+            <td class="bppv-num">17)</td>
+            <td class="bppv-desc">Other observations</td>
+            <td class="bppv-value">{{ item.data.otherObservations || 'None' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Footer -->
+      <div class="bppv-cert-footer">
+        <div class="bppv-cert-statement">
+          I certify that on <strong>{{ item.data.dateOfExamination | date:'dd.MM.yyyy' }}</strong>
+          the pressure plant/vessel described above was thoroughly cleaned and (so far its construction permits)
+          made accessible for thorough examination and for such tests as were necessary for thorough examination
+          and that on the said date, thoroughly examined this pressure plant/vessel including its fittings,
+          and that the above is a true report of my examination.
+        </div>
+        <div class="bppv-next-due">
+          <strong>Next Due Date for Examination: {{ item.data.nextDueDateForExamination | date:'dd.MM.yyyy' }}</strong>
+        </div>
+      <div class="bppv-signature-section">
+
+  <!-- LEFT: Inspector signature + stamp (mirrors bpl layout) -->
+  <div class="bppv-sign-left">
+    <div class="bppv-sign-text-wrap">
+      <div class="bppv-signature-name">{{ item.data.competentPersonName }}</div>
+      <div class="bppv-signature-title">Competent Person/Chartered Engineer</div>
+      <div class="bppv-signature-title">Factories Act, 1948 {{ getSectionText() }}</div>
+      <ng-container *ngFor="let line of getApprovalText().split('\n')">
+        <div class="bppv-signature-title">{{ line }}</div>
+      </ng-container>
+      <!-- Stamp overlay -->
+      <img *ngIf="showStamp && stampImageUrl"
+           [src]="stampImageUrl"
+           class="bppv-stamp-overlay"
+           alt="Stamp">
+    </div>
+  </div>
+
+  <!-- RIGHT: Counter sign -->
+  <div class="bppv-sign-right">
+    <div class="bppv-counter-sig-wrap" *ngIf="showStamp && counterSignImageUrl">
+      <img [src]="counterSignImageUrl" class="bppv-counter-sig-img" alt="Counter Sign">
+    </div>
+    <div class="bppv-signature-title">Counter Signed</div>
+  </div>
+
+</div>
+        <div class="bppv-cert-bottom-row">
+          <div class="bppv-cert-disclaimer">
+            DISCLAIMER: This report reflects conditions as observed on the date of examination.
+            No liability accepted for accidents/mishaps after examination date.
+          </div>
+        </div>
+      </div><!-- /bppv-cert-footer -->
+
+    </div><!-- /bppv-print-page -->
+
+    <!-- Page break between records (not after last) -->
+    <div class="bppv-page-break" *ngIf="!last"></div>
+  </ng-container>
+
+</div><!-- /#bulk-print-pv-section -->

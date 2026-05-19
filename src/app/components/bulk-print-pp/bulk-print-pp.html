@@ -1,0 +1,197 @@
+<!-- ══════════════════════════════════════════════════════════
+     BULK PRINT — POWER PRESS PAGE
+     Self-contained: only PP records, no Lifting / PV logic
+══════════════════════════════════════════════════════════ -->
+
+<div id="bulk-print-pp-section"
+     *ngIf="ppItems.length > 0"
+     class="bppp-root">
+
+  <!-- ── INDEX PAGE ── -->
+  <div class="bppp-index-page">
+    <div class="bppp-index-header">
+      <div class="bppp-index-title">Power Press / Dangerous Machine Inspection Records — Index</div>
+      <div class="bppp-index-subtitle">Summary of Power Press / Dangerous Machine Inspection Reports</div>
+    </div>
+
+    <table class="bppp-index-table">
+      <thead>
+        <tr>
+          <th>Sl No.</th>
+          <th>Type</th>
+          <th>Certificate No</th>
+          <th>Serial No.</th>
+          <th>Machine Type</th>
+          <th>Sr.No</th>
+          <th>Manufacturer</th>
+          <th>Year</th>
+          <th>Capacity</th>
+          <th>Location</th>
+          <th>Testing Date</th>
+          <th>Due Date</th>
+          <th>Remark</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of ppItems; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td class="bppp-badge">PP</td>
+          <td class="bppp-cert-no">{{ item.data.certificateNo || '—' }}</td>
+          <td>{{ item.data.serialNo || '—' }}</td>
+          <td>{{ item.data.machineType || '—' }}</td>
+          <td>{{ item.data.serialNo || '—' }}</td>
+          <td>{{ item.data.manufacturerName || '—' }}</td>
+          <td>{{ item.data.yearOfManufacture || '—' }}</td>
+          <td>{{ item.data.capacity || '—' }}</td>
+          <td>{{ item.data.location || '—' }}</td>
+          <td>{{ safeDateFormat(item.data.dateOfExamination) }}</td>
+          <td>{{ safeDateFormat(item.data.nextDueDate) }}</td>
+          <td>
+            <div class="bppp-remark-qr-cell">
+              <div class="bppp-index-qr-block" *ngIf="item.data.qrCodeUrl">
+                <img [src]="item.data.qrCodeUrl" alt="QR Code" class="bppp-index-qr-img" />
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="bppp-index-footer">
+      Total Power Press Records: {{ ppItems.length }}
+    </div>
+  </div><!-- /bppp-index-page -->
+
+  <!-- Page break after index -->
+  <div class="bppp-page-break"></div>
+
+  <!-- ── ONE PAGE PER PP RECORD ── -->
+  <ng-container *ngFor="let item of ppItems; let last = last">
+    <div class="bppp-print-page">
+
+      <!-- Header -->
+      <div class="bppp-bulk-header">
+        <div class="bppp-header-title-row">
+          <div class="bppp-header-title-block">
+            <div class="bppp-title-main">Report of Examination of Dangerous Machine / Power Press / Centrifugal Machine</div>
+            <div class="bppp-title-sub">Under Section 21(2) of Factories Act 1948</div>
+          </div>
+          <div class="bppp-header-qr-block">
+            <img [src]="generateQrSvg(item.data.certificateNo + '|' + companyId + '|pp')"
+                 class="bppp-header-qr-img" alt="QR Code">
+            <div class="bppp-header-qr-label">Scan to Download</div>
+          </div>
+        </div>
+        <div class="bppp-cert-date-row">
+          <span><strong>Certificate No: {{ item.data.certificateNo }}</strong></span>
+          <span><strong>Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
+        </div>
+      </div>
+
+      <!-- Main table -->
+      <table class="bppp-print-table">
+        <tbody>
+          <tr>
+            <td class="bppp-num">1)</td>
+            <td class="bppp-desc">Name of Occupier (of factory)</td>
+            <td class="bppp-value">{{ item.data.occupierName || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bppp-num">2)</td>
+            <td class="bppp-desc">Address of factory</td>
+            <td class="bppp-value">{{ item.data.factoryAddress || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bppp-num">3)</td>
+            <td class="bppp-desc">Identification number of mark sufficient to identify the dangerous machine / power press / centrifugal machine or the safety device.</td>
+            <td class="bppp-value">
+              <div class="bppp-equipment-main">{{ item.data.machineType || '—' }}</div>
+              <div class="bppp-eq-meta">
+                <span>Sr. No.: {{ item.data.serialNo || '—' }}</span>
+                <span>Model No.: {{ item.data.modelNo || '—' }}</span>
+                <span>Capacity: {{ item.data.capacity || '—' }}</span>
+                <span>Location: {{ item.data.location || '—' }}</span>
+                <span>Mfg. Name: {{ item.data.manufacturerName || '—' }}</span>
+                <span>Year: {{ item.data.yearOfManufacture || '—' }}</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="bppp-num">4)</td>
+            <td class="bppp-desc">Date on which the dangerous machine/power press centrifugal machine or the safety device was first taken into use in the factory</td>
+            <td class="bppp-value">{{ item.data.dateFirstUse || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bppp-num">5)</td>
+            <td class="bppp-desc">Date on which the dangerous machine/power press centrifugal machine or the safety device was first taken into use iDate of each periodical thorough examination carried out as per requirements of sub - paragraph (2) aboven the factory</td>
+            <td class="bppp-value">
+              Last time tested by
+              <ng-container *ngIf="item.data.lastExaminedBy">
+                {{ item.data.lastExaminedBy }}
+              </ng-container>
+              us on dated {{ safeDateFormat(item.data.lastExaminationDate) }}
+            </td>
+          </tr>
+          <tr>
+            <td class="bppp-num">6)</td>
+            <td class="bppp-desc">Particulars of any defects affecting safely working of Tested and found in satisfactory condition the dangerous machine / power press / centrifugal for safe operation. machine or the safety device found at any such thorough examination and steps taken to remedy such defects</td>
+            <td class="bppp-value">
+              <div class="bppp-row8-block">
+                <div class="bppp-row8-status">{{ item.data.defectsObservation || 'NIL' }}</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Footer -->
+      <div class="bppp-cert-footer">
+        <div class="bppp-cert-certify">
+          I certify that on <strong>{{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong>,
+          I thoroughly examined the above machine and that the above is a true report of the result of the examination.
+        </div>
+        <div class="bppp-cert-next-due">
+          <strong>NEXT EXAMINATION DUE:</strong> {{ item.data.nextDueDate | date:'dd-MM-yyyy' }}
+        </div>
+    <div class="bppp-cert-signature-row">
+
+  <!-- LEFT: Inspector signature + stamp -->
+  <div class="bppp-sign-left">
+    <div class="bppp-sign-text-wrap">
+      <div class="bppp-signature-name">{{ item.data.certifiedBy || '—' }}</div>
+      <div class="bppp-signature-title">Competent Person/Chartered Engineer</div>
+      <div class="bppp-signature-title">Factories Act, 1948 {{ getSectionText() }}</div>
+      <ng-container *ngFor="let line of getApprovalText().split('\n')">
+        <div class="bppp-signature-title">{{ line }}</div>
+      </ng-container>
+      <!-- Stamp overlay -->
+      <img *ngIf="showStamp && stampImageUrl"
+           [src]="stampImageUrl"
+           class="bppp-stamp-overlay"
+           alt="Stamp">
+    </div>
+  </div>
+
+  <!-- RIGHT: Counter sign -->
+  <div class="bppp-sign-right">
+    <div class="bppp-counter-sig-wrap" *ngIf="showStamp && counterSignImageUrl">
+      <img [src]="counterSignImageUrl" class="bppp-counter-sig-img" alt="Counter Sign">
+    </div>
+    <div class="bppp-signature-title">Counter Signed</div>
+  </div>
+
+</div>
+        <div class="bppp-cert-bottom-row">
+          <div class="bppp-cert-disclaimer">
+            DISCLAIMER: This report reflects conditions as observed on the date of examination.
+            No liability accepted for accidents/mishaps after examination date.
+          </div>
+        </div>
+      </div><!-- /bppp-cert-footer -->
+
+    </div><!-- /bppp-print-page -->
+
+    <!-- Page break between records (not after last) -->
+    <div class="bppp-page-break" *ngIf="!last"></div>
+  </ng-container>
+
+</div><!-- /#bulk-print-pp-section -->

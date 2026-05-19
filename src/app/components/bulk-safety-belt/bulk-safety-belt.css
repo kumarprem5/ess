@@ -1,0 +1,622 @@
+/* ═══════════════════════════════════════════════════════════════
+   BULK-PRINT-SB.COMPONENT.CSS
+   Scope prefix : bpsb-  (Bulk Print Safety Belt)
+   Font         : Calibri, no italic anywhere
+   Print vars   : mirrors root vars from report.css
+   Changing this file has ZERO effect on Lifting, PV, or PP print output.
+═══════════════════════════════════════════════════════════════ */
+
+/* ── CSS Variables (local copy) ── */
+:root {
+  --bpsb-font      : "Calibri", "Calibri Body", "Trebuchet MS", Arial, sans-serif;
+  --bpsb-base: 12px;
+  --bpsb-title     : 10px;
+  --bpsb-subtitle  : 10px;
+  --bpsb-cert-row  : 10px;
+  --bpsb-table-desc: 10px;
+  --bpsb-table-val : 10px;
+  --bpsb-table-num : 10px;
+  --bpsb-eq-meta   : 10px;
+  --bpsb-footer    : 10px;
+  --bpsb-sig-name  : 10px;
+  --bpsb-sig-title : 10px;
+  --bpsb-next-due  : 10px;
+  --bpsb-disclaimer: 7px;
+  --bpsb-qr-label  : 7px;
+  --bpsb-index-th  : 10px;
+  --bpsb-index-td  : 10px;
+}
+
+/* ── Hide on screen ── */
+#bulk-print-sb-section {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+
+
+/* ── Component section header row ── */
+.bpsb-section-header-row td { padding: 0 !important; }
+.bpsb-section-label {
+  background: #e3e3e3;
+  color: #000;
+  font-weight: 700;
+  font-size: 9px;
+  font-family: var(--bpsb-font);
+  font-style: normal;
+  padding: 3px 6px !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── Condition value alignment in main table ── */
+.bpsb-print-table .bpsb-cond-val {
+  font-weight: 400;
+  text-align: left;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SHARED LAYOUT
+═══════════════════════════════════════════════════════════════ */
+
+.bpsb-root { font-family: var(--bpsb-font); font-style: normal; color: #111; }
+
+/* ── Index page ── */
+.bpsb-index-page     { width: 100%; font-family: var(--bpsb-font); font-style: normal; color: #111; padding: 0; }
+.bpsb-index-header   { text-align: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #111; }
+.bpsb-index-title    { font-size: 14px; font-weight: 700; font-family: var(--bpsb-font); font-style: normal; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
+.bpsb-index-subtitle { font-size: 11.5px; font-family: var(--bpsb-font); font-style: normal; color: #444; }
+
+.bpsb-index-table    { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: var(--bpsb-index-td); font-family: var(--bpsb-font); font-style: normal; margin-top: 6px; }
+.bpsb-index-table th { background: #e3e3e3; color: #000; font-weight: 600; padding: 4px 3px; text-align: center; font-size: var(--bpsb-index-th); font-family: var(--bpsb-font); font-style: normal; line-height: 1.0; border: 1px solid #999; white-space: normal; word-break: break-word; }
+.bpsb-index-table td { padding: 4px 3px; border: 1px solid #d1d5db; font-size: var(--bpsb-index-td); font-family: var(--bpsb-font); font-style: normal; vertical-align: middle; color: #111; line-height: 1.2; white-space: normal; }
+.bpsb-index-table tbody tr:nth-child(even) td { background: #f8fafc; }
+
+.bpsb-cert-no  { font-family: monospace; font-size: 10px; white-space: normal; word-break: break-word; }
+.bpsb-badge    { font-weight: 700; font-size: 10px; text-align: center; padding: 2px 3px; border-radius: 2px; white-space: normal; font-family: var(--bpsb-font); font-style: normal; background: #ecfdf5; color: #065f46; }
+
+.bpsb-remark-qr-cell  { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+.bpsb-index-qr-block  { display: flex; justify-content: center; align-items: center; }
+.bpsb-index-qr-img    { width: 40px; height: 40px; object-fit: contain; border: 1px solid #d1d5db; padding: 2px; background: #fff; }
+
+.bpsb-index-footer { margin-top: 8px; font-size: 11px; font-family: var(--bpsb-font); font-style: normal; color: #555; text-align: right; border-top: 1px solid #ccc; padding-top: 4px; }
+
+/* ── Page break ── */
+.bpsb-page-break { height: 0; }
+
+
+/* ── SB Left signature block ── */
+.bpsb-sign-left {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+}
+
+.bpsb-sign-text-wrap {
+  position: relative;
+  display: inline-block;
+  padding-top: 2px;
+  min-height: 70px;
+}
+
+/* Stamp overlay — 2.5 in × 1.5 in @ 96dpi */
+.bpsb-stamp-overlay {
+  position: absolute;
+  top: -75px;
+  left: 0px;
+  width: 240px;
+  height: 144px;
+  opacity: 0.75;
+  z-index: 10;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* Counter sign wrapper */
+.bpsb-sign-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.bpsb-counter-sig-wrap {
+  height: 65px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 0;
+  margin-top: -60px;
+}
+
+.bpsb-counter-sig-img {
+  height: 55px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* ── Print page wrapper ── */
+.bpsb-print-page { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── Print header ── */
+.bpsb-bulk-header { margin-bottom: 4px; }
+.bpsb-header-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+  min-height: 60px;
+}
+.bpsb-header-title-block {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.bpsb-header-qr-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Sub-description under row label ── */
+.bpsb-subdesc {
+  font-size: 8px;
+  font-weight: 400;
+  color: #555;
+  margin-top: 2px;
+  font-family: var(--bpsb-font);
+  font-style: normal;
+}
+
+/* ── Sr. number cell inside condition table ── */
+.bpsb-cond-sr {
+  text-align: center;
+  font-weight: 700;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+/* ── Overall condition summary row ── */
+.bpsb-overall-row td {
+  background: #f0fdf4;
+  border-top: 1px solid #d1fae5;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+
+.bpsb-header-qr-spacer { width: 52px; flex-shrink: 0; }
+.bpsb-header-qr-img    { width: 52px; height: 52px; display: block; border: 1px solid #ccc; padding: 2px; background: #fff; }
+.bpsb-header-qr-label  { font-size: var(--bpsb-qr-label); color: #555; text-align: center; font-family: var(--bpsb-font); font-style: normal; }
+
+.bpsb-title-main { font-size: var(--bpsb-title); font-weight: 700; font-family: var(--bpsb-font); font-style: normal; margin-bottom: 3px; }
+.bpsb-title-sub  { font-size: var(--bpsb-subtitle); font-family: var(--bpsb-font); font-style: normal; }
+
+.bpsb-cert-date-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--bpsb-cert-row);
+  font-family: var(--bpsb-font);
+  font-style: normal;
+  font-weight: 600;
+  margin: 3px 0 5px;
+  background: #e3e3e3;
+  color: #000;
+  padding: 5px 12px;
+  box-sizing: border-box;
+  width: 100%;
+  letter-spacing: 0.02em;
+}
+
+/* ── Main table ── */
+.bpsb-print-table { width: 100%; border-collapse: collapse; font-family: var(--bpsb-font); font-style: normal; flex-shrink: 0; }
+.bpsb-print-table td { padding: 2px 4px; vertical-align: top; font-size: var(--bpsb-base); font-family: var(--bpsb-font); font-style: normal; color: #000; line-height: 1.0; }
+.bpsb-num   { width: 26px; text-align: center; white-space: nowrap; font-size: var(--bpsb-table-num); }
+.bpsb-desc  { width: 45%; font-size: var(--bpsb-table-desc); white-space: pre-line; }
+.bpsb-value { font-size: var(--bpsb-table-val); font-weight: 500; }
+
+/* ── Belt meta ── */
+.bpsb-belt-main { font-weight: 700; font-size: var(--bpsb-table-val); font-family: var(--bpsb-font); font-style: normal; text-transform: uppercase; margin-bottom: 2px; }
+.bpsb-belt-meta { display: flex; flex-wrap: wrap; gap: 0 12px; font-size: var(--bpsb-eq-meta); font-family: var(--bpsb-font); font-style: normal; line-height: 1.4; }
+.bpsb-belt-meta span { white-space: nowrap; }
+
+/* ── Condition check table ── */
+.bpsb-condition-table { width: 100%; border-collapse: collapse; font-family: var(--bpsb-font); font-style: normal; margin-top: 2px; }
+.bpsb-condition-table th { background: #f0f0f0; font-size: 9px; font-weight: 600; padding: 2px 4px; border: 1px solid #ccc; text-align: center; font-family: var(--bpsb-font); font-style: normal; }
+.bpsb-condition-table td { font-size: 9px; padding: 2px 4px; border: 1px solid #ccc; font-family: var(--bpsb-font); font-style: normal; vertical-align: middle; }
+.bpsb-cond-val { font-weight: 700; text-align: center; }
+
+/* ── Row 8 ── */
+.bpsb-row8-block  { display: flex; flex-direction: column; gap: 2px; }
+.bpsb-row8-status { display: block; font-size: var(--bpsb-base); font-family: var(--bpsb-font); font-style: normal; line-height: 1.0; }
+
+/* ── Cert footer (flex column — footer pinned to bottom) ── */
+.bpsb-cert-footer {
+  margin-top: 10px;
+  font-family: var(--bpsb-font);
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+}
+.bpsb-cert-statement {
+  font-size: var(--bpsb-footer);
+  font-family: var(--bpsb-font);
+  font-style: normal;
+  text-align: justify;
+  margin-bottom: 0;
+  line-height: 1.0;
+  flex-shrink: 0;
+}
+.bpsb-next-due {
+  font-weight: 700;
+  font-size: var(--bpsb-next-due);
+  font-family: var(--bpsb-font);
+  font-style: normal;
+  margin: auto 0 6px;
+  flex-shrink: 0;
+  background: #e3e3e3;
+  color: #000;
+  padding: 5px 12px;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.bpsb-signature-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 4px;
+  font-family: var(--bpsb-font);
+  font-style: normal;
+  flex-shrink: 0;
+}
+.bpsb-signature-name {
+  font-size: var(--bpsb-sig-name);
+  font-weight: 700;
+  font-family: var(--bpsb-font);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 2px;
+}
+.bpsb-signature-title {
+  font-size: var(--bpsb-sig-title);
+  font-family: var(--bpsb-font);
+  font-style: normal;
+  line-height: 1.0;
+  color: #111;
+  margin: 0;
+}
+.bpsb-signature-right { text-align: right; }
+
+.bpsb-cert-qr-block { display: flex; flex-direction: column; align-items: center; gap: 3px; flex-shrink: 0; }
+.bpsb-cert-qr-img   { width: 60px; height: 60px; display: block; border: 1px solid #ccc; padding: 2px; background: #fff; }
+.bpsb-cert-qr-label { font-size: var(--bpsb-qr-label); color: #555; text-align: center; font-family: var(--bpsb-font); font-style: normal; }
+
+.bpsb-cert-bottom-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+  font-family: var(--bpsb-font);
+  font-style: normal;
+  flex-shrink: 0;
+}
+.bpsb-cert-disclaimer {
+  flex: 1;
+  margin-top: 1px;
+  padding: 4px 10px;
+  background: #fffdf0;
+  font-size: var(--bpsb-disclaimer);
+  font-family: var(--bpsb-font);
+  font-style: normal;
+  text-align: center;
+  color: #111;
+  line-height: 1.0;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   @media print
+═══════════════════════════════════════════════════════════════ */
+@media print {
+
+  @page { size: A4 portrait; margin: 30mm 8mm 20mm 8mm; }
+
+  .bpsb-index-page { page: bpsbIndexPage; }
+  @page bpsbIndexPage { size: A4 landscape; margin: 8mm; }
+
+  /* ── Reveal section ── */
+  #bulk-print-sb-section {
+    display: flex !important;
+    flex-direction: column !important;
+    visibility: visible !important;
+    position: absolute !important;
+    top: 0 !important; left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+    font-family: var(--bpsb-font) !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+    color: #111 !important;
+    line-height: 1.2 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  #bulk-print-sb-section * {
+    visibility: visible !important;
+    font-family: var(--bpsb-font) !important;
+    font-style: normal !important;
+    
+
+
+  }
+
+  /* Global font-size reset */
+  #bulk-print-sb-section,
+  #bulk-print-sb-section * { font-size: 14px !important; }
+
+  /* Print page: fixed A4 height */
+  #bulk-print-sb-section .bpsb-print-page {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 249mm !important;
+    page-break-before: always !important;
+    break-before: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Footer: follows table with gap, then pinned */
+  #bulk-print-sb-section .bpsb-cert-footer {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: 5px !important;
+  }
+
+  /* Next-due banner: margin-top:auto = key spacer */
+  #bulk-print-sb-section .bpsb-next-due {
+    font-weight: 700 !important;
+    font-size: var(--bpsb-next-due) !important;
+    font-family: var(--bpsb-font) !important;
+    font-style: normal !important;
+    margin-top: auto !important;     /* push to bottom */
+    margin-bottom: 15mm !important;  /* fixed gap */
+    flex-shrink: 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+    background: #e3e3e3 !important;
+    color: #000 !important;
+    padding: 5px 12px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Certify text */
+  #bulk-print-sb-section .bpsb-cert-statement {
+    flex-shrink: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 2px 0 !important;
+    line-height: 1.0 !important;
+  }
+
+  /* Signature */
+  #bulk-print-sb-section .bpsb-signature-section {
+    flex-shrink: 0 !important;
+    flex-wrap: nowrap !important;
+    margin-top: 4px !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Bottom row */
+  #bulk-print-sb-section .bpsb-cert-bottom-row {
+    flex-shrink: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  /* Tables: flex-shrink:0 so they don't expand to fill */
+  #bulk-print-sb-section .bpsb-print-table { flex-shrink: 0 !important; }
+
+  /* Page breaks */
+  .bpsb-page-break {
+    display: block !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    height: 0 !important;
+  }
+  #bulk-print-sb-section .bpsb-index-page {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  /* ── Cert date row styling ── */
+  #bulk-print-sb-section .bpsb-cert-date-row {
+    background: #e3e3e3 !important;
+    color: #000 !important;
+    padding: 5px 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    font-weight: 600 !important;
+    font-size: 10px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* ── Font-size semantic overrides ── */
+  #bulk-print-sb-section .bpsb-title-main       { font-size: 16px !important; font-weight: 700 !important; font-style: normal !important; text-transform: uppercase !important; }
+  #bulk-print-sb-section .bpsb-title-sub        { font-size: var(--bpsb-subtitle)   !important; font-style: normal !important; }
+  #bulk-print-sb-section .bpsb-num              { font-size: var(--bpsb-table-num)  !important; font-style: normal !important; }
+  #bulk-print-sb-section .bpsb-desc             { font-size: var(--bpsb-table-desc) !important; font-style: normal !important; }
+  #bulk-print-sb-section .bpsb-value            { font-size: var(--bpsb-table-val)  !important; font-style: normal !important; }
+  #bulk-print-sb-section .bpsb-belt-main        { font-size: var(--bpsb-table-val)  !important; font-weight: 700 !important; font-style: normal !important; }
+  #bulk-print-sb-section .bpsb-belt-meta        { font-size: var(--bpsb-eq-meta)    !important; font-style: normal !important; }
+  #bulk-print-sb-section .bpsb-cert-statement   { font-size: var(--bpsb-footer)     !important; font-style: normal !important; line-height: 1.0 !important; }
+  #bulk-print-sb-section .bpsb-signature-name   { font-size: var(--bpsb-sig-name)   !important; font-weight: 700 !important; font-style: normal !important; }
+  #bulk-print-sb-section .bpsb-signature-title  { font-size: var(--bpsb-sig-title)  !important; font-style: normal !important; line-height: 1.0 !important; }
+  #bulk-print-sb-section .bpsb-cert-disclaimer  { font-size: 7px !important; font-style: normal !important; margin-top: 1px !important; }
+  #bulk-print-sb-section .bpsb-index-table th,
+  #bulk-print-sb-section .bpsb-index-table td   { font-size: 12px !important; padding: 3px !important; font-style: normal !important; border: 1px solid #999 !important; }
+  #bulk-print-sb-section .bpsb-badge,
+  #bulk-print-sb-section .bpsb-cert-no          { font-size: 12px !important; font-style: normal !important; }
+
+  #bulk-print-sb-section .bpsb-print-table td   { border: none !important; padding: 3px 5px !important; font-size: var(--bpsb-base) !important; font-style: normal !important; vertical-align: top !important; line-height: 1.0 !important; }
+
+  /* Condition table */
+  #bulk-print-sb-section .bpsb-condition-table  { display: table !important; width: 100% !important; border-collapse: collapse !important; }
+  #bulk-print-sb-section .bpsb-condition-table th,
+  #bulk-print-sb-section .bpsb-condition-table td { display: table-cell !important; border: 1px solid #aaa !important; padding: 2px 4px !important; font-size: 9px !important; font-style: normal !important; }
+
+  /* QR */
+  #bulk-print-sb-section .bpsb-header-qr-img    { display: block !important; width: 75px !important; height: 75px !important; }
+  #bulk-print-sb-section .bpsb-cert-qr-img      { display: block !important; width: 60px !important; height: 60px !important; }
+  #bulk-print-sb-section .bpsb-index-qr-img     { display: block !important; width: 36px !important; height: 36px !important; border: 1px solid #999 !important; }
+  .bpsb-cert-qr-label, .bpsb-header-qr-label    { font-size: var(--bpsb-qr-label) !important; font-style: normal !important; }
+
+  /* ── Flex layout enforcement ── */
+  #bulk-print-sb-section .bpsb-cert-date-row,
+  #bulk-print-sb-section .bpsb-belt-meta,
+  #bulk-print-sb-section .bpsb-signature-section,
+  #bulk-print-sb-section .bpsb-cert-bottom-row,
+  #bulk-print-sb-section .bpsb-remark-qr-cell,
+  #bulk-print-sb-section .bpsb-index-qr-block   { display: flex !important; flex-wrap: wrap !important; }
+
+  #bulk-print-sb-section .bpsb-cert-date-row    { justify-content: space-between !important; flex-wrap: nowrap !important; }
+  #bulk-print-sb-section .bpsb-signature-section { justify-content: space-between !important; align-items: flex-end !important; flex-wrap: nowrap !important; }
+  #bulk-print-sb-section .bpsb-cert-bottom-row  { align-items: flex-end !important; justify-content: space-between !important; }
+  #bulk-print-sb-section .bpsb-remark-qr-cell   { flex-direction: column !important; align-items: center !important; }
+
+  #bulk-print-sb-section .bpsb-header-title-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    min-height: 85px !important;
+  }
+  #bulk-print-sb-section .bpsb-header-title-block {
+    flex: 1 !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+  #bulk-print-sb-section .bpsb-header-qr-block {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+  }
+  #bulk-print-sb-section .bpsb-header-qr-spacer {
+    display: block !important;
+    width: 75px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Row 8 */
+  #bulk-print-sb-section .bpsb-row8-block  { flex-direction: column !important; }
+  #bulk-print-sb-section .bpsb-row8-status { font-size: var(--bpsb-base) !important; font-style: normal !important; }
+
+  /* ── Table structure ── */
+  #bulk-print-sb-section table  { display: table !important; border-collapse: collapse !important; width: 100% !important; }
+  #bulk-print-sb-section tbody  { display: table-row-group !important; }
+  #bulk-print-sb-section thead  { display: table-header-group !important; }
+  #bulk-print-sb-section tr     { display: table-row !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+  #bulk-print-sb-section td     { display: table-cell !important; }
+  #bulk-print-sb-section .bpsb-index-table th { display: table-cell !important; }
+
+  /* Compact overrides */
+  #bulk-print-sb-section .bpsb-bulk-header  { margin-bottom: 4px !important; }
+  #bulk-print-sb-section .bpsb-signature-title { font-size: var(--bpsb-sig-title) !important; line-height: 1.0 !important; }
+  #bulk-print-sb-section .bpsb-belt-meta    { font-size: var(--bpsb-eq-meta) !important; line-height: 1.0 !important; }
+  #bulk-print-sb-section .bpsb-belt-main    { margin-bottom: 1px !important; }
+
+#bulk-print-sb-section .bpsb-section-label {
+  background: #e3e3e3 !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+}
+
+ #bulk-print-sb-section .bpsb-print-page {
+    position: relative !important;
+  }
+
+  #bulk-print-sb-section .bpsb-cert-disclaimer {
+    position: absolute !important;
+    bottom: 25mm !important;   /* your required spacing */
+    left: 0 !important;
+    width: 100% !important;
+  }
+
+/* ── SB Signature layout ── */
+  #bulk-print-sb-section .bpsb-sign-left {
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 220px !important;
+  }
+
+  #bulk-print-sb-section .bpsb-sign-text-wrap {
+    position: relative !important;
+    display: inline-block !important;
+    min-height: 70px !important;
+  }
+
+  /* Stamp — 2.5 in × 1.5 in */
+  #bulk-print-sb-section .bpsb-stamp-overlay {
+    display: block !important;
+    position: absolute !important;
+    width: 180pt !important;
+    height: 108pt !important;
+    top: -75px !important;
+    left: 0px !important;
+    opacity: 0.90 !important;
+    z-index: 10 !important;
+    object-fit: contain !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Counter sign */
+  #bulk-print-sb-section .bpsb-sign-right {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+  }
+
+  #bulk-print-sb-section .bpsb-counter-sig-wrap {
+    height: 65px !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    margin-top: -60px !important;
+    margin-bottom: 0 !important;
+  }
+
+  #bulk-print-sb-section .bpsb-counter-sig-img {
+    display: block !important;
+    height: 55px !important;
+    width: auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+
+} /* end @media print */

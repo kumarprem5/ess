@@ -10,7 +10,8 @@ import {
  
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private base = 'http://localhost:8080/api/admin';
+  // private base = 'http://localhost:8080/api/admin';
+  private base = 'https://ess-backend-10.onrender.com/api/admin';
 
   constructor(private http: HttpClient) {}
 
@@ -114,4 +115,67 @@ export class ApiService {
   deletePowerPress(id: number, companyId: number): Observable<RestApiResponse> {
     return this.http.delete<RestApiResponse>(`${this.base}/power-press/${id}?companyId=${companyId}`, { headers: this.headers() });
   }
+
+// SAFETY BELT
+createSafetyBelt(data: any): Observable<RestApiResponse> {
+  return this.http.post<RestApiResponse>(
+    `${this.base}/safety-belt`,
+    data,
+    { headers: this.headers() }
+  );
+}
+
+updateSafetyBelt(id: number, data: any): Observable<RestApiResponse> {
+  return this.http.put<RestApiResponse>(
+    `${this.base}/safety-belt/${id}`,
+    data,
+    { headers: this.headers() }
+  );
+}
+
+getSafetyBeltById(id: number, companyId: number): Observable<RestApiResponse> {
+  return this.http.get<RestApiResponse>(
+    `${this.base}/safety-belt/${id}?companyId=${companyId}`,
+    { headers: this.headers() }
+  );
+}
+
+getAllSafetyBelts(companyId: number): Observable<RestApiResponse> {
+  return this.http.get<RestApiResponse>(
+    `${this.base}/safety-belt/company/${companyId}`,
+    { headers: this.headers() }
+  );
+}
+
+deleteSafetyBelt(id: number, companyId: number): Observable<RestApiResponse> {
+  return this.http.delete<RestApiResponse>(
+    `${this.base}/safety-belt/${id}?companyId=${companyId}`,
+    { headers: this.headers() }
+  );
+}
+
+filterSafetyBeltByOccupier(companyId: number, name: string): Observable<RestApiResponse> {
+  return this.http.get<RestApiResponse>(
+    `${this.base}/safety-belt/filter/occupier?companyId=${companyId}&name=${name}`,
+    { headers: this.headers() }
+  );
+}
+
+filterSafetyBeltBySerial(companyId: number, serial: string): Observable<RestApiResponse> {
+  return this.http.get<RestApiResponse>(
+    `${this.base}/safety-belt/filter/serial?companyId=${companyId}&serial=${serial}`,
+    { headers: this.headers() }
+  );
+}
+
+filterSafetyBeltByYear(companyId: number, year: number): Observable<RestApiResponse> {
+  return this.http.get<RestApiResponse>(
+    `${this.base}/safety-belt/filter/year?companyId=${companyId}&year=${year}`,
+    { headers: this.headers() }
+  );
+}
+
+
+
+
 }

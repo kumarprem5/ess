@@ -155,3 +155,110 @@
     </div>
   </div>
 </div>
+
+
+<!-- ── PP REPORT ── -->
+<div class="print-wrap" *ngIf="!loading && !error && recType === 'pp' && record">
+  <div class="no-print verify-banner">
+    <span>✅ Verified Certificate</span>
+    <button (click)="printPage()">🖨 Print</button>
+  </div>
+  <div class="pv-print-header">
+    <div class="pv-title-main">Report of Examination of Dangerous Machine / Power Press</div>
+    <div class="pv-title-sub">Under Section 21(2) of Factories Act 1948</div>
+    <div class="pv-cert-date-row">
+      <span>Certificate No: <strong>{{ record.certificateNo }}</strong></span>
+      <span>Date: <strong>{{ record.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
+    </div>
+  </div>
+  <table class="pv-form-table">
+    <tbody>
+      <tr><td class="col-num">1)</td><td class="col-desc">Name of Occupier</td><td class="col-val">{{ record.occupierName || '—' }}</td></tr>
+      <tr><td class="col-num">2)</td><td class="col-desc">Address of Factory</td><td class="col-val">{{ record.factoryAddress || '—' }}</td></tr>
+      <tr>
+        <td class="col-num">3)</td>
+        <td class="col-desc">Machine identification</td>
+        <td class="col-val">
+          <strong>{{ record.machineType || '—' }}</strong><br>
+          Sr.No: {{ record.serialNo || '—' }} | Model: {{ record.modelNo || '—' }}<br>
+          Capacity: {{ record.capacity || '—' }} | Location: {{ record.location || '—' }}<br>
+          Mfg: {{ record.manufacturerName || '—' }} | Year: {{ record.yearOfManufacture || '—' }}
+        </td>
+      </tr>
+      <tr><td class="col-num">4)</td><td class="col-desc">First taken into use</td><td class="col-val">{{ record.dateFirstUse || '—' }}</td></tr>
+      <tr><td class="col-num">5)</td><td class="col-desc">Examined by</td><td class="col-val">{{ record.lastExaminedBy || '—' }} on {{ safeDateFormat(record.lastExaminationDate) }}</td></tr>
+      <tr><td class="col-num">6)</td><td class="col-desc">Defects / Observations</td><td class="col-val">{{ record.defectsObservation || 'NIL' }}</td></tr>
+    </tbody>
+  </table>
+  <div class="pv-cert-footer">
+    <div class="pv-certify-text">I certify that on <strong>{{ record.dateOfExamination | date:'dd-MM-yyyy' }}</strong>, I thoroughly examined the above machine and that the above is a true report.</div>
+    <div class="pv-next-due"><strong>NEXT DUE DATE: {{ record.nextDueDate | date:'dd-MM-yyyy' }}</strong></div>
+    <div class="pv-signature-row">
+      <div>
+        <div class="pv-sign-name">{{ record.certifiedBy }}</div>
+        <div>{{ record.designation }}</div>
+        <div>License No.: {{ record.licenseNo }}</div>
+        <div>{{ record.approvalDetails }}</div>
+      </div>
+      <div style="text-align:right">Counter Signed</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SB REPORT ── -->
+<div class="print-wrap" *ngIf="!loading && !error && recType === 'sb' && record">
+  <div class="no-print verify-banner">
+    <span>✅ Verified Certificate</span>
+    <button (click)="printPage()">🖨 Print</button>
+  </div>
+  <div class="pv-print-header">
+    <div class="pv-title-main">Report of Examination of Safety Belt / Full Body Harness</div>
+    <div class="pv-title-sub">Under Section 87 of Factories Act 1948 &amp; IS 3521 / IS 1891</div>
+    <div class="pv-cert-date-row">
+      <span>Certificate No: <strong>{{ record.certificateNumber }}</strong></span>
+      <span>Date: <strong>{{ record.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
+    </div>
+  </div>
+  <table class="pv-form-table">
+    <tbody>
+      <tr><td class="col-num">1)</td><td class="col-desc">Name of Occupier</td><td class="col-val">{{ record.occupierName || '—' }}</td></tr>
+      <tr><td class="col-num">2)</td><td class="col-desc">Address of Factory</td><td class="col-val">{{ record.factoryAddress || '—' }}</td></tr>
+      <tr>
+        <td class="col-num">3)</td>
+        <td class="col-desc">Belt identification</td>
+        <td class="col-val">
+          <strong>{{ record.beltType || '—' }}</strong><br>
+          Make: {{ record.make || '—' }} | Sr.No: {{ record.serialNo || '—' }}<br>
+          Model: {{ record.modelNo || '—' }} | Batch: {{ record.batchNo || '—' }}<br>
+          Year: {{ record.yearOfManufacture || '—' }} | Location: {{ record.location || '—' }}
+        </td>
+      </tr>
+      <tr><td class="col-num">4)</td><td class="col-desc">First taken into use</td><td class="col-val">{{ record.dateFirstUse || '—' }}</td></tr>
+      <tr><td class="col-num">5)</td><td class="col-desc">Examined by</td><td class="col-val">{{ record.lastExaminedBy || '—' }} on {{ safeDateFormat(record.lastExaminationDate) }}</td></tr>
+      <tr>
+        <td class="col-num">6)</td>
+        <td class="col-desc">Component conditions</td>
+        <td class="col-val">
+          Webbing: {{ record.webbing || '—' }} | Buckles: {{ record.buckles || '—' }}<br>
+          D-Rings: {{ record.dRings || '—' }} | Lanyard: {{ record.lanyardCondition || '—' }}<br>
+          Stitching: {{ record.stitching || '—' }} | Hooks: {{ record.hooks || '—' }}
+        </td>
+      </tr>
+      <tr><td class="col-num">7)</td><td class="col-desc">Overall Condition</td><td class="col-val"><strong>{{ record.overallCondition || '—' }}</strong></td></tr>
+      <tr><td class="col-num">8)</td><td class="col-desc">Defects / Observations</td><td class="col-val">{{ record.defectsObservation || 'NIL' }}</td></tr>
+    </tbody>
+  </table>
+  <div class="pv-cert-footer">
+    <div class="pv-certify-text">I certify that on <strong>{{ record.dateOfExamination | date:'dd-MM-yyyy' }}</strong>, I thoroughly examined the above safety belt / harness and that the above is a true report.</div>
+    <div class="pv-next-due"><strong>NEXT DUE DATE: {{ record.nextDueDate | date:'dd-MM-yyyy' }}</strong></div>
+    <div class="pv-signature-row">
+      <div>
+        <div class="pv-sign-name">{{ record.certifiedBy }}</div>
+        <div>{{ record.designation }}</div>
+        <div>License No.: {{ record.licenseNo }}</div>
+        <div>{{ record.approvalDetails }}</div>
+      </div>
+      <div style="text-align:right">Counter Signed</div>
+    </div>
+  </div>
+</div>

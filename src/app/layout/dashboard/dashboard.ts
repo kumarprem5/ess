@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth-service';
 import { Router, NavigationEnd, RouterModule, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
@@ -72,7 +72,8 @@ export class Dashboard implements OnInit {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private api: ApiService
+    private api: ApiService, 
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -113,10 +114,12 @@ export class Dashboard implements OnInit {
         console.log('Dynamic Companies:', this.companies);
 
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: err => {
         console.error('Load Company Error:', err);
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }

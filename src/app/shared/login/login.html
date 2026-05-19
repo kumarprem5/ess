@@ -1,88 +1,164 @@
-<!-- src/app/auth/login/login.component.html -->
 <div class="login-wrapper">
-  <!-- Animated background -->
-  <div class="bg-grid"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
 
+  <!-- LOGIN CARD -->
   <div class="login-card">
-    <!-- Brand -->
+
+    <!-- BRAND -->
     <div class="brand">
+
       <div class="brand-icon">
         <svg viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="19" stroke="url(#g1)" stroke-width="2"/>
-          <path d="M12 20L18 26L28 14" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <circle
+            cx="20"
+            cy="20"
+            r="19"
+            stroke="url(#g1)"
+            stroke-width="2"/>
+
+          <path
+            d="M12 20L18 26L28 14"
+            stroke="url(#g2)"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+
           <defs>
-            <linearGradient id="g1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#0ea5e9"/><stop offset="1" stop-color="#6366f1"/>
+
+            <linearGradient id="g1">
+              <stop stop-color="#0ea5e9"/>
+              <stop offset="1" stop-color="#7c3aed"/>
             </linearGradient>
-            <linearGradient id="g2" x1="10" y1="14" x2="30" y2="28" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#0ea5e9"/><stop offset="1" stop-color="#6366f1"/>
+
+            <linearGradient id="g2">
+              <stop stop-color="#0ea5e9"/>
+              <stop offset="1" stop-color="#7c3aed"/>
             </linearGradient>
+
           </defs>
+
         </svg>
       </div>
+
       <div class="brand-text">
         <span class="brand-name">ESS</span>
-        <span class="brand-sub">Equipment Safety Suite</span>
+
+        <span class="brand-sub">
+          EQUIPMENT SAFETY SUITE
+        </span>
       </div>
+
     </div>
 
-    <h1 class="login-title">Welcome back</h1>
-    <p class="login-subtitle">Sign in to your admin dashboard</p>
+    <!-- TITLE -->
+    <h1 class="login-title">
+      Welcome Back
+    </h1>
 
-    <!-- Error -->
+    <p class="login-subtitle">
+      Sign in to your admin dashboard
+    </p>
+
+    <!-- ERROR -->
     <div class="alert-error" *ngIf="error">
-      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
       {{ error }}
     </div>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <!-- emailId -->
-      <div class="field" [class.has-error]="f['emailId'].touched && f['emailId'].invalid">
-        <label>emailId Address</label>
+    <!-- FORM -->
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()">
+
+      <!-- EMAIL -->
+      <div class="field">
+
+        <label>Email Address</label>
+
         <div class="input-wrap">
-          <svg class="input-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M2.5 5.5A1.5 1.5 0 014 4h12a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0116 16H4a1.5 1.5 0 01-1.5-1.5v-9z"/>
-            <path d="M2.5 5.5l7.5 5 7.5-5" stroke-linecap="round"/>
+
+          <svg
+            class="input-icon"
+            viewBox="0 0 20 20"
+            fill="none">
+
+            <path
+              d="M2.5 5.5L10 10.5L17.5 5.5"
+              stroke="currentColor"/>
+
           </svg>
-          <input type="emailId" formControlName="emailId" placeholder="admin@company.com" autocomplete="emailId"/>
+
+          <input
+            type="email"
+            formControlName="emailId"
+            placeholder="admin@company.com">
+
         </div>
-        <span class="field-error" *ngIf="f['emailId'].touched && f['emailId'].errors?.['required']">emailId is required</span>
-        <span class="field-error" *ngIf="f['emailId'].touched && f['emailId'].errors?.['emailId']">Enter a valid emailId</span>
+
       </div>
 
-      <!-- Password -->
-      <div class="field" [class.has-error]="f['password'].touched && f['password'].invalid">
+      <!-- PASSWORD -->
+      <div class="field">
+
         <label>Password</label>
+
         <div class="input-wrap">
-          <svg class="input-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="3.5" y="8" width="13" height="10" rx="1.5"/>
-            <path d="M7 8V5.5a3 3 0 116 0V8" stroke-linecap="round"/>
+
+          <svg
+            class="input-icon"
+            viewBox="0 0 20 20"
+            fill="none">
+
+            <rect
+              x="3"
+              y="8"
+              width="14"
+              height="9"
+              rx="2"
+              stroke="currentColor"/>
+
           </svg>
-          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Enter password" autocomplete="current-password"/>
-          <button type="button" class="toggle-pw" (click)="togglePassword()">
-            <svg *ngIf="!showPassword" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M10 4C5.5 4 2 10 2 10s3.5 6 8 6 8-6 8-6-3.5-6-8-6z"/><circle cx="10" cy="10" r="2.5"/>
-            </svg>
-            <svg *ngIf="showPassword" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M3 3l14 14M8.5 8.68A2.5 2.5 0 0111.3 11.5M5.65 5.71C4.07 6.88 2.7 8.83 2 10c.97 1.64 2.59 3.6 4.62 4.74M10 4c1.1 0 2.13.26 3.06.69M14.06 7.3C15.52 8.43 16.85 9.7 17.99 11c-1.5 2.63-4.2 5-8 5a8.6 8.6 0 01-2.01-.24"/>
-            </svg>
+
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter password">
+
+          <button
+            type="button"
+            class="toggle-pw"
+            (click)="togglePassword()">
+
+            👁
+
           </button>
+
         </div>
-        <span class="field-error" *ngIf="f['password'].touched && f['password'].errors?.['required']">Password is required</span>
+
       </div>
 
-      <button type="submit" class="btn-login" [class.loading]="loading" [disabled]="loading">
-        <span class="btn-text" *ngIf="!loading">Sign In</span>
-        <span class="btn-loader" *ngIf="loading">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="31.4" stroke-dashoffset="10"/></svg>
+      <!-- BUTTON -->
+      <button
+        class="btn-login"
+        type="submit"
+        [disabled]="loading">
+
+        <span *ngIf="!loading">
+          SIGN IN →
+        </span>
+
+        <span *ngIf="loading">
           Signing in...
         </span>
+
       </button>
+
     </form>
 
-    <p class="footer-note">ESS Admin Portal &copy; 2024 · Equipment Safety Suite</p>
+    <!-- FOOTER -->
+    <p class="footer-note">
+      ESS Admin Portal ©2026
+    </p>
+
   </div>
+
 </div>

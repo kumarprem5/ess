@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../../service/api-service';
 import { CommonModule } from '@angular/common';
@@ -32,7 +32,7 @@ export class Companies {
   // Form model
   form: any = this.emptyForm();
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router,  private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadCompanies();
@@ -45,9 +45,13 @@ export class Companies {
       next: (res: any) => {
         this.companies = res.data || [];
         this.filteredCompanies = [...this.companies];
+        this.cdr.detectChanges();
       },
-      error: err => console.error(err)
-    });
+      error: err => {
+      console.error(err);
+      this.cdr.detectChanges();    // ← ADD
+    }
+  });
   }
 
   applyFilters(): void {
@@ -107,12 +111,12 @@ openReport(company: any) {
   saveCompany(): void {
     if (this.modalMode === 'add') {
       this.api.createCompany(this.form).subscribe({
-        next: () => { this.loadCompanies(); this.closeModal(); },
+        next: () => { this.loadCompanies(); this.closeModal(); this.cdr.detectChanges();},
         error: err => console.error(err)
       });
     } else if (this.modalMode === 'update') {
       this.api.updateCompany(this.selectedCompany.id, this.form).subscribe({
-        next: () => { this.loadCompanies(); this.closeModal(); },
+        next: () => { this.loadCompanies(); this.closeModal(); this.cdr.detectChanges(); },
         error: err => console.error(err)
       });
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -6,6 +6,10 @@ import { forkJoin } from 'rxjs';
 
 import { ApiService } from '../../service/api-service';
 import { CompanyProfile } from '../../model/models.model';
+import { BulkPrintLifting } from "../bulk-print-lifting/bulk-print-lifting";
+import { BulkPrintPv } from '../bulk-print-pv/bulk-print-pv';
+import { BulkPrintPp } from '../bulk-print-pp/bulk-print-pp';
+import { BulkSafetyBelt } from '../bulk-safety-belt/bulk-safety-belt';
 
 /* =========================================================
    PRESSURE VESSEL CERTIFICATE
@@ -13,6 +17,7 @@ import { CompanyProfile } from '../../model/models.model';
 export interface PressureVesselCertificate {
   id?: number;
   companyId: number;
+  testName: string;
   certificateNo: string;
   formNo: string;
   ruleNumber: string;
@@ -127,8 +132,47 @@ export interface PowerPress {
   updatedAt?: string;
 }
 
+
+/* =========================================================
+   SAFETY BELT MODEL  ← NEW
+========================================================= */
+export interface SafetyBeltInspection {
+  id?: number;
+  companyId: number;
+  certificateNumber: string;  
+  dateOfExamination: string;
+  nextDueDate: string;
+  occupierName: string;
+  factoryAddress: string;
+  beltType: string;
+  serialNo: string;
+  modelNo: string;
+  make: string;
+  batchNo: string;
+  yearOfManufacture: string;
+  location: string;
+  dateFirstUse: string;
+  lastExaminedBy: string;
+  lastExaminationDate: string;
+  webbing: string;
+  buckles: string;
+  dRings: string;
+  lanyardCondition: string;
+  stitching: string;
+  hooks: string;
+  overallCondition: string;
+  defectsObservation: string;
+  certifiedBy: string;
+  designation: string;
+  licenseNo: string;
+  approvalDetails: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 /* =========================================================
    TOGGLE FIELD KEYS
+
 ========================================================= */
 type ToggleFieldKey =
   | 'nameOfOccupier' | 'addressOfFactory' | 'distinguishingMarksDescription'
@@ -150,60 +194,159 @@ const ALL_TOGGLE_FIELDS: ToggleFieldKey[] = [
 ];
 
 export const liftingEquipmentList: string[] = [
-  'EOT Crane', 'HOT Crane', 'Fork Lift', 'Hydraulic Hand Pallet Truck',
-  'Hydraulic Lifter', 'Scissor Lift', 'Dock Leveller', 'Rack Stability',
-  'Electric Stacker', 'Electric Hoist', 'Wire Rope Hoist', 'HMT Rope',
-  'Die Loader', 'Hand Lifter', 'Life Line Rope', 'Wire Rope Sling',
-  'Web Sling', 'To Track', 'Balancer', 'Spring Balancer',
-  'Pneumatic Balancer', 'Hoist and Lift', 'Fall Arrester'
+  // Cranes
+  'EOT Crane',
+  'HOT Crane',
+  'Jib Crane',
+  'Gantry Crane',
+  'Hydra Crane',
+  // Hoists & Lifts
+  'Electric Hoist',
+  'Wire Rope Hoist',
+  'Monorail Hoist',
+  'Chain Pulley Block',
+  'Hoist and Lift',
+  // Forklifts & Stackers
+  'Fork Lift',
+  'Electric Stacker',
+  'Hydraulic Hand Pallet Truck',
+  'Hydraulic Lifter',
+  // Platforms & Loaders
+  'Scissor Lift',
+  'Dock Leveller',
+  'Die Loader',
+  'Hand Lifter',
+  // Ropes & Slings
+  'Wire Rope Sling',
+  'Chain Sling',
+  'Web Sling',
+  'Fiber/Synthetic Sling',
+  'Life Line Rope',
+  'HMT Rope',
+  'To Track',
+  // Hardware
+  'Eye Bolt',
+  'Shackle',
+  'Hook',
+  'D-Ring',
+  'Master Link',
+  // Balancers & Arresters
+  'Balancer',
+  'Spring Balancer',
+  'Pneumatic Balancer',
+  'Fall Arrester',
+  'Rack Stability',
 ];
 
 export const powerPressMachineList: string[] = [
-  'Power Press', 'Hydraulic Press', 'Pneumatic Press', 'Eccentric Press',
-  'Knuckle Joint Press', 'Friction Screw Press', 'Toggle Press',
-  'Fly Press', 'Punch Press', 'Stamping Press', 'Blanking Press',
-  'Deep Drawing Press', 'Forging Press', 'Coining Press',
-  'Centrifugal Machine', 'Grinding Machine', 'Milling Machine',
-  'Shearing Machine', 'Bending Machine', 'Broaching Machine'
+  'Power Press',
+  'Hydraulic Press',
+  'Pneumatic Press',
+  'Eccentric Press',
+  'Knuckle Joint Press',
+  'Friction Screw Press',
+  'Toggle Press',
+  'Fly Press',
+  'Punch Press',
+  'Stamping Press',
+  'Blanking Press',
+  'Deep Drawing Press',
+  'Forging Press',
+  'Coining Press',
+  'Centrifugal Machine',
+  'Grinding Machine',
+  'Milling Machine',
+  'Shearing Machine',
+  'Bending Machine',
+  'Broaching Machine',
+  'Injection Moulding Machine',
 ];
 
+
+export const safetyBeltTypeList: string[] = [
+  'Full Body Harness',
+  'Safety Belt (Waist Belt)',
+  'Lineman Belt',
+  'Fall Arrest Harness',
+  'Rescue Harness',
+  'Work Positioning Belt',
+  'Suspension Harness',
+  'Rope Access Harness',
+  'Sit Harness',
+  'Chest Harness',
+];
 @Component({
   selector: 'app-company-report',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, BulkPrintLifting,
+    BulkPrintPv,        // ← add
+    BulkPrintPp,BulkSafetyBelt],
   templateUrl: './report.html',
   styleUrls: ['./report.css']
 })
 export class CompanyReport implements OnInit {
 
+signatureBase64    = '';
+stampBase64        = '';
+counterSignBase64  = '';
+showStampOnPrint   = true;
+
+ activeTab: 'lifting' | 'pv' | 'pp' | 'sb' = 'lifting';
+  
+  [x: string]: any;
+
+toastVisible = false;
+toastMessage = '';
+toastType: 'success' | 'error' = 'success';
   /* ── Single-record print targets ── */
   selectedItem: any = null;
   selectedPvItem: PressureVesselCertificate | null = null;
   selectedPpItem: PowerPress | null = null;
+  selectedSbItem: SafetyBeltInspection | null = null;
 
   /* ── Vessel dropdown ── */
-  vesselDescriptionOptions: string[] = [
-    'Air Receiver / Compressed Air Vessel',
-    'Steam Boiler',
-    'Hot Water Generator',
-    'Autoclave',
-    'Heat Exchanger',
-    'Hydraulic Accumulator',
-    'Pressure Filter',
-    'Deaerator',
-    'Flash Vessel',
-    'Surge Vessel',
-    'Vacuum Vessel',
-    'LPG / Gas Cylinder Storage Vessel',
-    'Nitrogen Pressure Vessel',
-    'Oxygen Pressure Vessel',
-    'Chemical Reactor Vessel',
-    'Storage Tank (Pressurised)',
-    'Expansion Vessel',
-    'Condenser',
-    'Evaporator',
-    'Pressure Cooker (Industrial)',
-  ];
+vesselDescriptionOptions: string[] = [
+  'Air Receiver / Compressed Air Vessel',
+  'Steam Boiler',
+  'Hot Water Generator',
+  'Autoclave',
+  'Heat Exchanger',
+  'Hydraulic Accumulator',
+  'Pressure Filter',
+  'Deaerator',
+  'Flash Vessel',
+  'Surge Vessel',
+  'Vacuum Vessel',
+  'LPG / Gas Cylinder Storage Vessel',
+  'Nitrogen Pressure Vessel',
+  'Oxygen Pressure Vessel',
+  'Chemical Reactor Vessel',
+  'Storage Tank (Pressurised)',
+  'Expansion Vessel',
+  'Condenser',
+  'Evaporator',
+  'Compressor Tank',
+  'Pressure Cooker (Industrial)',
+];
+
+  pvTestOptions: string[] = [
+  'REPORT OF EXAMINATION OR TEST OF PRESSURE VESSEL OR PLANT',
+  'REPORT OF HYDRO-STATIC EXAMINATION OF PRESSURE VESSEL OR PLANT',
+];
+
+private loadImageAsBase64(url: string): Promise<string> {
+  return fetch(url)
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.blob();
+    })
+    .then(blob => new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror  = reject;
+      reader.readAsDataURL(blob);
+    }));
+}
 
   /* ── Machine type options for Power Press ── */
   machineTypeOptions: string[] = [
@@ -211,17 +354,18 @@ export class CompanyReport implements OnInit {
   ];
 
   powerPressMachineList = powerPressMachineList;
+   safetyBeltTypeList = safetyBeltTypeList;
 
   /* ── Lifting filter ── */
   selectedTestName = '';
 
   liftingTestOptions = [
-    'REPORT OF EXAMINATION OF DANGEROUS MACHINES / POWER PRESS CENTRIFUGAL MACHINES (Under Section 21 (2) of Factories Act 1948)',
+    // 'REPORT OF EXAMINATION OF DANGEROUS MACHINES / POWER PRESS CENTRIFUGAL MACHINES (Under Section 21 (2) of Factories Act 1948)',
     'REPORTS OF EXAMINATION OF HOIST & LIFT (Under Section 28 of Factories Act 1948)',
     'REPORTS OF EXAMINATION OF LIFTING MACHINES/TACKLES (Under Section 29 of Factories Act 1948)',
-    'REPORT OF EXAMINATION OR TEST OF PRESSURE VESSEL OR PLANT (Under Section 31 of Factories Act 1948)',
-    'REPORTS OF EXAMINATION OF SAFETY BELTS',
-    'REPORT OF HYDRAULIC EXAMINATION OF PRESSURE VESSEL OR PLANT (Under Section 31 of Factories Act 1948)',
+    // 'REPORT OF EXAMINATION OR TEST OF PRESSURE VESSEL OR PLANT (Under Section 31 of Factories Act 1948)',
+    // 'REPORTS OF EXAMINATION OF SAFETY BELTS',
+    // 'REPORT OF HYDRAULIC EXAMINATION OF PRESSURE VESSEL OR PLANT (Under Section 31 of Factories Act 1948)',
   ];
 
   equipmentList = liftingEquipmentList;
@@ -232,6 +376,13 @@ export class CompanyReport implements OnInit {
   liftingReports: LiftingRecord[] = [];
   pressureReports: PressureVesselCertificate[] = [];
   powerPressReports: PowerPress[] = [];
+  safetyBeltReports: SafetyBeltInspection[] = [];
+  
+
+  liftingItemsForPrint: { type: 'lifting'; data: any }[] = [];
+  pvItemsForPrint:      { type: 'pv';      data: any }[] = [];
+  ppItemsForPrint:      { type: 'pp';      data: any }[] = [];
+  sbItemsForPrint:      { type: 'sb';      data: any }[] = [];
 
   loading = true;
   error   = false;
@@ -264,6 +415,13 @@ export class CompanyReport implements OnInit {
   ppForm!: PowerPress;
   ppDuration: '6months' | '1year' | '2years' | '' = '';
 
+   /* ── Safety Belt modal ── NEW ── */
+  showSafetyBeltModal  = false;
+  safetyBeltModalMode: 'add' | 'update' = 'add';
+  selectedSafetyBelt: SafetyBeltInspection | null = null;
+  sbForm!: SafetyBeltInspection;
+  sbDuration: '6months' | '1year' | '2years' | '' = '';
+
   /* ── Shared lists ── */
   inspectorList: string[] = ['Brijesh Kumar', 'Aditya Kaushik'];
 
@@ -276,19 +434,30 @@ export class CompanyReport implements OnInit {
     'Hydraulic Test Rule'
   ];
 
+
+
+
+  // Bulk Print New 
+  
+    get selectedItemsForPrint(): { type: 'lifting' | 'pv' | 'pp'; data: any }[] {
+    return [...this.liftingItemsForPrint, ...this.pvItemsForPrint, ...this.ppItemsForPrint];
+  }
+
   /* =========================================================
      BULK PRINT
   ========================================================= */
   selectedLiftingIds: Set<number> = new Set();
   selectedPvIds: Set<number> = new Set();
   selectedPpIds: Set<number> = new Set();
+  selectedSbIds: Set<number> = new Set();
 
   /** Ordered array built just before window.print() is called */
-  selectedItemsForPrint: { type: 'lifting' | 'pv' | 'pp'; data: any }[] = [];
+  // selectedItemsForPrint: { type: 'lifting' | 'pv' | 'pp'; data: any }[] = [];
 
-  get totalSelected(): number {
-    return this.selectedLiftingIds.size + this.selectedPvIds.size + this.selectedPpIds.size;
-  }
+get totalSelected(): number {
+  return this.selectedLiftingIds.size + this.selectedPvIds.size + 
+         this.selectedPpIds.size + this.selectedSbIds.size;
+}
 
   toggleLiftingSelection(id: number): void {
     if (this.selectedLiftingIds.has(id)) { this.selectedLiftingIds.delete(id); }
@@ -316,6 +485,14 @@ export class CompanyReport implements OnInit {
     }
   }
 
+  selectAllSb(): void {
+    if (this.selectedSbIds.size === this.safetyBeltReports.length) {
+      this.selectedSbIds = new Set();
+    } else {
+      this.selectedSbIds = new Set(this.safetyBeltReports.filter(r => r.id != null).map(r => r.id!));
+    }
+  }
+
   selectAllPv(): void {
     if (this.selectedPvIds.size === this.pressureReports.length) {
       this.selectedPvIds = new Set();
@@ -332,92 +509,136 @@ export class CompanyReport implements OnInit {
     }
   }
 
+
+   toggleSbSelection(id: number): void {
+    if (this.selectedSbIds.has(id)) { this.selectedSbIds.delete(id); }
+    else { this.selectedSbIds.add(id); }
+    this.selectedSbIds = new Set(this.selectedSbIds);
+  }
+
+
+
   clearAllSelections(): void {
     this.selectedLiftingIds = new Set();
     this.selectedPvIds = new Set();
     this.selectedPpIds = new Set();
+    this.selectedSbIds      = new Set();
   }
 
-  getLiftingCount(): number { return this.selectedItemsForPrint.filter(i => i.type === 'lifting').length; }
-  getPvCount(): number      { return this.selectedItemsForPrint.filter(i => i.type === 'pv').length; }
-  getPpCount(): number      { return this.selectedItemsForPrint.filter(i => i.type === 'pp').length; }
-
-  printSelected(): void {
-    const liftingItems = this.liftingReports
+   printSelected(): void {
+    // ── Lifting ──
+    this.liftingItemsForPrint = this.liftingReports
       .filter(r => r.id != null && this.selectedLiftingIds.has(r.id!))
       .map(r => ({
         type: 'lifting' as const,
         data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNo + '|' + this.companyId + '|lifting') }
       }));
-
-    const pvItems = this.pressureReports
+ 
+    // ── PV ──
+    this.pvItemsForPrint = this.pressureReports
       .filter(r => r.id != null && this.selectedPvIds.has(r.id!))
       .map(r => ({
         type: 'pv' as const,
         data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNo + '|' + this.companyId + '|pv') }
       }));
-
-    const ppItems = this.powerPressReports
+ 
+    // ── PP ──
+    this.ppItemsForPrint = this.powerPressReports
       .filter(r => r.id != null && this.selectedPpIds.has(r.id!))
       .map(r => ({
         type: 'pp' as const,
         data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNo + '|' + this.companyId + '|pp') }
       }));
 
+
+      /* ── SB ── NEW ── */
+    this.sbItemsForPrint = this.safetyBeltReports
+      .filter(r => r.id != null && this.selectedSbIds.has(r.id!))
+      .map(r => ({
+        type: 'sb' as const,
+        data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNumber + '|' + this.companyId + '|sb') }
+      }));
+ 
+    // Clear single-record targets
     this.selectedItem   = null;
     this.selectedPvItem = null;
     this.selectedPpItem = null;
-    this.selectedItemsForPrint = [...liftingItems, ...pvItems, ...ppItems];
+    this.selectedSbItem = null;
+ 
     setTimeout(() => window.print(), 300);
   }
-
+ 
+/* ── STEP 3 ── Update getLiftingCount / getPvCount / getPpCount ── */
+ 
+  getLiftingCount(): number { return this.liftingItemsForPrint.length; }
+  getPvCount():      number { return this.pvItemsForPrint.length; }
+  getPpCount():      number { return this.ppItemsForPrint.length; }
+  getSbCount():      number { return this.sbItemsForPrint.length; }
   /* =========================================================
      CONSTRUCTOR / INIT
   ========================================================= */
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private api: ApiService
+    private api: ApiService,
+    private cdr: ChangeDetectorRef,
+
   ) {}
 
-  ngOnInit(): void {
-    this.companyId = Number(this.route.snapshot.paramMap.get('id'));
-    if (!this.companyId) { this.goBack(); return; }
+ngOnInit(): void {
+  this.companyId = Number(this.route.snapshot.paramMap.get('id'));
+  if (!this.companyId) { this.goBack(); return; }
 
-    this.liftingForm  = this.emptyLiftingForm();
-    this.pvForm       = this.emptyPvForm();
-    this.ppForm       = this.emptyPpForm();
-    this.fieldToggles = this.defaultToggles();
+  this.liftingForm  = this.emptyLiftingForm();
+  this.pvForm       = this.emptyPvForm();
+  this.ppForm       = this.emptyPpForm();
+  this.sbForm       = this.emptySbForm();
+  this.fieldToggles = this.defaultToggles();
 
-    this.loadAllData();
-  }
+  this.loadImageAsBase64('/sign.png')
+    .then(b64 => { this.signatureBase64 = b64; this.cdr.detectChanges(); })
+    .catch(() => console.warn('sign.png not found'));
 
+  this.loadImageAsBase64('/stamp.png')
+    .then(b64 => { this.stampBase64 = b64; this.cdr.detectChanges(); })
+    .catch(() => console.warn('stamp.jpg not found'));
+
+  this.loadImageAsBase64('/sign.png')
+    .then(b64 => { this.counterSignBase64 = b64; this.cdr.detectChanges(); })
+    .catch(() => console.warn('sign.jpg not found'));
+
+  this.loadAllData();
+}
   /* =========================================================
      LOAD DATA
   ========================================================= */
-  loadAllData(): void {
-    this.loading = true;
-    forkJoin({
-      company:    this.api.getCompanyById(this.companyId),
-      lifting:    this.api.getAllLiftingByCompany(this.companyId),
-      pressure:   this.api.getAllPressureByCompany(this.companyId),
-      powerPress: this.api.getAllPowerPressByCompany(this.companyId)
-    }).subscribe({
-      next: (res: any) => {
-        this.company           = res.company?.data  ?? null;
-        this.allLiftingReports = res.lifting?.data  ?? [];
-        this.liftingReports    = [...this.allLiftingReports];
-        this.pressureReports   = res.pressure?.data   ?? [];
-        this.powerPressReports = res.powerPress?.data ?? [];
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Load Error:', err);
-        this.loading = false;
-        this.error   = true;
-      }
-    });
-  }
+loadAllData(): void {
+  this.loading = true;
+  forkJoin({
+    company:    this.api.getCompanyById(this.companyId),
+    lifting:    this.api.getAllLiftingByCompany(this.companyId),
+    pressure:   this.api.getAllPressureByCompany(this.companyId),
+    powerPress: this.api.getAllPowerPressByCompany(this.companyId),
+    safetyBelt: this.api.getAllSafetyBelts(this.companyId),
+  }).subscribe({
+    next: (res: any) => {
+      this.company           = res.company?.data  ?? null;
+      this.allLiftingReports = res.lifting?.data  ?? [];
+      this.liftingReports    = [...this.allLiftingReports];
+      this.pressureReports   = res.pressure?.data   ?? [];
+      this.powerPressReports = res.powerPress?.data ?? [];
+      this.safetyBeltReports = res.safetyBelt?.data ?? [];
+      this.loading = false;
+      this.cdr.detectChanges();   // ← ADD THIS
+    },
+    error: (err) => {
+      console.error('Load Error:', err);
+      this.loading = false;
+      this.error   = true;
+      this.cdr.detectChanges();   // ← ADD THIS TOO
+    }
+  });
+}
 
   /* =========================================================
      FILTER
@@ -443,10 +664,14 @@ export class CompanyReport implements OnInit {
   printReport(): void { window.print(); }
 
   openPrintModal(item: LiftingRecord): void {
-    this.selectedItemsForPrint = [];
+    this.liftingItemsForPrint = [];
+this.pvItemsForPrint = [];
+ this.sbItemsForPrint = []; 
+this.ppItemsForPrint = [];
     this.selectedPvItem        = null;
     this.selectedPpItem        = null;
     this.selectedItem          = item;
+     this.selectedSbItem       = null;
     setTimeout(() => window.print(), 200);
   }
 
@@ -459,10 +684,13 @@ export class CompanyReport implements OnInit {
      SINGLE PV PRINT
   ========================================================= */
   openPrintPressure(item: PressureVesselCertificate): void {
-    this.selectedItemsForPrint = [];
+    this.liftingItemsForPrint = [];
+this.pvItemsForPrint = [];
+this.ppItemsForPrint = [];
     this.selectedItem          = null;
     this.selectedPpItem        = null;
     this.selectedPvItem        = item;
+    console.log(this.selectedPvItem);
     setTimeout(() => window.print(), 200);
   }
 
@@ -470,10 +698,27 @@ export class CompanyReport implements OnInit {
      SINGLE POWER PRESS PRINT
   ========================================================= */
   openPrintPowerPress(item: PowerPress): void {
-    this.selectedItemsForPrint = [];
+    this.liftingItemsForPrint = [];
+this.pvItemsForPrint = [];
+this.ppItemsForPrint = [];
     this.selectedItem          = null;
     this.selectedPvItem        = null;
     this.selectedPpItem        = item;
+    setTimeout(() => window.print(), 200);
+  }
+
+  /* =========================================================
+     SINGLE SAFETY BELT PRINT  ← NEW
+  ========================================================= */
+  openPrintSafetyBelt(item: SafetyBeltInspection): void {
+    this.liftingItemsForPrint = [];
+    this.pvItemsForPrint      = [];
+    this.ppItemsForPrint      = [];
+    this.sbItemsForPrint      = [];
+    this.selectedItem         = null;
+    this.selectedPvItem       = null;
+    this.selectedPpItem       = null;
+    this.selectedSbItem       = item;
     setTimeout(() => window.print(), 200);
   }
 
@@ -501,6 +746,7 @@ export class CompanyReport implements OnInit {
     return {
       companyId: this.companyId,
       certificateNo: '',
+       testName: 'REPORT OF EXAMINATION OR TEST OF PRESSURE VESSEL OR PLANT', // ← ADD THIS
       formNo: 'Form No. 8',
       ruleNumber: 'Rule 61',
       nameOfOccupier: '',
@@ -564,6 +810,27 @@ export class CompanyReport implements OnInit {
     nextDueDate: '',
   };
 }
+
+ /* ── Safety Belt empty form ── NEW ── */
+  emptySbForm(): SafetyBeltInspection {
+    return {
+      companyId: this.companyId,
+       certificateNumber: '', dateOfExamination: '', nextDueDate: '',
+      occupierName: '', factoryAddress: '',
+      beltType: 'Full Body Harness', serialNo: '', modelNo: 'N/A',
+      make: '', batchNo: '', yearOfManufacture: '', location: '',
+      dateFirstUse: '', lastExaminedBy: '', lastExaminationDate: '',
+      webbing: 'OK', buckles: 'OK', dRings: 'OK',
+      lanyardCondition: 'OK', stitching: 'OK', hooks: 'OK',
+      overallCondition: 'Satisfactory',
+      defectsObservation: 'Safe to use As per IS:3521',
+      certifiedBy: '', designation: 'Competent Person U/s 21(2), 28, 29, 31',
+      licenseNo: '', approvalDetails: '',
+    };
+  }
+ 
+
+
 
   defaultToggles(): Record<ToggleFieldKey, boolean | null> {
     const obj = {} as Record<ToggleFieldKey, boolean | null>;
@@ -680,30 +947,53 @@ export class CompanyReport implements OnInit {
     this.selectedLifting  = null;
   }
 
-  saveLifting(): void {
-    if (this.liftingModalMode === 'add') {
-      this.api.createLiftingRecord(this.liftingForm as any).subscribe({
-        next: () => { this.reloadLifting(); this.closeLiftingModal(); },
-        error: err => console.error('Create Error:', err)
-      });
-    } else {
-      if (!this.selectedLifting?.id) return;
-      this.api.updateLiftingRecord(this.selectedLifting.id, this.liftingForm as any).subscribe({
-        next: () => { this.reloadLifting(); this.closeLiftingModal(); },
-        error: err => console.error('Update Error:', err)
-      });
-    }
-  }
-
-  reloadLifting(): void {
-    this.api.getAllLiftingByCompany(this.companyId).subscribe({
-      next: (res: any) => {
-        this.allLiftingReports = res?.data ?? [];
-        this.filterByTestName();
+/* ── LIFTING ── */
+saveLifting(): void {
+  if (this.liftingModalMode === 'add') {
+    this.api.createLiftingRecord(this.liftingForm as any).subscribe({
+      next: () => {
+        this.reloadLifting(() => {
+          this.closeLiftingModal();
+          this.showToast('Lifting record added successfully!');
+        });
       },
-      error: err => console.error('Reload Error:', err)
+      error: err => {
+        console.error('Create Error:', err);
+        this.showToast('Failed to add lifting record.', 'error');
+      }
+    });
+  } else {
+    if (!this.selectedLifting?.id) return;
+    this.api.updateLiftingRecord(this.selectedLifting.id, this.liftingForm as any).subscribe({
+      next: () => {
+        this.reloadLifting(() => {
+          this.closeLiftingModal();
+          this.showToast('Lifting record updated successfully!');
+        });
+      },
+      error: err => {
+        console.error('Update Error:', err);
+        this.showToast('Failed to update lifting record.', 'error');
+      }
     });
   }
+}
+
+reloadLifting(onDone?: () => void): void {
+  this.api.getAllLiftingByCompany(this.companyId).subscribe({
+    next: (res: any) => {
+      this.allLiftingReports = res?.data ?? [];
+      this.liftingReports    = [...this.allLiftingReports];
+      this.filterByTestName();
+      this.cdr.detectChanges();
+      onDone?.();
+    },
+    error: err => console.error('Reload Error:', err)
+  });
+}
+
+
+  
 
   /* =========================================================
      CERTIFICATE NUMBER GENERATOR — LIFTING
@@ -730,6 +1020,19 @@ export class CompanyReport implements OnInit {
     const serial = String((this.powerPressReports?.length ?? 0) + 1).padStart(3, '0');
     this.ppForm.certificateNo = `ESS/${companyCode}/${dateCode}/PP/${serial}`;
   }
+
+  /* =========================================================
+     CERTIFICATE NUMBER GENERATOR — SAFETY BELT  ← NEW
+  ========================================================= */
+  generateSbCertificateNo(): void {
+    if (!this.company) return;
+    const companyCode = (this.company.companyName || '').replace(/[^A-Za-z]/g, '').substring(0, 3).toUpperCase();
+    const now = this.sbForm.dateOfExamination ? new Date(this.sbForm.dateOfExamination) : new Date();
+    const dateCode = `${String(now.getDate()).padStart(2,'0')}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getFullYear()).slice(-2)}`;
+    const serial = String((this.safetyBeltReports?.length ?? 0) + 1).padStart(3, '0');
+    this.sbForm.certificateNumber = `ESS/${companyCode}/${dateCode}/SB/${serial}`;
+  }
+
 
   /* =========================================================
      STATE-BASED TEXT HELPERS
@@ -818,28 +1121,50 @@ export class CompanyReport implements OnInit {
     this.selectedPressure  = null;
   }
 
-  savePressure(): void {
-    this.pvForm.maxPermissibleWorkingPressureCalculated = this.computedMaxWorkingPressure;
-    if (this.pressureModalMode === 'add') {
-      this.api.createPressureCertificate(this.pvForm).subscribe({
-        next: () => { this.reloadPressure(); this.closePressureModal(); },
-        error: err => console.error('PV Create Error:', err)
-      });
-    } else {
-      if (!this.selectedPressure?.id) return;
-      this.api.updatePressureCertificate(this.selectedPressure.id, this.pvForm).subscribe({
-        next: () => { this.reloadPressure(); this.closePressureModal(); },
-        error: err => console.error('PV Update Error:', err)
-      });
-    }
-  }
-
-  reloadPressure(): void {
-    this.api.getAllPressureByCompany(this.companyId).subscribe({
-      next: (res: any) => { this.pressureReports = res?.data ?? []; },
-      error: err => console.error('PV Reload Error:', err)
+ /* ── PRESSURE VESSEL ── */
+savePressure(): void {
+  this.pvForm.maxPermissibleWorkingPressureCalculated = this.computedMaxWorkingPressure;
+  if (this.pressureModalMode === 'add') {
+    this.api.createPressureCertificate(this.pvForm).subscribe({
+      next: () => {
+        this.reloadPressure(() => {
+          this.closePressureModal();
+          this.showToast('Pressure vessel record added successfully!');
+        });
+      },
+      error: err => {
+        console.error('PV Create Error:', err);
+        this.showToast('Failed to add pressure vessel record.', 'error');
+      }
+    });
+  } else {
+    if (!this.selectedPressure?.id) return;
+    this.api.updatePressureCertificate(this.selectedPressure.id, this.pvForm).subscribe({
+      next: () => {
+        this.reloadPressure(() => {
+          this.closePressureModal();
+          this.showToast('Pressure vessel record updated successfully!');
+        });
+      },
+      error: err => {
+        console.error('PV Update Error:', err);
+        this.showToast('Failed to update pressure vessel record.', 'error');
+      }
     });
   }
+}
+
+reloadPressure(onDone?: () => void): void {
+  this.api.getAllPressureByCompany(this.companyId).subscribe({
+    next: (res: any) => {
+      this.pressureReports = res?.data ?? [];
+      this.cdr.detectChanges();
+      onDone?.();
+    },
+    error: err => console.error('PV Reload Error:', err)
+  });
+}
+
 
   /* =========================================================
      POWER PRESS MODAL
@@ -884,28 +1209,130 @@ openAddPowerPress(): void {
     this.selectedPowerPress  = null;
   }
 
-  savePowerPress(): void {
-    if (this.powerPressModalMode === 'add') {
-      this.api.createPowerPress(this.ppForm as any).subscribe({
-        next: () => { this.reloadPowerPress(); this.closePowerPressModal(); },
-        error: err => console.error('PP Create Error:', err)
-      });
-    } else {
-      if (!this.selectedPowerPress?.id) return;
-      this.api.updatePowerPress(this.selectedPowerPress.id, this.ppForm as any).subscribe({
-        next: () => { this.reloadPowerPress(); this.closePowerPressModal(); },
-        error: err => console.error('PP Update Error:', err)
-      });
-    }
-  }
-
-  reloadPowerPress(): void {
-    this.api.getAllPowerPressByCompany(this.companyId).subscribe({
-      next: (res: any) => { this.powerPressReports = res?.data ?? []; },
-      error: err => console.error('PP Reload Error:', err)
+/* ── POWER PRESS ── */
+savePowerPress(): void {
+  if (this.powerPressModalMode === 'add') {
+    this.api.createPowerPress(this.ppForm as any).subscribe({
+      next: () => {
+        this.reloadPowerPress(() => {
+          this.closePowerPressModal();
+          this.showToast('Power press record added successfully!');
+        });
+      },
+      error: err => {
+        console.error('PP Create Error:', err);
+        this.showToast('Failed to add power press record.', 'error');
+      }
+    });
+  } else {
+    if (!this.selectedPowerPress?.id) return;
+    this.api.updatePowerPress(this.selectedPowerPress.id, this.ppForm as any).subscribe({
+      next: () => {
+        this.reloadPowerPress(() => {
+          this.closePowerPressModal();
+          this.showToast('Power press record updated successfully!');
+        });
+      },
+      error: err => {
+        console.error('PP Update Error:', err);
+        this.showToast('Failed to update power press record.', 'error');
+      }
     });
   }
+}
 
+reloadPowerPress(onDone?: () => void): void {
+  this.api.getAllPowerPressByCompany(this.companyId).subscribe({
+    next: (res: any) => {
+      this.powerPressReports = res?.data ?? [];
+      this.cdr.detectChanges();
+      onDone?.();
+    },
+    error: err => console.error('PP Reload Error:', err)
+  });
+}
+
+    /* =========================================================
+     SAFETY BELT MODAL  ← NEW
+  ========================================================= */
+  openAddSafetyBelt(): void {
+    this.safetyBeltModalMode = 'add';
+    this.selectedSafetyBelt  = null;
+    this.sbDuration          = '';
+ 
+    this.sbForm = {
+      ...this.emptySbForm(),
+      occupierName:      this.company?.companyName    ?? '',
+      factoryAddress:    this.company?.factoryAddress ?? '',
+      location:          'Shop Floor-1',
+      yearOfManufacture: new Date().getFullYear().toString(),
+      dateFirstUse:      new Date().getFullYear().toString(),
+      dateOfExamination: this.toDateStr(new Date()),
+      lastExaminationDate: this.toDateStr(new Date()),
+      lastExaminedBy:    'Brijesh Kumar',
+      certifiedBy:       'Brijesh Kumar',
+      designation:       'Competent Person U/s 21(2), 28, 29, 31',
+      licenseNo:         '2986',
+    };
+ 
+    this.generateSbCertificateNo();
+    this.sbDuration = '6months';
+    this.calculateSbDueDate();
+    this.showSafetyBeltModal = true;
+  }
+ 
+  openEditSafetyBelt(item: SafetyBeltInspection): void {
+    this.safetyBeltModalMode = 'update';
+    this.selectedSafetyBelt  = item;
+    this.sbForm              = { ...item };
+    this.sbDuration          = '';
+    this.showSafetyBeltModal = true;
+  }
+ 
+  closeSafetyBeltModal(): void { this.showSafetyBeltModal = false; this.selectedSafetyBelt = null; }
+ 
+ /* ── SAFETY BELT ── */
+saveSafetyBelt(): void {
+  if (this.safetyBeltModalMode === 'add') {
+    this.api.createSafetyBelt(this.sbForm as any).subscribe({
+      next: () => {
+        this.reloadSafetyBelt(() => {
+          this.closeSafetyBeltModal();
+          this.showToast('Safety belt record added successfully!');
+        });
+      },
+      error: err => {
+        console.error('SB Create Error:', err);
+        this.showToast('Failed to add safety belt record.', 'error');
+      }
+    });
+  } else {
+    if (!this.selectedSafetyBelt?.id) return;
+    this.api.updateSafetyBelt(this.selectedSafetyBelt.id, this.sbForm as any).subscribe({
+      next: () => {
+        this.reloadSafetyBelt(() => {
+          this.closeSafetyBeltModal();
+          this.showToast('Safety belt record updated successfully!');
+        });
+      },
+      error: err => {
+        console.error('SB Update Error:', err);
+        this.showToast('Failed to update safety belt record.', 'error');
+      }
+    });
+  }
+}
+
+reloadSafetyBelt(onDone?: () => void): void {
+  this.api.getAllSafetyBelts(this.companyId).subscribe({
+    next: (res: any) => {
+      this.safetyBeltReports = res?.data ?? [];
+      this.cdr.detectChanges();
+      onDone?.();
+    },
+    error: err => console.error('SB Reload Error:', err)
+  });
+}
   /* =========================================================
      POWER PRESS — NEXT DUE DATE
   ========================================================= */
@@ -926,6 +1353,14 @@ private calculatePpDueDate(): void {
   }
   this.ppForm.nextDueDate = this.toDateStr(due);
 }
+
+ /* =========================================================
+     SAFETY BELT — NEXT DUE DATE  ← NEW
+  ========================================================= */
+  setSbDuration(duration: '6months' | '1year' | '2years'): void {
+    this.sbDuration = duration;
+    this.calculateSbDueDate();
+  }
   /* =========================================================
      PRESSURE VESSEL — NEXT DUE DATE
   ========================================================= */
@@ -934,6 +1369,29 @@ private calculatePpDueDate(): void {
     this.calculatePvDueDate();
   }
 
+
+  private calculateSbDueDate(): void {
+  if (!this.sbForm.dateOfExamination) return;
+
+  const base = new Date(this.sbForm.dateOfExamination);
+  if (isNaN(base.getTime())) return;
+
+  const due = new Date(base);
+
+  switch (this.sbDuration) {
+    case '6months':
+      due.setMonth(due.getMonth() + 6);
+      break;
+    case '1year':
+      due.setFullYear(due.getFullYear() + 1);
+      break;
+    case '2years':
+      due.setFullYear(due.getFullYear() + 2);
+      break;
+  }
+
+  this.sbForm.nextDueDate = this.toDateStr(due);
+}
   private calculatePvDueDate(): void {
     if (!this.pvForm.dateOfExamination) return;
     const base = new Date(this.pvForm.dateOfExamination);
@@ -950,14 +1408,24 @@ private calculatePpDueDate(): void {
   /* =========================================================
      CERTIFICATE NUMBER GENERATOR — PV
   ========================================================= */
+  // generatePvCertificateNo(): void {
+  //   if (!this.company) return;
+  //   const companyCode = (this.company.companyName || '').replace(/[^A-Za-z]/g, '').substring(0, 3).toUpperCase();
+  //   const now = new Date();
+  //   const dateCode = `${String(now.getDate()).padStart(2,'0')}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getFullYear()).slice(-2)}`;
+  //   const serial = String((this.pressureReports?.length ?? 0) + 1).padStart(3, '0');
+  //   this.pvForm.certificateNo = `ESS/${companyCode}/${dateCode}/PV/${serial}`;
+  // }
+
   generatePvCertificateNo(): void {
-    if (!this.company) return;
-    const companyCode = (this.company.companyName || '').replace(/[^A-Za-z]/g, '').substring(0, 3).toUpperCase();
-    const now = new Date();
-    const dateCode = `${String(now.getDate()).padStart(2,'0')}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getFullYear()).slice(-2)}`;
-    const serial = String((this.pressureReports?.length ?? 0) + 1).padStart(3, '0');
-    this.pvForm.certificateNo = `ESS/${companyCode}/${dateCode}/PV/${serial}`;
-  }
+  if (!this.company) return;
+  const companyCode = (this.company.companyName || '').replace(/[^A-Za-z]/g, '').substring(0, 3).toUpperCase();
+  // ← use pvForm date, not new Date()
+  const now = this.pvForm.dateOfExamination ? new Date(this.pvForm.dateOfExamination) : new Date();
+  const dateCode = `${String(now.getDate()).padStart(2,'0')}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getFullYear()).slice(-2)}`;
+  const serial = String((this.pressureReports?.length ?? 0) + 1).padStart(3, '0');
+  this.pvForm.certificateNo = `ESS/${companyCode}/${dateCode}/PV/${serial}`;
+}
 
   /* =========================================================
      UTILITY
@@ -990,15 +1458,28 @@ private calculatePpDueDate(): void {
     return dateStr || '—';
   }
 
-  generateQrSvg(rawText: string): string {
-    const parts   = rawText.split('|');
-    const certNo  = parts[0] || '';
-    const recType = (parts[2] || '').toLowerCase();
-    const baseUrl = 'https://yourdomain.com/verify';
-    const verifyUrl = `${baseUrl}?cert=${certNo}&type=${recType}&cid=${this.companyId}`;
-    const encoded = encodeURIComponent(verifyUrl);
-    return `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encoded}&margin=4&color=000000&bgcolor=ffffff`;
-  }
+  // generateQrSvg(rawText: string): string {
+  //   const parts   = rawText.split('|');
+  //   const certNo  = parts[0] || '';
+  //   const recType = (parts[2] || '').toLowerCase();
+  //   const baseUrl = 'https://yourdomain.com/verify';
+  //   const verifyUrl = `${baseUrl}?cert=${certNo}&type=${recType}&cid=${this.companyId}`;
+  //   const encoded = encodeURIComponent(verifyUrl);
+  //   return `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encoded}&margin=4&color=000000&bgcolor=ffffff`;
+  // }
+
+generateQrSvg(rawText: string): string {
+  const parts   = rawText.split('|');
+  const certNo  = parts[0] || '';
+  const recType = (parts[2] || '').toLowerCase();
+  const baseUrl = 'https://blog-app-dc4e7.web.app/verify';   // ← UPDATED
+  const verifyUrl = `${baseUrl}?cert=${certNo}&type=${recType}&cid=${this.companyId}`;
+  const encoded = encodeURIComponent(verifyUrl);
+  return `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encoded}&margin=4&color=000000&bgcolor=ffffff`;
+}
+
+
+
 
   get computedMaxWorkingPressure(): string {
     const swp = this.pvForm?.maxPermissibleWorkingPressureByManufacturer || '';
@@ -1028,4 +1509,18 @@ private calculatePpDueDate(): void {
     const match = thickness.match(/Dish[:\s]*([\d.,\s]+mm)/i);
     return match ? match[1].trim() : '—';
   }
+
+showToast(message: string, type: 'success' | 'error' = 'success'): void {
+  this.toastMessage = message;
+  this.toastType    = type;
+  this.toastVisible = true;
+  this.cdr.detectChanges();
+  setTimeout(() => {
+    this.toastVisible = false;
+    this.cdr.detectChanges();
+  }, 3000);
+}
+
+
+
 }
