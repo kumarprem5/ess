@@ -1071,7 +1071,7 @@
 } /* end @media print */
 
 
-/* ── Watermark (screen hidden, print shown) ── */
+/* ── Watermark (screen hidden, print shown) ──
 .bpl-watermark-wrap {
   display: none;
 }
@@ -1088,5 +1088,5 @@
   z-index: 0;
   pointer-events: none;
   object-fit: contain;
-}
+} */
 
