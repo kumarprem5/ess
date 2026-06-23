@@ -1337,3 +1337,48 @@ font-size:24px;
   transform:scale(1.15);
 
 }
+
+/* ═══════════════════════════════════════════════════════════
+   GLOBAL PRINT RULES — Hide sidebar & header on all pages
+═══════════════════════════════════════════════════════════ */
+@media print {
+
+  .sidebar,
+  .topbar,
+  .overlay,
+  .sb-logout,
+  .sb-divider,
+  .sb-section-label {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .shell {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .main {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .content {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 8mm;
+  }
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+}
