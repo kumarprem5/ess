@@ -4,6 +4,10 @@
 ══════════════════════════════════════════════════════════ -->
 
 <div id="bulk-print-lifting-section" *ngIf="liftingItems.length > 0" class="bpl-root">
+  
+<div class="bpl-watermark-wrap" *ngIf="watermarkImageUrl">
+  <img [src]="watermarkImageUrl"class="bpl-watermark-img">
+</div>
 
   <!-- ── INDEX PAGE ── -->
   <div class="bpl-index-page">
@@ -64,10 +68,7 @@
   <ng-container *ngFor="let item of liftingItems; let last = last">
     <div class="bpl-print-page">
 
-    <div class="bpl-watermark-wrap" *ngIf="watermarkImageUrl">
-  <img [src]="watermarkImageUrl"
-       class="bpl-watermark-img">
-</div>
+  
       <!-- Header
       <div class="bpl-print-header-row">
         <div class="bpl-print-title-group">
