@@ -919,16 +919,14 @@
     max-height: unset !important;
   }
 
-  /* ── Counter sign ── */
-  #sv-bulk-print-section .bpsv-sign-right {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
-    justify-content: flex-end !important;
-    flex-shrink: 0 !important;
-    gap: 4px !important;  /* Space between image and label */
-  }
-
+#sv-bulk-print-section .bpsv-sign-right {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: flex-end !important;
+  transform: translateY(-75px) !important;  /* move up/down only */
+}
+  
 #sv-bulk-print-section .bpsv-counter-sig-wrap {
   height: auto !important;
   display: flex !important;
@@ -946,22 +944,18 @@
     margin: 0 !important;
     padding: 0 !important;
   }
-  #sv-bulk-print-section .bpsv-sign-right .bpsv-signature-title {
-    margin: 0 !important;
-    text-align: right !important;
-    position: relative !important;
-    z-index: 5 !important;
-    font-size: var(--bpsv-sig-title) !important;
-    line-height: 1.0 !important;
-  }
+  
+#sv-bulk-print-section .bpsv-sign-right .bpsv-signature-title {
+  margin: 0 !important;
+  text-align: right !important;
+}
 
-  #sv-bulk-print-section .bpsv-counter-sig-img {
-    height: 160px !important;
-    width: auto !important;
-    object-fit: contain !important;
-    margin-bottom: 1px !important;  /* Fine-tune alignment */
-  }
- 
+#sv-bulk-print-section .bpsv-counter-sig-img {
+  height: 160px !important;   /* keep your current size */
+  width: auto !important;
+  object-fit: contain !important;
+}
+
   /* ── Disclaimer ── */
   #sv-bulk-print-section .bpsv-cert-bottom-row {
     display: flex !important;
