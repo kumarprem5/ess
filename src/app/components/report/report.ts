@@ -1406,7 +1406,7 @@ onSvExaminationDateChange(): void {
           case 'delhi':          return 'Approved by the CIF Haryana Vide Lic. No. 2968 Dated 27.06.2019 Memo No. 957-997 dt. 26.03.2021 & 3449-89 dt. 17.08.21';
           case 'madhya pradesh': return 'Approved by CIF Madhya Pradesh Vide Lic. No. CMI2110221 dated 16.09.2023';
           case 'uttar pradesh':  return 'Approved by the Dir. Fac. Kanpur Vide Lic. No.155/F/C.P.U.P./Org.2025 DT. 22.01.2025';
-          case 'uttarakhand':    return 'Approved by the Dir. Fac. Haldwani Vide Lic. No.114/F/C.P.U.K./Org.2025 DT.11.02.2025';  // ← ADD (fill in real details)
+          case 'uttarakhand':    return 'Approved by the Dir. Fac. Haldwani Vide <br> Lic. No.114/F/C.P.U.K./Org.2025 DT.11.02.2025';  // ← ADD (fill in real details)
           default:               return 'Approved by CIF&B, Jaipur Lic No: CMP-883/2025 Dt: 22.12.2025';
         }
       }

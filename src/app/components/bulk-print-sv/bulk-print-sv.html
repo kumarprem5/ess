@@ -166,9 +166,7 @@
               <div class="bpsv-signature-name">Brijesh Kumar</div>
               <div class="bpsv-signature-title">Authorized Signatory</div>
               <div class="bpsv-signature-title">Factories Act, 1948 {{ getSectionText() }}</div>
-              <div class="bpsv-cert-certify">
-        {{ getApprovalText() }}
-      </div>
+               <div class="bpsv-cert-certify" [innerHTML]="getApprovalText()"></div>
               <!-- Stamp floats over the text -->
               <img *ngIf="showStamp && stampImageUrl"
                    [src]="stampImageUrl"
