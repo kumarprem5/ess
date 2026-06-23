@@ -51,7 +51,6 @@
   <tr>
     <th>#</th>
     <th>Company Name</th>
-    <th>City</th>
     <th>Division</th>
     <th>Actions</th>
   </tr>
@@ -67,9 +66,9 @@
     {{ company.companyName }}
   </td>
 
-  <td>
+  <!-- <td>
     {{ company.city }}
-  </td>
+  </td> -->
 
   <td>
     <span class="badge badge-lic">
@@ -101,7 +100,7 @@
 </tr>
 
       <tr *ngIf="filteredCompanies.length === 0">
-        <td colspan="6" class="no-data">
+        <td colspan="4" class="no-data">
           No companies found
         </td>
       </tr>
