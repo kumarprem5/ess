@@ -29,6 +29,7 @@ export class BulkSafetyBelt {
   @Input() signatureImageUrl: string = '';
   @Input() stampImageUrl: string = '';
   @Input() counterSignImageUrl: string = '';
+  @Input() watermarkImageUrl: string = '';
   
 
 

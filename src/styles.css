@@ -1,1 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+@media print {
+  app-sidebar,
+  app-header,
+  .sidebar,
+  .app-header,
+  .top-navbar {
+    display: none !important;
+  }
+
+  /* Let the printed certificate fill the page */
+  app-company-report,
+  .report-page-wrapper,
+  router-outlet + * {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}

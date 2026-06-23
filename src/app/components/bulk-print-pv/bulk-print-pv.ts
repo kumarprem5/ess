@@ -8,8 +8,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './bulk-print-pv.css',
 })
 export class BulkPrintPv {
-
-   @Input() pvItems: { type: 'pv'; data: any }[] = [];
+  @Input() pvItems: { type: 'pv'; data: any }[] = [];
   @Input() companyId = 0;
   @Input() safeDateFormat!: (d: string | null | undefined) => string;
   @Input() generateQrSvg!: (raw: string) => string;
@@ -17,12 +16,11 @@ export class BulkPrintPv {
   @Input() getApprovalText!: () => string;
   @Input() getShellValue!: (t: string) => string;
   @Input() getDishValue!: (t: string) => string;
-
+  @Input() watermarkImageUrl: string = '';
     // ── Stamp / Signature inputs ──
   @Input() showStamp: boolean = true;
   @Input() signatureImageUrl: string = '';
   @Input() stampImageUrl: string = '';
   @Input() counterSignImageUrl: string = '';
-
 
 }

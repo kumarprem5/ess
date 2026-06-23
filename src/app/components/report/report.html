@@ -1,55 +1,65 @@
 <!-- ══════════════════════════════════════════════════════════
-     REPORT PAGE — FIXED: Tabs, Modal CSS, Modern Header
-     - Tab switching uses Angular (click) binding
-     - Modal overlays use solid backgrounds (not transparent)
-     - Modern header with company info strip
-     - No business logic changed
+     REPORT COMPONENT TEMPLATE — report.component.html
 ══════════════════════════════════════════════════════════ -->
 
 <div class="report-page">
 
-  <!-- Loading -->
+  <!-- ── Loading State ── -->
   <div class="state-box" *ngIf="loading">
     <div class="spinner"></div>
     <p>Loading report…</p>
   </div>
 
-  <!-- Error -->
+  <!-- ── Error State ── -->
   <div class="state-box" *ngIf="error && !loading">
     <p class="error-text">Failed to load company details.</p>
     <button class="btn-back" (click)="goBack()">← Go Back</button>
   </div>
 
-  <!-- MAIN CONTENT -->
+  <!-- ══════════════════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════════════════ -->
   <ng-container *ngIf="!loading && !error && company">
 
-    <!-- ══════════════════════════════════════════════════════
-         MODERN PAGE HEADER
-    ══════════════════════════════════════════════════════ -->
+    <!-- ── PAGE HEADER ── -->
     <div class="page-header">
       <div class="page-header-inner">
+
         <div class="header-top-row">
           <button class="btn-back" (click)="goBack()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
             Back
           </button>
+
           <div class="header-company-identity">
-            <div class="header-avatar">{{ company.companyName?.charAt(0)?.toUpperCase() }}</div>
+            <div class="header-avatar">
+              {{ company.companyName?.charAt(0)?.toUpperCase() }}
+            </div>
             <div class="header-company-info">
               <h1 class="header-company-name">{{ company.companyName }}</h1>
               <div class="header-company-meta">
                 <span class="header-meta-item">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
                   {{ company.city }}, {{ company.state }}
                 </span>
                 <span class="header-meta-sep">·</span>
                 <span class="header-meta-item">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.76a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.76a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z" />
+                  </svg>
                   {{ company.mobileNumber }}
                 </span>
                 <span class="header-meta-sep">·</span>
                 <span class="header-meta-item">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 10h8M8 14h5"/></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="2" />
+                    <path d="M8 10h8M8 14h5" />
+                  </svg>
                   Member since {{ company.createdAt | date:'MMM yyyy' }}
                 </span>
               </div>
@@ -61,142 +71,138 @@
         <div class="header-detail-cards">
           <div class="detail-card">
             <div class="detail-card-icon detail-icon-person">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
             </div>
             <div class="detail-card-body">
               <span class="detail-card-label">Contact Person</span>
               <span class="detail-card-value">{{ company.contactPerson }}</span>
             </div>
           </div>
+
           <div class="detail-card">
             <div class="detail-card-icon detail-icon-email">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
             </div>
             <div class="detail-card-body">
               <span class="detail-card-label">Email</span>
               <span class="detail-card-value">{{ company.email }}</span>
             </div>
           </div>
+
           <div class="detail-card">
             <div class="detail-card-icon detail-icon-pin">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="3 11 22 2 13 21 11 13 3 11" />
+              </svg>
             </div>
             <div class="detail-card-body">
               <span class="detail-card-label">Pincode</span>
               <span class="detail-card-value">{{ company.pincode }}</span>
             </div>
           </div>
+
           <div class="detail-card detail-card-wide">
             <div class="detail-card-icon detail-icon-factory">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20V8l7-5 7 5v12"/><path d="M16 20V10l6 3v7"/><rect x="6" y="13" width="3" height="3"/><rect x="11" y="13" width="3" height="3"/><rect x="8" y="18" width="4" height="2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 20V8l7-5 7 5v12" />
+                <path d="M16 20V10l6 3v7" />
+                <rect x="6" y="13" width="3" height="3" />
+                <rect x="11" y="13" width="3" height="3" />
+                <rect x="8" y="18" width="4" height="2" />
+              </svg>
             </div>
             <div class="detail-card-body">
               <span class="detail-card-label">Factory Address</span>
               <span class="detail-card-value">{{ company.factoryAddress }}</span>
             </div>
           </div>
-        </div>
+        </div><!-- /header-detail-cards -->
+
       </div>
-    </div>
+    </div><!-- /page-header -->
 
     <!-- ══════════════════════════════════════════════════════
-         STATS ROW
-    ══════════════════════════════════════════════════════ -->
-    <div class="stats-section">
-      <div class="stats-row">
-        <div class="stat-card stat-lifting">
-          <div class="stat-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="3"/></svg>
-          </div>
-          <div class="stat-body">
-            <span class="stat-num">{{ liftingReports.length }}</span>
-            <span class="stat-lbl">Lifting Records</span>
-          </div>
-        </div>
-        <div class="stat-card stat-pv">
-          <div class="stat-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-          </div>
-          <div class="stat-body">
-            <span class="stat-num">{{ pressureReports.length }}</span>
-            <span class="stat-lbl">Pressure Vessels</span>
-          </div>
-        </div>
-        <div class="stat-card stat-pp">
-          <div class="stat-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-          </div>
-          <div class="stat-body">
-            <span class="stat-num">{{ powerPressReports.length }}</span>
-            <span class="stat-lbl">Power Press</span>
-          </div>
-        </div>
-        <div class="stat-card stat-sb">
-          <div class="stat-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <div class="stat-body">
-            <span class="stat-num">{{ safetyBeltReports.length }}</span>
-            <span class="stat-lbl">Safety Belts</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════════════════
-         TAB NAV — uses Angular (click) binding
+         TAB NAVIGATION
     ══════════════════════════════════════════════════════ -->
     <div class="tab-nav-wrapper">
       <div class="tab-nav">
-        <button class="tab-btn"
-          [class.tab-active-lifting]="activeTab === 'lifting'"
-          [class.tab-active]="activeTab === 'lifting'"
-          (click)="activeTab = 'lifting'">
+
+        <button class="tab-btn" [class.tab-active-lifting]="activeTab === 'lifting'"
+          [class.tab-active]="activeTab === 'lifting'" (click)="activeTab = 'lifting'">
           <span class="tab-icon-wrap tab-icon-lifting">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M2 12h20" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
           </span>
           <span class="tab-label">Lifting Equipment</span>
           <span class="tab-badge tab-badge-lifting">{{ liftingReports.length }}</span>
         </button>
-        <button class="tab-btn"
-          [class.tab-active-pv]="activeTab === 'pv'"
-          [class.tab-active]="activeTab === 'pv'"
+
+        <button class="tab-btn" [class.tab-active-pv]="activeTab === 'pv'" [class.tab-active]="activeTab === 'pv'"
           (click)="activeTab = 'pv'">
           <span class="tab-icon-wrap tab-icon-pv">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+            </svg>
           </span>
           <span class="tab-label">Pressure Vessel</span>
           <span class="tab-badge tab-badge-pv">{{ pressureReports.length }}</span>
         </button>
-        <button class="tab-btn"
-          [class.tab-active-pp]="activeTab === 'pp'"
-          [class.tab-active]="activeTab === 'pp'"
+
+        <button class="tab-btn" [class.tab-active-pp]="activeTab === 'pp'" [class.tab-active]="activeTab === 'pp'"
           (click)="activeTab = 'pp'">
           <span class="tab-icon-wrap tab-icon-pp">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <path d="M8 21h8M12 17v4" />
+            </svg>
           </span>
           <span class="tab-label">Power Press</span>
           <span class="tab-badge tab-badge-pp">{{ powerPressReports.length }}</span>
         </button>
-        <button class="tab-btn"
-          [class.tab-active-sb]="activeTab === 'sb'"
-          [class.tab-active]="activeTab === 'sb'"
+
+        <button class="tab-btn" [class.tab-active-sb]="activeTab === 'sb'" [class.tab-active]="activeTab === 'sb'"
           (click)="activeTab = 'sb'">
           <span class="tab-icon-wrap tab-icon-sb">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
           </span>
           <span class="tab-label">Safety Belt</span>
           <span class="tab-badge tab-badge-sb">{{ safetyBeltReports.length }}</span>
         </button>
+
+<button class="tab-btn" [class.tab-active-sv]="activeTab === 'sv'" [class.tab-active]="activeTab === 'sv'"
+  (click)="activeTab = 'sv'">
+  <span class="tab-icon-wrap tab-icon-sv">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+    </svg>
+  </span>
+  <span class="tab-label">Safety Valve</span>
+  <span class="tab-badge tab-badge-sv">{{ safetyValveReports.length }}</span>
+</button>
       </div>
-    </div>
+    </div><!-- /tab-nav-wrapper -->
 
     <!-- ══════════════════════════════════════════════════════
-         TAB PANELS — Angular *ngIf switching
+         TAB PANELS
     ══════════════════════════════════════════════════════ -->
     <div class="tab-panels-wrapper">
 
-      <!-- ── LIFTING PANEL ── -->
+      <!-- ════════════════════════════════════════
+           LIFTING PANEL
+      ════════════════════════════════════════ -->
       <div class="tab-panel" *ngIf="activeTab === 'lifting'">
         <div class="panel-header panel-header-lifting">
           <div class="panel-header-left">
@@ -204,74 +210,257 @@
             <h2 class="panel-title">Lifting Equipment Inspection Records</h2>
           </div>
           <button class="btn-add btn-add-lifting" (click)="openAddLifting()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
             Add Record
           </button>
         </div>
 
-        <div *ngIf="liftingReports.length; else noLifting" class="table-container">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th class="col-check">
-                  <input type="checkbox" class="bulk-checkbox"
-                    [checked]="selectedLiftingIds.size === liftingReports.length && liftingReports.length > 0"
-                    [indeterminate]="selectedLiftingIds.size > 0 && selectedLiftingIds.size < liftingReports.length"
-                    (change)="selectAllLifting()">
-                </th>
-                <th class="col-sr">#</th>
-                <th>Certificate No</th>
-                <th>Equipment</th>
-                <th>Model</th>
-                <th>Serial No</th>
-                <th>Manufacturer</th>
-                <th>Capacity</th>
-                <th>Next Due</th>
-                <th class="col-actions">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of liftingReports; let i = index"
-                  [class.row-selected]="selectedLiftingIds.has(item.id!)">
-                <td class="col-check">
-                  <input type="checkbox" class="bulk-checkbox"
-                    [checked]="selectedLiftingIds.has(item.id!)"
-                    (change)="toggleLiftingSelection(item.id!)">
-                </td>
-                <td class="col-sr">{{ i + 1 }}</td>
-                <td><span class="cert-no">{{ item.certificateNo || '—' }}</span></td>
-                <td><span class="equipment-tag equipment-tag-lifting">{{ item.equipmentName || '—' }}</span></td>
-                <td class="text-muted">{{ item.modelNumber || '—' }}</td>
-                <td class="text-muted">{{ item.srNo || '—' }}</td>
-                <td class="text-muted">{{ item.manufacturerName || '—' }}</td>
-                <td><span class="capacity-badge">{{ item.capacity || '—' }}</span></td>
-                <td><span class="due-date">{{ item.nextDueDate | date:'dd-MM-yyyy' }}</span></td>
-                <td class="col-actions">
-                  <button class="btn-action btn-edit" (click)="openEditLifting(item)">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Edit
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- Equipment Counter Summary -->
+        <div class="equipment-counter-strip" *ngIf="liftingReports.length > 0">
+          <div class="equipment-counter-label">Equipment Summary:</div>
+          <div class="equipment-counter-chips">
+            <span class="equipment-chip" *ngFor="let entry of equipmentGroups"
+              (click)="liftingGroupBy = 'equipment'; liftingSortBy = 'equipment'"
+              [title]="'Click to group by equipment'">
+              <span class="equipment-chip-name">{{ entry.name }}</span>
+              <span class="equipment-chip-count">{{ entry.count }}</span>
+            </span>
+          </div>
         </div>
+
+        <!-- Sort & Group Controls -->
+        <div class="lifting-controls" *ngIf="liftingReports.length > 0">
+          <div class="lifting-controls-left">
+            <span class="controls-label">Sort by:</span>
+            <div class="sort-btn-group">
+              <button class="sort-btn" [class.active]="liftingSortBy === 'serial'"
+                (click)="liftingSortBy = 'serial'; liftingGroupBy = 'none'"># Serial</button>
+              <button class="sort-btn" [class.active]="liftingSortBy === 'equipment'"
+                (click)="liftingSortBy = 'equipment'; liftingGroupBy = 'none'">Equipment</button>
+              <button class="sort-btn" [class.active]="liftingSortBy === 'date'"
+                (click)="liftingSortBy = 'date'; liftingGroupBy = 'none'">Date</button>
+            </div>
+            <span class="controls-divider">|</span>
+            <span class="controls-label">View:</span>
+            <div class="sort-btn-group">
+              <button class="sort-btn" [class.active]="liftingGroupBy === 'none'"
+                (click)="liftingGroupBy = 'none'">Flat List</button>
+              <button class="sort-btn" [class.active]="liftingGroupBy === 'equipment'"
+                (click)="liftingGroupBy = 'equipment'; liftingSortBy = 'equipment'">Group by Equipment</button>
+            </div>
+          </div>
+          <div class="lifting-controls-right">
+            <span class="total-count-badge">Total: {{ liftingReports.length }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="liftingReports.length; else noLifting">
+
+          <!-- FLAT LIST VIEW -->
+          <div class="table-container" *ngIf="liftingGroupBy === 'none'">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th class="col-check">
+                    <input type="checkbox" class="bulk-checkbox"
+                      [checked]="selectedLiftingIds.size === liftingReports.length && liftingReports.length > 0"
+                      [indeterminate]="selectedLiftingIds.size > 0 && selectedLiftingIds.size < liftingReports.length"
+                      (change)="selectAllLifting()">
+                  </th>
+                  <th class="col-sr">#</th>
+                  <th>Certificate No</th>
+                  <th>Equipment</th>
+                  <th>Model</th>
+                  <th>Serial No</th>
+                  <th>Manufacturer</th>
+                  <th>Capacity</th>
+                  <th>Next Due</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of sortedLiftingReports; let i = index"
+                  [class.row-selected]="selectedLiftingIds.has(item.id!)">
+                  <td class="col-check">
+                    <input type="checkbox" class="bulk-checkbox"
+                      [checked]="selectedLiftingIds.has(item.id!)"
+                      (change)="toggleLiftingSelection(item.id!)">
+                  </td>
+                  <td class="col-sr">{{ i + 1 }}</td>
+                  <td><span class="cert-no">{{ item.certificateNo || '—' }}</span></td>
+                  <td><span class="equipment-tag equipment-tag-lifting">{{ item.equipmentName || '—' }}</span></td>
+                  <td class="text-muted">{{ item.modelNumber || '—' }}</td>
+                  <td class="text-muted">{{ item.srNo || '—' }}</td>
+                  <td class="text-muted">{{ item.manufacturerName || '—' }}</td>
+                  <td><span class="capacity-badge">{{ item.capacity || '—' }}</span></td>
+                  <td><span class="due-date"
+                    [class.due-overdue]="isDueOverdue(item.nextDueDate)"
+                    [class.due-warning]="isDueWarning(item.nextDueDate)"
+                    [class.due-upcoming]="isDueUpcoming(item.nextDueDate)">
+                    {{ safeDateFormat(item.nextDueDate) }}
+                  </span></td>
+                  <td class="col-actions">
+                    <div class="col-actions-wrap">
+                      <button class="btn-action btn-edit" (click)="openEditLifting(item)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Edit
+                      </button>  
+                      
+                      <!-- Inside the flat list col-actions-wrap, BETWEEN Edit and Delete buttons -->
+<button class="btn-action btn-renew"
+  (click)="openRenewSingle('lifting', item.id!, item.equipmentName || item.certificateNo,
+           item.dateOfExamination, item.nextDueDate)">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="23 4 23 10 17 10"/>
+    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+  </svg>
+  Renew
+</button>
+                      <button class="btn-action btn-delete-rec"
+                        (click)="openDeleteConfirm('lifting', item.id!, item.equipmentName || item.certificateNo)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6l-1 14H6L5 6"/>
+                          <path d="M10 11v6M14 11v6"/>
+                          <path d="M9 6V4h6v2"/>
+                        </svg>
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- GROUPED VIEW -->
+          <div *ngIf="liftingGroupBy === 'equipment'">
+            <div class="equipment-group-block" *ngFor="let group of equipmentGroups">
+              <div class="equipment-group-header">
+                <div class="equipment-group-header-left">
+                  <input type="checkbox" class="bulk-checkbox"
+                    [checked]="isGroupFullySelected(group.records)"
+                    [indeterminate]="isGroupPartiallySelected(group.records)"
+                    (change)="toggleGroupSelection(group.records)">
+                  <span class="equipment-group-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </span>
+                  <span class="equipment-group-name">{{ group.name }}</span>
+                  <span class="equipment-group-count">{{ group.count }} record{{ group.count !== 1 ? 's' : '' }}</span>
+                </div>
+                <button class="btn-bulk-group-print" (click)="toggleGroupSelection(group.records)"
+                  [class.group-all-selected]="isGroupFullySelected(group.records)">
+                  {{ isGroupFullySelected(group.records) ? '✓ All Selected' : 'Select All' }}
+                </button>
+              </div>
+              <div class="table-container group-table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th class="col-check"></th>
+                      <th class="col-sr">#</th>
+                      <th>Certificate No</th>
+                      <th>Model</th>
+                      <th>Serial No</th>
+                      <th>ID No</th>
+                      <th>Capacity</th>
+                      <th>Location</th>
+                      <th>Next Due</th>
+                      <th class="col-actions">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of group.records; let i = index"
+                      [class.row-selected]="selectedLiftingIds.has(item.id!)">
+                      <td class="col-check">
+                        <input type="checkbox" class="bulk-checkbox"
+                          [checked]="selectedLiftingIds.has(item.id!)"
+                          (change)="toggleLiftingSelection(item.id!)">
+                      </td>
+                      <td class="col-sr">{{ i + 1 }}</td>
+                      <td><span class="cert-no">{{ item.certificateNo || '—' }}</span></td>
+                      <td class="text-muted">{{ item.modelNumber || '—' }}</td>
+                      <td class="text-muted">{{ item.srNo || '—' }}</td>
+                      <td class="text-muted">{{ item.idNumber || '—' }}</td>
+                      <td><span class="capacity-badge">{{ item.capacity || '—' }}</span></td>
+                      <td class="text-muted">{{ item.equipmentLocation || '—' }}</td>
+                      <td><span class="due-date"
+                        [class.due-overdue]="isDueOverdue(item.nextDueDate)"
+                        [class.due-warning]="isDueWarning(item.nextDueDate)"
+                        [class.due-upcoming]="isDueUpcoming(item.nextDueDate)">
+                        {{ safeDateFormat(item.nextDueDate) }}
+                      </span></td>
+                      <td class="col-actions">
+                        <div class="col-actions-wrap">
+                          <button class="btn-action btn-edit" (click)="openEditLifting(item)">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Edit
+                          </button>
+
+                          <!-- Inside the flat list col-actions-wrap, BETWEEN Edit and Delete buttons -->
+<button class="btn-action btn-renew"
+  (click)="openRenewSingle('lifting', item.id!, item.equipmentName || item.certificateNo,
+           item.dateOfExamination, item.nextDueDate)">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="23 4 23 10 17 10"/>
+    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+  </svg>
+  Renew
+</button>
+                          <button class="btn-action btn-delete-rec"
+                            (click)="openDeleteConfirm('lifting', item.id!, item.equipmentName || item.certificateNo)">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <polyline points="3 6 5 6 21 6"/>
+                              <path d="M19 6l-1 14H6L5 6"/>
+                              <path d="M10 11v6M14 11v6"/>
+                              <path d="M9 6V4h6v2"/>
+                            </svg>
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
         <ng-template #noLifting>
           <div class="empty-state">
             <div class="empty-icon-wrap empty-icon-lifting">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="3"/>
+              </svg>
             </div>
             <p class="empty-title">No Lifting Records Yet</p>
             <p class="empty-sub">Add your first lifting equipment inspection record</p>
             <button class="btn-add btn-add-lifting" (click)="openAddLifting()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
               Add First Record
             </button>
           </div>
         </ng-template>
-      </div>
+      </div><!-- /lifting panel -->
 
-      <!-- ── PRESSURE VESSEL PANEL ── -->
+      <!-- ════════════════════════════════════════
+           PRESSURE VESSEL PANEL
+      ════════════════════════════════════════ -->
       <div class="tab-panel" *ngIf="activeTab === 'pv'">
         <div class="panel-header panel-header-pv">
           <div class="panel-header-left">
@@ -279,9 +468,43 @@
             <h2 class="panel-title">Pressure Vessel Inspection Records</h2>
           </div>
           <button class="btn-add btn-add-pv" (click)="openAddPressure()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
             Add Record
           </button>
+        </div>
+
+        <!-- ── PV: Equipment Summary Strip ── -->
+        <div class="equipment-counter-strip" *ngIf="pressureReports.length > 0">
+          <div class="equipment-counter-label">Vessel Summary:</div>
+          <div class="equipment-counter-chips">
+            <span class="equipment-chip pv-chip" *ngFor="let entry of vesselGroups"
+              (click)="pvSortBy = 'vessel'"
+              [title]="'Click to sort by vessel type'">
+              <span class="equipment-chip-name">{{ entry.name }}</span>
+              <span class="equipment-chip-count pv-chip-count">{{ entry.count }}</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- ── PV: Sort Controls ── -->
+        <div class="lifting-controls" *ngIf="pressureReports.length > 0">
+          <div class="lifting-controls-left">
+            <span class="controls-label">Sort by:</span>
+            <div class="sort-btn-group">
+              <button class="sort-btn" [class.active]="pvSortBy === 'serial'"
+                (click)="pvSortBy = 'serial'"># Serial</button>
+              <button class="sort-btn" [class.active]="pvSortBy === 'vessel'"
+                (click)="pvSortBy = 'vessel'">Vessel Type</button>
+              <button class="sort-btn" [class.active]="pvSortBy === 'date'"
+                (click)="pvSortBy = 'date'">Date</button>
+            </div>
+          </div>
+          <div class="lifting-controls-right">
+            <span class="total-count-badge">Total: {{ pressureReports.length }}</span>
+          </div>
         </div>
 
         <div *ngIf="pressureReports.length; else noPressure" class="table-container">
@@ -306,11 +529,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let pv of pressureReports; let i = index"
-                  [class.row-selected]="selectedPvIds.has(pv.id!)">
+              <tr *ngFor="let pv of sortedPressureReports; let i = index" [class.row-selected]="selectedPvIds.has(pv.id!)">
                 <td class="col-check">
-                  <input type="checkbox" class="bulk-checkbox"
-                    [checked]="selectedPvIds.has(pv.id!)"
+                  <input type="checkbox" class="bulk-checkbox" [checked]="selectedPvIds.has(pv.id!)"
                     (change)="togglePvSelection(pv.id!)">
                 </td>
                 <td class="col-sr">{{ i + 1 }}</td>
@@ -320,33 +541,71 @@
                 <td class="text-muted">{{ pv.vesselIdNo || '—' }}</td>
                 <td class="text-muted">{{ pv.vesselLocation || '—' }}</td>
                 <td class="text-muted">{{ pv.manufacturerName || '—' }}</td>
-                <td><span class="due-date">{{ safeDateFormat(pv.nextDueDateForExamination) }}</span></td>
+                <td><span class="due-date"
+                  [class.due-overdue]="isDueOverdue(pv.nextDueDateForExamination)"
+                  [class.due-warning]="isDueWarning(pv.nextDueDateForExamination)"
+                  [class.due-upcoming]="isDueUpcoming(pv.nextDueDateForExamination)">
+                  {{ safeDateFormat(pv.nextDueDateForExamination) }}
+                </span></td>
                 <td class="col-actions">
-                  <button class="btn-action btn-edit" (click)="openEditPressure(pv)">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Edit
-                  </button>
+                  <div class="col-actions-wrap">
+                    <button class="btn-action btn-edit" (click)="openEditPressure(pv)">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      </svg>
+                      Edit
+                    </button>
+<button class="btn-action btn-renew"
+  (click)="openRenewSingle('pv', pv.id!, pv.vesselDescription || pv.certificateNo,
+           pv.dateOfExamination, pv.nextDueDateForExamination)">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="23 4 23 10 17 10"/>
+    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+  </svg>
+  Renew
+</button>
+
+                    <button class="btn-action btn-delete-rec"
+                      (click)="openDeleteConfirm('pv', pv.id!, pv.vesselDescription || pv.certificateNo)">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+                        <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+                      </svg>
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+
         <ng-template #noPressure>
           <div class="empty-state">
             <div class="empty-icon-wrap empty-icon-pv">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <ellipse cx="12" cy="5" rx="9" ry="3" />
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+              </svg>
             </div>
             <p class="empty-title">No Pressure Vessel Records Yet</p>
             <p class="empty-sub">Add your first pressure vessel inspection record</p>
             <button class="btn-add btn-add-pv" (click)="openAddPressure()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
               Add First Record
             </button>
           </div>
         </ng-template>
-      </div>
+      </div><!-- /pv panel -->
 
-      <!-- ── POWER PRESS PANEL ── -->
+      <!-- ════════════════════════════════════════
+           POWER PRESS PANEL
+      ════════════════════════════════════════ -->
       <div class="tab-panel" *ngIf="activeTab === 'pp'">
         <div class="panel-header panel-header-pp">
           <div class="panel-header-left">
@@ -354,9 +613,43 @@
             <h2 class="panel-title">Power Press / Dangerous Machine Inspection Records</h2>
           </div>
           <button class="btn-add btn-add-pp" (click)="openAddPowerPress()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
             Add Record
           </button>
+        </div>
+
+        <!-- ── PP: Equipment Summary Strip ── -->
+        <div class="equipment-counter-strip" *ngIf="powerPressReports.length > 0">
+          <div class="equipment-counter-label">Machine Summary:</div>
+          <div class="equipment-counter-chips">
+            <span class="equipment-chip pp-chip" *ngFor="let entry of machineGroups"
+              (click)="ppSortBy = 'machine'"
+              [title]="'Click to sort by machine type'">
+              <span class="equipment-chip-name">{{ entry.name }}</span>
+              <span class="equipment-chip-count pp-chip-count">{{ entry.count }}</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- ── PP: Sort Controls ── -->
+        <div class="lifting-controls" *ngIf="powerPressReports.length > 0">
+          <div class="lifting-controls-left">
+            <span class="controls-label">Sort by:</span>
+            <div class="sort-btn-group">
+              <button class="sort-btn" [class.active]="ppSortBy === 'serial'"
+                (click)="ppSortBy = 'serial'"># Serial</button>
+              <button class="sort-btn" [class.active]="ppSortBy === 'machine'"
+                (click)="ppSortBy = 'machine'">Machine Type</button>
+              <button class="sort-btn" [class.active]="ppSortBy === 'date'"
+                (click)="ppSortBy = 'date'">Date</button>
+            </div>
+          </div>
+          <div class="lifting-controls-right">
+            <span class="total-count-badge">Total: {{ powerPressReports.length }}</span>
+          </div>
         </div>
 
         <div *ngIf="powerPressReports.length; else noPowerPress" class="table-container">
@@ -381,11 +674,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let pp of powerPressReports; let i = index"
-                  [class.row-selected]="selectedPpIds.has(pp.id!)">
+              <tr *ngFor="let pp of sortedPowerPressReports; let i = index" [class.row-selected]="selectedPpIds.has(pp.id!)">
                 <td class="col-check">
-                  <input type="checkbox" class="bulk-checkbox"
-                    [checked]="selectedPpIds.has(pp.id!)"
+                  <input type="checkbox" class="bulk-checkbox" [checked]="selectedPpIds.has(pp.id!)"
                     (change)="togglePpSelection(pp.id!)">
                 </td>
                 <td class="col-sr">{{ i + 1 }}</td>
@@ -395,33 +686,72 @@
                 <td><span class="capacity-badge">{{ pp.capacity || '—' }}</span></td>
                 <td class="text-muted">{{ pp.location || '—' }}</td>
                 <td class="text-muted">{{ pp.manufacturerName || '—' }}</td>
-                <td><span class="due-date">{{ safeDateFormat(pp.nextDueDate) }}</span></td>
+                <td><span class="due-date"
+                  [class.due-overdue]="isDueOverdue(pp.nextDueDate)"
+                  [class.due-warning]="isDueWarning(pp.nextDueDate)"
+                  [class.due-upcoming]="isDueUpcoming(pp.nextDueDate)">
+                  {{ safeDateFormat(pp.nextDueDate) }}
+                </span></td>
                 <td class="col-actions">
-                  <button class="btn-action btn-edit" (click)="openEditPowerPress(pp)">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Edit
-                  </button>
+                  <div class="col-actions-wrap">
+                    <button class="btn-action btn-edit" (click)="openEditPowerPress(pp)">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      </svg>
+                      Edit
+                    </button>
+
+<button class="btn-action btn-renew"
+  (click)="openRenewSingle('pp', pp.id!, pp.machineType || pp.certificateNo,
+           pp.dateOfExamination, pp.nextDueDate)">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="23 4 23 10 17 10"/>
+    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+  </svg>
+  Renew
+</button>
+
+
+                    <button class="btn-action btn-delete-rec"
+                      (click)="openDeleteConfirm('pp', pp.id!, pp.machineType || pp.certificateNo)">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+                        <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+                      </svg>
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+
         <ng-template #noPowerPress>
           <div class="empty-state">
             <div class="empty-icon-wrap empty-icon-pp">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <path d="M8 21h8M12 17v4" />
+              </svg>
             </div>
             <p class="empty-title">No Power Press Records Yet</p>
             <p class="empty-sub">Add your first power press / dangerous machine inspection record</p>
             <button class="btn-add btn-add-pp" (click)="openAddPowerPress()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
               Add First Record
             </button>
           </div>
         </ng-template>
-      </div>
+      </div><!-- /pp panel -->
 
-      <!-- ── SAFETY BELT PANEL ── -->
+      <!-- ════════════════════════════════════════
+           SAFETY BELT PANEL
+      ════════════════════════════════════════ -->
       <div class="tab-panel" *ngIf="activeTab === 'sb'">
         <div class="panel-header panel-header-sb">
           <div class="panel-header-left">
@@ -429,9 +759,43 @@
             <h2 class="panel-title">Safety Belt / Full Body Harness Inspection Records</h2>
           </div>
           <button class="btn-add btn-add-sb" (click)="openAddSafetyBelt()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
             Add Record
           </button>
+        </div>
+
+        <!-- ── SB: Equipment Summary Strip ── -->
+        <div class="equipment-counter-strip" *ngIf="safetyBeltReports.length > 0">
+          <div class="equipment-counter-label">Belt Summary:</div>
+          <div class="equipment-counter-chips">
+            <span class="equipment-chip sb-chip" *ngFor="let entry of beltGroups"
+              (click)="sbSortBy = 'belt'"
+              [title]="'Click to sort by belt type'">
+              <span class="equipment-chip-name">{{ entry.name }}</span>
+              <span class="equipment-chip-count sb-chip-count">{{ entry.count }}</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- ── SB: Sort Controls ── -->
+        <div class="lifting-controls" *ngIf="safetyBeltReports.length > 0">
+          <div class="lifting-controls-left">
+            <span class="controls-label">Sort by:</span>
+            <div class="sort-btn-group">
+              <button class="sort-btn" [class.active]="sbSortBy === 'serial'"
+                (click)="sbSortBy = 'serial'"># Serial</button>
+              <button class="sort-btn" [class.active]="sbSortBy === 'belt'"
+                (click)="sbSortBy = 'belt'">Belt Type</button>
+              <button class="sort-btn" [class.active]="sbSortBy === 'date'"
+                (click)="sbSortBy = 'date'">Date</button>
+            </div>
+          </div>
+          <div class="lifting-controls-right">
+            <span class="total-count-badge">Total: {{ safetyBeltReports.length }}</span>
+          </div>
         </div>
 
         <div *ngIf="safetyBeltReports.length; else noSafetyBelt" class="table-container">
@@ -456,11 +820,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let sb of safetyBeltReports; let i = index"
-                  [class.row-selected]="selectedSbIds.has(sb.id!)">
+              <tr *ngFor="let sb of sortedSafetyBeltReports; let i = index" [class.row-selected]="selectedSbIds.has(sb.id!)">
                 <td class="col-check">
-                  <input type="checkbox" class="bulk-checkbox"
-                    [checked]="selectedSbIds.has(sb.id!)"
+                  <input type="checkbox" class="bulk-checkbox" [checked]="selectedSbIds.has(sb.id!)"
                     (change)="toggleSbSelection(sb.id!)">
                 </td>
                 <td class="col-sr">{{ i + 1 }}</td>
@@ -476,132 +838,327 @@
                     {{ sb.overallCondition === 'Satisfactory' ? '✓ OK' : '✗ Unsat.' }}
                   </span>
                 </td>
-                <td><span class="due-date">{{ safeDateFormat(sb.nextDueDate) }}</span></td>
+                <td><span class="due-date"
+                  [class.due-overdue]="isDueOverdue(sb.nextDueDate)"
+                  [class.due-warning]="isDueWarning(sb.nextDueDate)"
+                  [class.due-upcoming]="isDueUpcoming(sb.nextDueDate)">
+                  {{ safeDateFormat(sb.nextDueDate) }}
+                </span></td>
                 <td class="col-actions">
-                  <button class="btn-action btn-edit" (click)="openEditSafetyBelt(sb)">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Edit
-                  </button>
+                  <div class="col-actions-wrap">
+                    <button class="btn-action btn-edit" (click)="openEditSafetyBelt(sb)">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      </svg>
+                      Edit
+                    </button>
+
+                    <button class="btn-action btn-renew"
+  (click)="openRenewSingle('sb', sb.id!, sb.beltType || sb.certificateNumber,
+           sb.dateOfExamination, sb.nextDueDate)">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="23 4 23 10 17 10"/>
+    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+  </svg>
+  Renew
+</button>
+                    <button class="btn-action btn-delete-rec"
+                      (click)="openDeleteConfirm('sb', sb.id!, sb.beltType || sb.certificateNumber)">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+                        <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+                      </svg>
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+
         <ng-template #noSafetyBelt>
           <div class="empty-state">
             <div class="empty-icon-wrap empty-icon-sb">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
             </div>
             <p class="empty-title">No Safety Belt Records Yet</p>
             <p class="empty-sub">Add your first safety belt / harness inspection record</p>
             <button class="btn-add btn-add-sb" (click)="openAddSafetyBelt()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
               Add First Record
             </button>
           </div>
         </ng-template>
+      </div><!-- /sb panel -->
+
+
+
+      <!-- ════════════════════════════════════════
+     SAFETY VALVE PANEL
+════════════════════════════════════════ -->
+<div class="tab-panel" *ngIf="activeTab === 'sv'">
+  <div class="panel-header panel-header-sv">
+    <div class="panel-header-left">
+      <span class="panel-tag panel-tag-sv">Pressure Relief Device</span>
+      <h2 class="panel-title">Safety Valve Inspection Records</h2>
+    </div>
+    <button class="btn-add btn-add-sv" (click)="openAddSafetyValve()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+      Add Record
+    </button>
+  </div>
+
+  <!-- ── SV: Equipment Summary Strip ── -->
+  <div class="equipment-counter-strip" *ngIf="safetyValveReports.length > 0">
+    <div class="equipment-counter-label">Valve Summary:</div>
+    <div class="equipment-counter-chips">
+      <span class="equipment-chip sv-chip" *ngFor="let entry of valveGroups"
+        (click)="svSortBy = 'valve'"
+        [title]="'Click to sort by valve type'">
+        <span class="equipment-chip-name">{{ entry.name }}</span>
+        <span class="equipment-chip-count sv-chip-count">{{ entry.count }}</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ── SV: Sort Controls ── -->
+  <div class="lifting-controls" *ngIf="safetyValveReports.length > 0">
+    <div class="lifting-controls-left">
+      <span class="controls-label">Sort by:</span>
+      <div class="sort-btn-group">
+        <button class="sort-btn" [class.active]="svSortBy === 'serial'"
+          (click)="svSortBy = 'serial'"># Serial</button>
+        <button class="sort-btn" [class.active]="svSortBy === 'valve'"
+          (click)="svSortBy = 'valve'">Valve Type</button>
+        <button class="sort-btn" [class.active]="svSortBy === 'date'"
+          (click)="svSortBy = 'date'">Date</button>
       </div>
+    </div>
+    <div class="lifting-controls-right">
+      <span class="total-count-badge">Total: {{ safetyValveReports.length }}</span>
+    </div>
+  </div>
+
+  <div *ngIf="safetyValveReports.length; else noSafetyValve" class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th class="col-check">
+            <input type="checkbox" class="bulk-checkbox"
+              [checked]="selectedSvIds.size === safetyValveReports.length && safetyValveReports.length > 0"
+              [indeterminate]="selectedSvIds.size > 0 && selectedSvIds.size < safetyValveReports.length"
+              (change)="selectAllSv()">
+          </th>
+          <th class="col-sr">#</th>
+          <th>Certificate No</th>
+          <th>Valve Type</th>
+          <th>Serial No</th>
+          <th>Size</th>
+          <th>Location</th>
+          <th>Manufacturer</th>
+          <th>Next Due</th>
+          <th class="col-actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sv of sortedSafetyValveReports; let i = index" [class.row-selected]="selectedSvIds.has(sv.id!)">
+          <td class="col-check">
+            <input type="checkbox" class="bulk-checkbox" [checked]="selectedSvIds.has(sv.id!)"
+              (change)="toggleSvSelection(sv.id!)">
+          </td>
+          <td class="col-sr">{{ i + 1 }}</td>
+          <td><span class="cert-no">{{ sv.certificateNo || '—' }}</span></td>
+          <td><span class="equipment-tag equipment-tag-sv">{{ sv.valveType || '—' }}</span></td>
+          <td class="text-muted">{{ sv.serialNo || '—' }}</td>
+          <td class="text-muted">{{ sv.size || '—' }}</td>
+          <td class="text-muted">{{ sv.location || '—' }}</td>
+          <td class="text-muted">{{ sv.manufacturerName || '—' }}</td>
+          <td><span class="due-date"
+            [class.due-overdue]="isDueOverdue(sv.nextDueDate)"
+            [class.due-warning]="isDueWarning(sv.nextDueDate)"
+            [class.due-upcoming]="isDueUpcoming(sv.nextDueDate)">
+            {{ safeDateFormat(sv.nextDueDate) }}
+          </span></td>
+          <td class="col-actions">
+            <div class="col-actions-wrap">
+              <button class="btn-action btn-edit" (click)="openEditSafetyValve(sv)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                Edit
+              </button>
+
+              <button class="btn-action btn-renew"
+                (click)="openRenewSingle('sv', sv.id!, sv.valveType || sv.certificateNo,
+                         sv.dateOfExamination, sv.nextDueDate)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="23 4 23 10 17 10"/>
+                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                </svg>
+                Renew
+              </button>
+
+              <button class="btn-action btn-delete-rec"
+                (click)="openDeleteConfirm('sv', sv.id!, sv.valveType || sv.certificateNo)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+                  <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+                </svg>
+                Delete
+              </button>
+
+              <!-- <button class="btn-action btn-print"
+                (click)="openPrintSafetyValve(sv)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 6 2 18 2 18 9"/>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                  <rect x="6" y="14" width="12" height="8"/>
+                </svg>
+                Print
+              </button> -->
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noSafetyValve>
+    <div class="empty-state">
+      <div class="empty-icon-wrap empty-icon-sv">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>
+      </div>
+      <p class="empty-title">No Safety Valve Records Yet</p>
+      <p class="empty-sub">Add your first safety valve / pressure relief device inspection record</p>
+      <button class="btn-add btn-add-sv" (click)="openAddSafetyValve()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Add First Record
+      </button>
+    </div>
+  </ng-template>
+</div><!-- /sv panel -->
 
     </div><!-- /tab-panels-wrapper -->
-  </ng-container>
-</div>
+
+  </ng-container><!-- /main content -->
+</div><!-- /report-page -->
 
 <!-- ══════════════════════════════════════════════════════════
      BULK PRINT FLOATING BAR
 ══════════════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════════
+     BULK PRINT FLOATING BAR
+══════════════════════════════════════════════════════════ -->
 <div class="bulk-print-bar" *ngIf="totalSelected > 0">
+
   <div class="bulk-print-bar-info">
     <span class="bulk-count-badge">{{ totalSelected }}</span>
     <span>record{{ totalSelected > 1 ? 's' : '' }} selected</span>
-    <span class="bulk-breakdown"
-      *ngIf="selectedLiftingIds.size > 0 || selectedPvIds.size > 0 || selectedPpIds.size > 0 || selectedSbIds.size > 0">
-      (
-      <ng-container *ngIf="selectedLiftingIds.size > 0">{{ selectedLiftingIds.size }} Lifting</ng-container>
-      <ng-container *ngIf="selectedLiftingIds.size > 0 && (selectedPvIds.size > 0 || selectedPpIds.size > 0 || selectedSbIds.size > 0)"> · </ng-container>
-      <ng-container *ngIf="selectedPvIds.size > 0">{{ selectedPvIds.size }} PV</ng-container>
-      <ng-container *ngIf="selectedPvIds.size > 0 && (selectedPpIds.size > 0 || selectedSbIds.size > 0)"> · </ng-container>
-      <ng-container *ngIf="selectedPpIds.size > 0">{{ selectedPpIds.size }} PP</ng-container>
-      <ng-container *ngIf="selectedPpIds.size > 0 && selectedSbIds.size > 0"> · </ng-container>
-      <ng-container *ngIf="selectedSbIds.size > 0">{{ selectedSbIds.size }} SB</ng-container>
-      )
-    </span>
-  </div>
-<div class="bulk-print-bar-actions">
-  <button class="btn-bulk-clear" (click)="clearAllSelections()">✕ Clear</button>
+<span class="bulk-breakdown"
+  *ngIf="selectedLiftingIds.size > 0 || selectedPvIds.size > 0 || selectedPpIds.size > 0 || selectedSbIds.size > 0 || selectedSvIds.size > 0">
+  (
+  <ng-container *ngIf="selectedLiftingIds.size > 0">{{ selectedLiftingIds.size }} Lifting</ng-container>
+  <ng-container *ngIf="selectedLiftingIds.size > 0 && (selectedPvIds.size > 0 || selectedPpIds.size > 0 || selectedSbIds.size > 0 || selectedSvIds.size > 0)"> · </ng-container>
+  <ng-container *ngIf="selectedPvIds.size > 0">{{ selectedPvIds.size }} PV</ng-container>
+  <ng-container *ngIf="selectedPvIds.size > 0 && (selectedPpIds.size > 0 || selectedSbIds.size > 0 || selectedSvIds.size > 0)"> · </ng-container>
+  <ng-container *ngIf="selectedPpIds.size > 0">{{ selectedPpIds.size }} PP</ng-container>
+  <ng-container *ngIf="selectedPpIds.size > 0 && (selectedSbIds.size > 0 || selectedSvIds.size > 0)"> · </ng-container>
+  <ng-container *ngIf="selectedSbIds.size > 0">{{ selectedSbIds.size }} SB</ng-container>
+  <ng-container *ngIf="selectedSbIds.size > 0 && selectedSvIds.size > 0"> · </ng-container>
+  <ng-container *ngIf="selectedSvIds.size > 0">{{ selectedSvIds.size }} SV</ng-container>
+  )
+</span>
+  </div><!-- ✅ closes bulk-print-bar-info -->
 
-  <button class="btn-toggle-stamp"
-    (click)="showStampOnPrint = !showStampOnPrint"
-    [style.background]="showStampOnPrint ? '#1e40af' : '#6b7280'"
-    [style.color]="'#fff'"
-    [style.border]="'none'"
-    [style.padding]="'6px 14px'"
-    [style.borderRadius]="'6px'"
-    [style.cursor]="'pointer'"
-    [style.fontSize]="'13px'">
-    {{ showStampOnPrint ? '🔏 With Stamp' : '📄 Without Stamp' }}
-  </button>
+  <div class="bulk-print-bar-actions">
+    <button class="btn-bulk-clear" (click)="clearAllSelections()">✕ Clear</button>
+    <button class="btn-toggle-stamp" (click)="showStampOnPrint = !showStampOnPrint"
+      [class.stamp-on]="showStampOnPrint" [class.stamp-off]="!showStampOnPrint">
+      {{ showStampOnPrint ? '🔏 With Stamp' : '📄 Without Stamp' }}
+    </button>
+    <button class="btn-bulk-renew" (click)="openRenewBulk()">🔄 Renew Selected</button>
+    <button class="btn-bulk-print" (click)="printSelected()">🖨 Print Selected</button>
+  </div><!-- ✅ closes bulk-print-bar-actions -->
 
-  <button class="btn-bulk-print" (click)="printSelected()">🖨 Print Selected</button>
-</div>
-</div>
-
+</div><!-- ✅ closes bulk-print-bar -->
 <!-- ══════════════════════════════════════════════════════════
      LIFTING MODAL
 ══════════════════════════════════════════════════════════ -->
-<div class="modal-overlay" [class.modal-overlay-open]="showLiftingModal" (click)="closeLiftingModal()">
+<div class="modal-overlay" [class.modal-overlay-open]="showLiftingModal">
   <div class="modal modal-lg" (click)="$event.stopPropagation()">
     <div class="modal-header modal-header-lifting">
       <div>
-        <h3 class="modal-title">{{ liftingModalMode === 'add' ? 'Add Lifting Record' : 'Update Lifting Record' }}</h3>
+        <h3 class="modal-title">
+          {{ liftingModalMode === 'add' ? 'Add Lifting Record' : 'Update Lifting Record' }}
+        </h3>
         <p class="modal-subtitle">Section 28 / 29 • Factories Act 1948</p>
       </div>
       <button class="modal-close-btn" (click)="closeLiftingModal()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
       </button>
     </div>
+
     <div class="modal-body">
       <div class="form-grid">
 
         <div class="field">
           <label>Test Name</label>
-          <select [(ngModel)]="liftingForm.testName" (change)="generateCertificateNo()">
+   <select [(ngModel)]="liftingForm.testName">
             <option value="">Select Test Name</option>
             <option *ngFor="let item of liftingTestOptions" [value]="item">{{ item }}</option>
           </select>
         </div>
         <div class="field">
-          <label>Rules &amp; Section</label>
-          <select [(ngModel)]="liftingForm.sectionRule">
-            <option value="">Select Rules &amp; Section</option>
-            <option *ngFor="let item of sectionRuleOptions" [value]="item">{{ item }}</option>
-          </select>
-        </div>
-        <div class="field">
           <label>Equipment Name</label>
-          <select [(ngModel)]="liftingForm.equipmentName" (change)="generateCertificateNo()">
+          <select [(ngModel)]="liftingForm.equipmentName" (change)="generatelifCertificateNo()">
             <option value="">Select Equipment</option>
             <option *ngFor="let item of equipmentList" [value]="item">{{ item }}</option>
           </select>
         </div>
         <div class="field">
           <label>Certificate No</label>
-          <input [(ngModel)]="liftingForm.certificateNo" readonly placeholder="Auto-generated">
+          <input [(ngModel)]="liftingForm.certificateNo" placeholder="Auto-generated", readonly>
         </div>
         <div class="field">
           <label>Date of Examination</label>
           <input type="date" [(ngModel)]="liftingForm.dateOfExamination" (change)="onExaminationDateChange()">
         </div>
+
         <div class="field">
           <label>Next Due Date</label>
           <div class="due-date-group">
             <div class="duration-btn-group">
-              <button type="button" class="duration-btn" [class.active]="selectedDuration === '6months'" (click)="setDuration('6months')">6 Months</button>
-              <button type="button" class="duration-btn" [class.active]="selectedDuration === '1year'" (click)="setDuration('1year')">1 Year</button>
-              <button type="button" class="duration-btn" [class.active]="selectedDuration === '2years'" (click)="setDuration('2years')">2 Years</button>
+              <button type="button" class="duration-btn" [class.active]="selectedDuration === '6months'"
+                (click)="setDuration('6months')">6 Months</button>
+              <button type="button" class="duration-btn" [class.active]="selectedDuration === '1year'"
+                (click)="setDuration('1year')">1 Year</button>
+              <button type="button" class="duration-btn" [class.active]="selectedDuration === '2years'"
+                (click)="setDuration('2years')">2 Years</button>
             </div>
             <input type="date" [(ngModel)]="liftingForm.nextDueDate" class="due-date-input">
           </div>
         </div>
+
         <div class="field">
           <label>Inspector Name</label>
           <select [(ngModel)]="liftingForm.inspectorName" (ngModelChange)="updatePeriodicalDetails()">
@@ -615,11 +1172,14 @@
           <div class="toggle-field-header">
             <label>Name of Occupier</label>
             <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['nameOfOccupier'] === true" (click)="setFieldToggle('nameOfOccupier', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['nameOfOccupier'] === false" (click)="setFieldToggle('nameOfOccupier', false)">No</button>
+              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['nameOfOccupier'] === true"
+                (click)="setFieldToggle('nameOfOccupier', true)">Yes</button>
+              <button type="button" class="yn-btn no" [class.active]="fieldToggles['nameOfOccupier'] === false"
+                (click)="setFieldToggle('nameOfOccupier', false)">No</button>
             </div>
           </div>
-          <input [(ngModel)]="liftingForm.nameOfOccupier" [disabled]="fieldToggles['nameOfOccupier'] !== true" [class.field-disabled]="fieldToggles['nameOfOccupier'] !== true">
+          <input [(ngModel)]="liftingForm.nameOfOccupier" [disabled]="fieldToggles['nameOfOccupier'] !== true"
+            [class.field-disabled]="fieldToggles['nameOfOccupier'] !== true">
         </div>
 
         <div class="field full section-divider"><span>2. Address of Factory</span></div>
@@ -627,140 +1187,180 @@
           <div class="toggle-field-header">
             <label>Address of Factory</label>
             <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['addressOfFactory'] === true" (click)="setFieldToggle('addressOfFactory', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['addressOfFactory'] === false" (click)="setFieldToggle('addressOfFactory', false)">No</button>
+              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['addressOfFactory'] === true"
+                (click)="setFieldToggle('addressOfFactory', true)">Yes</button>
+              <button type="button" class="yn-btn no" [class.active]="fieldToggles['addressOfFactory'] === false"
+                (click)="setFieldToggle('addressOfFactory', false)">No</button>
             </div>
           </div>
-          <textarea [(ngModel)]="liftingForm.addressOfFactory" [disabled]="fieldToggles['addressOfFactory'] !== true" [class.field-disabled]="fieldToggles['addressOfFactory'] !== true"></textarea>
+          <textarea [(ngModel)]="liftingForm.addressOfFactory" [disabled]="fieldToggles['addressOfFactory'] !== true"
+            [class.field-disabled]="fieldToggles['addressOfFactory'] !== true"></textarea>
         </div>
 
         <div class="field full section-divider"><span>3. Equipment Identification</span></div>
         <div class="field toggle-field">
-          <div class="toggle-field-header"><label>Model Number</label>
+          <div class="toggle-field-header">
+            <label>Other</label>
             <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['modelNumber'] === true" (click)="setFieldToggle('modelNumber', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['modelNumber'] === false" (click)="setFieldToggle('modelNumber', false)">No</button>
+              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['modelNumber'] === true"
+                (click)="setFieldToggle('modelNumber', true)">Yes</button>
+              <button type="button" class="yn-btn no" [class.active]="fieldToggles['modelNumber'] === false"
+                (click)="setFieldToggle('modelNumber', false)">No</button>
             </div>
           </div>
-          <input [(ngModel)]="liftingForm.modelNumber" [disabled]="fieldToggles['modelNumber'] !== true" [class.field-disabled]="fieldToggles['modelNumber'] !== true">
-        </div>
-        <div class="field toggle-field">
-          <div class="toggle-field-header"><label>Serial Number</label>
-            <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['srNo'] === true" (click)="setFieldToggle('srNo', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['srNo'] === false" (click)="setFieldToggle('srNo', false)">No</button>
-            </div>
-          </div>
-          <input [(ngModel)]="liftingForm.srNo" [disabled]="fieldToggles['srNo'] !== true" [class.field-disabled]="fieldToggles['srNo'] !== true">
-        </div>
-        <div class="field toggle-field">
-          <div class="toggle-field-header"><label>ID Number</label>
-            <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['idNumber'] === true" (click)="setFieldToggle('idNumber', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['idNumber'] === false" (click)="setFieldToggle('idNumber', false)">No</button>
-            </div>
-          </div>
-          <input [(ngModel)]="liftingForm.idNumber" [disabled]="fieldToggles['idNumber'] !== true" [class.field-disabled]="fieldToggles['idNumber'] !== true">
-        </div>
-        <div class="field toggle-field">
-          <div class="toggle-field-header"><label>Manufacturer Name</label>
-            <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['manufacturerName'] === true" (click)="setFieldToggle('manufacturerName', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['manufacturerName'] === false" (click)="setFieldToggle('manufacturerName', false)">No</button>
-            </div>
-          </div>
-          <input [(ngModel)]="liftingForm.manufacturerName" [disabled]="fieldToggles['manufacturerName'] !== true" [class.field-disabled]="fieldToggles['manufacturerName'] !== true">
-        </div>
-        <div class="field toggle-field">
-          <div class="toggle-field-header"><label>Manufacturer Year</label>
-            <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['manufacturerYear'] === true" (click)="setFieldToggle('manufacturerYear', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['manufacturerYear'] === false" (click)="setFieldToggle('manufacturerYear', false)">No</button>
-            </div>
-          </div>
-          <input [(ngModel)]="liftingForm.manufacturerYear" [disabled]="fieldToggles['manufacturerYear'] !== true" [class.field-disabled]="fieldToggles['manufacturerYear'] !== true">
-        </div>
-        <div class="field toggle-field">
-          <div class="toggle-field-header"><label>Capacity</label>
-            <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['capacity'] === true" (click)="setFieldToggle('capacity', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['capacity'] === false" (click)="setFieldToggle('capacity', false)">No</button>
-            </div>
-          </div>
-          <input [(ngModel)]="liftingForm.capacity" [disabled]="fieldToggles['capacity'] !== true" [class.field-disabled]="fieldToggles['capacity'] !== true">
-        </div>
-        <div class="field toggle-field">
-          <div class="toggle-field-header"><label>Safe Working Load (SWL)</label>
-            <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['safeWorkingLoad'] === true" (click)="setFieldToggle('safeWorkingLoad', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['safeWorkingLoad'] === false" (click)="setFieldToggle('safeWorkingLoad', false)">No</button>
-            </div>
-          </div>
-          <input [(ngModel)]="liftingForm.safeWorkingLoad" [disabled]="fieldToggles['safeWorkingLoad'] !== true" [class.field-disabled]="fieldToggles['safeWorkingLoad'] !== true">
-        </div>
-        <div class="field toggle-field">
-          <div class="toggle-field-header"><label>Equipment Location</label>
-            <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['equipmentLocation'] === true" (click)="setFieldToggle('equipmentLocation', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['equipmentLocation'] === false" (click)="setFieldToggle('equipmentLocation', false)">No</button>
-            </div>
-          </div>
-          <input [(ngModel)]="liftingForm.equipmentLocation" [disabled]="fieldToggles['equipmentLocation'] !== true" [class.field-disabled]="fieldToggles['equipmentLocation'] !== true">
+          <input [(ngModel)]="liftingForm.modelNumber" [disabled]="fieldToggles['modelNumber'] !== true"
+            [class.field-disabled]="fieldToggles['modelNumber'] !== true">
         </div>
 
-        <div class="field full section-divider"><span>4. Date First Taken Into Use</span></div>
         <div class="field toggle-field">
-          <div class="toggle-field-header"><label>Year First Taken Into Use</label>
+          <div class="toggle-field-header">
+            <label>Serial Number</label>
             <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['yearFirstTakenIntoUse'] === true" (click)="setFieldToggle('yearFirstTakenIntoUse', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['yearFirstTakenIntoUse'] === false" (click)="setFieldToggle('yearFirstTakenIntoUse', false)">No</button>
+              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['srNo'] === true"
+                (click)="setFieldToggle('srNo', true)">Yes</button>
+              <button type="button" class="yn-btn no" [class.active]="fieldToggles['srNo'] === false"
+                (click)="setFieldToggle('srNo', false)">No</button>
             </div>
           </div>
-          <input [(ngModel)]="liftingForm.yearFirstTakenIntoUse" [disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true" [class.field-disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true">
+          <input [(ngModel)]="liftingForm.srNo" [disabled]="fieldToggles['srNo'] !== true"
+            [class.field-disabled]="fieldToggles['srNo'] !== true">
+        </div>
+
+        <div class="field toggle-field">
+          <div class="toggle-field-header">
+            <label>ID Number</label>
+            <div class="yes-no-group">
+              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['idNumber'] === true"
+                (click)="setFieldToggle('idNumber', true)">Yes</button>
+              <button type="button" class="yn-btn no" [class.active]="fieldToggles['idNumber'] === false"
+                (click)="setFieldToggle('idNumber', false)">No</button>
+            </div>
+          </div>
+          <input [(ngModel)]="liftingForm.idNumber" [disabled]="fieldToggles['idNumber'] !== true"
+            [class.field-disabled]="fieldToggles['idNumber'] !== true" placeholder="e.g. EOT-01">
+        </div>
+
+        <div class="field toggle-field">
+          <div class="toggle-field-header">
+            <label>Manufacturer Name</label>
+            <div class="yes-no-group">
+              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['manufacturerName'] === true"
+                (click)="setFieldToggle('manufacturerName', true)">Yes</button>
+              <button type="button" class="yn-btn no" [class.active]="fieldToggles['manufacturerName'] === false"
+                (click)="setFieldToggle('manufacturerName', false)">No</button>
+            </div>
+          </div>
+          <input [(ngModel)]="liftingForm.manufacturerName" [disabled]="fieldToggles['manufacturerName'] !== true"
+            [class.field-disabled]="fieldToggles['manufacturerName'] !== true">
+        </div>
+
+        <div class="field toggle-field">
+          <div class="toggle-field-header">
+            <label>Manufacturer Year</label>
+            <div class="yes-no-group">
+              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['manufacturerYear'] === true"
+                (click)="setFieldToggle('manufacturerYear', true)">Yes</button>
+              <button type="button" class="yn-btn no" [class.active]="fieldToggles['manufacturerYear'] === false"
+                (click)="setFieldToggle('manufacturerYear', false)">No</button>
+            </div>
+          </div>
+          <input [(ngModel)]="liftingForm.manufacturerYear" [disabled]="fieldToggles['manufacturerYear'] !== true"
+            [class.field-disabled]="fieldToggles['manufacturerYear'] !== true" placeholder="e.g. 2012">
+        </div>
+
+        <div class="field toggle-field">
+          <div class="toggle-field-header">
+            <label>Capacity</label>
+            <div class="yes-no-group">
+              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['capacity'] === true"
+                (click)="setFieldToggle('capacity', true)">Yes</button>
+              <button type="button" class="yn-btn no" [class.active]="fieldToggles['capacity'] === false"
+                (click)="setFieldToggle('capacity', false)">No</button>
+            </div>
+          </div>
+          <input [(ngModel)]="liftingForm.capacity" [disabled]="fieldToggles['capacity'] !== true"
+            [class.field-disabled]="fieldToggles['capacity'] !== true">
+        </div>
+
+        <div class="field toggle-field">
+          <div class="toggle-field-header">
+            <label>Equipment Location</label>
+            <div class="yes-no-group">
+              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['equipmentLocation'] === true"
+                (click)="setFieldToggle('equipmentLocation', true)">Yes</button>
+              <button type="button" class="yn-btn no" [class.active]="fieldToggles['equipmentLocation'] === false"
+                (click)="setFieldToggle('equipmentLocation', false)">No</button>
+            </div>
+          </div>
+          <input [(ngModel)]="liftingForm.equipmentLocation" [disabled]="fieldToggles['equipmentLocation'] !== true"
+            [class.field-disabled]="fieldToggles['equipmentLocation'] !== true">
+        </div>
+
+        <div class="field toggle-field">
+          <div class="toggle-field-header">
+            <label>Year First Taken Into Use</label>
+            <div class="yes-no-group">
+              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['yearFirstTakenIntoUse'] === true"
+                (click)="setFieldToggle('yearFirstTakenIntoUse', true)">Yes</button>
+              <button type="button" class="yn-btn no" [class.active]="fieldToggles['yearFirstTakenIntoUse'] === false"
+                (click)="setFieldToggle('yearFirstTakenIntoUse', false)">No</button>
+            </div>
+          </div>
+          <input [(ngModel)]="liftingForm.yearFirstTakenIntoUse"
+            [disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true"
+            [class.field-disabled]="fieldToggles['yearFirstTakenIntoUse'] !== true" placeholder="e.g. 2012">
         </div>
 
         <div class="field full section-divider"><span>5. Previous Certificate Details</span></div>
         <div class="field full toggle-field">
-          <div class="toggle-field-header"><label>Previous Certificate Details</label>
+          <div class="toggle-field-header">
+            <label>Previous Certificate Details</label>
             <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['previousCertificateDetails'] === true" (click)="setFieldToggle('previousCertificateDetails', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['previousCertificateDetails'] === false" (click)="setFieldToggle('previousCertificateDetails', false)">No</button>
+              <button type="button" class="yn-btn yes"
+                [class.active]="fieldToggles['previousCertificateDetails'] === true"
+                (click)="setFieldToggle('previousCertificateDetails', true)">Yes</button>
+              <button type="button" class="yn-btn no"
+                [class.active]="fieldToggles['previousCertificateDetails'] === false"
+                (click)="setFieldToggle('previousCertificateDetails', false)">No</button>
             </div>
           </div>
-          <textarea [(ngModel)]="liftingForm.previousCertificateDetails" [disabled]="fieldToggles['previousCertificateDetails'] !== true" [class.field-disabled]="fieldToggles['previousCertificateDetails'] !== true"></textarea>
+          <textarea [(ngModel)]="liftingForm.previousCertificateDetails"
+            [disabled]="fieldToggles['previousCertificateDetails'] !== true"
+            [class.field-disabled]="fieldToggles['previousCertificateDetails'] !== true"></textarea>
         </div>
 
         <div class="field full section-divider"><span>6. Periodical Examination Details</span></div>
         <div class="field full toggle-field">
-          <div class="toggle-field-header"><label>Periodical Examination Details &amp; By Whom</label>
+          <div class="toggle-field-header">
+            <label>Periodical Examination Details &amp; By Whom</label>
             <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['periodicalExaminationDetails'] === true" (click)="setFieldToggle('periodicalExaminationDetails', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['periodicalExaminationDetails'] === false" (click)="setFieldToggle('periodicalExaminationDetails', false)">No</button>
+              <button type="button" class="yn-btn yes"
+                [class.active]="fieldToggles['periodicalExaminationDetails'] === true"
+                (click)="setFieldToggle('periodicalExaminationDetails', true)">Yes</button>
+              <button type="button" class="yn-btn no"
+                [class.active]="fieldToggles['periodicalExaminationDetails'] === false"
+                (click)="setFieldToggle('periodicalExaminationDetails', false)">No</button>
             </div>
           </div>
-          <textarea [(ngModel)]="liftingForm.periodicalExaminationDetails" [disabled]="fieldToggles['periodicalExaminationDetails'] !== true" [class.field-disabled]="fieldToggles['periodicalExaminationDetails'] !== true"></textarea>
-        </div>
-
-        <div class="field full section-divider"><span>7. Annealing / Heat Treatment</span></div>
-        <div class="field full toggle-field">
-          <div class="toggle-field-header"><label>Annealing / Heat Treatment Details</label>
-            <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['annealingOrHeatTreatmentDetails'] === true" (click)="setFieldToggle('annealingOrHeatTreatmentDetails', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['annealingOrHeatTreatmentDetails'] === false" (click)="setFieldToggle('annealingOrHeatTreatmentDetails', false)">No</button>
-            </div>
-          </div>
-          <textarea [(ngModel)]="liftingForm.annealingOrHeatTreatmentDetails" [disabled]="fieldToggles['annealingOrHeatTreatmentDetails'] !== true" [class.field-disabled]="fieldToggles['annealingOrHeatTreatmentDetails'] !== true"></textarea>
+          <textarea [(ngModel)]="liftingForm.periodicalExaminationDetails"
+            [disabled]="fieldToggles['periodicalExaminationDetails'] !== true"
+            [class.field-disabled]="fieldToggles['periodicalExaminationDetails'] !== true"></textarea>
         </div>
 
         <div class="field full section-divider"><span>8. Defects &amp; Remedies</span></div>
         <div class="field full toggle-field">
-          <div class="toggle-field-header"><label>Defects Particulars &amp; Steps Taken</label>
+          <div class="toggle-field-header">
+            <label>Defects Particulars &amp; Steps Taken</label>
             <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['defectsParticulars'] === true" (click)="setFieldToggle('defectsParticulars', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['defectsParticulars'] === false" (click)="setFieldToggle('defectsParticulars', false)">No</button>
+              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['defectsParticulars'] === true"
+                (click)="setFieldToggle('defectsParticulars', true)">Yes</button>
+              <button type="button" class="yn-btn no" [class.active]="fieldToggles['defectsParticulars'] === false"
+                (click)="setFieldToggle('defectsParticulars', false)">No</button>
             </div>
           </div>
-          <textarea [(ngModel)]="liftingForm.defectsParticulars" [disabled]="fieldToggles['defectsParticulars'] !== true" [class.field-disabled]="fieldToggles['defectsParticulars'] !== true"></textarea>
+          <textarea [(ngModel)]="liftingForm.defectsParticulars"
+            [disabled]="fieldToggles['defectsParticulars'] !== true"
+            [class.field-disabled]="fieldToggles['defectsParticulars'] !== true"></textarea>
         </div>
 
         <div class="field full section-divider"><span>10. Remarks</span></div>
@@ -769,43 +1369,43 @@
           <textarea [(ngModel)]="liftingForm.remarks"></textarea>
         </div>
 
-        <div class="field full section-divider"><span>Footer / Certification</span></div>
-        <div class="field toggle-field">
-          <div class="toggle-field-header"><label>Certified Date</label>
-            <div class="yes-no-group">
-              <button type="button" class="yn-btn yes" [class.active]="fieldToggles['certifiedDate'] === true" (click)="setFieldToggle('certifiedDate', true)">Yes</button>
-              <button type="button" class="yn-btn no" [class.active]="fieldToggles['certifiedDate'] === false" (click)="setFieldToggle('certifiedDate', false)">No</button>
-            </div>
-          </div>
-          <input type="date" [(ngModel)]="liftingForm.certifiedDate" [disabled]="fieldToggles['certifiedDate'] !== true" [class.field-disabled]="fieldToggles['certifiedDate'] !== true">
-        </div>
+      </div><!-- /form-grid -->
+    </div><!-- /modal-body -->
 
-      </div>
-    </div>
     <div class="modal-footer">
       <button class="btn-secondary" (click)="closeLiftingModal()">Cancel</button>
       <button class="btn-primary btn-primary-lifting" (click)="saveLifting()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+          <polyline points="17 21 17 13 7 13 7 21" />
+          <polyline points="7 3 7 8 15 8" />
+        </svg>
         Save Record
       </button>
     </div>
   </div>
-</div>
+</div><!-- /lifting modal -->
 
 <!-- ══════════════════════════════════════════════════════════
      PRESSURE VESSEL MODAL
 ══════════════════════════════════════════════════════════ -->
-<div class="modal-overlay" [class.modal-overlay-open]="showPressureModal" (click)="closePressureModal()">
+<div class="modal-overlay" [class.modal-overlay-open]="showPressureModal">
   <div class="modal modal-lg" (click)="$event.stopPropagation()">
     <div class="modal-header modal-header-pv">
       <div>
-        <h3 class="modal-title">{{ pressureModalMode === 'add' ? 'Add Pressure Vessel Record' : 'Update Pressure Vessel Record' }}</h3>
+        <h3 class="modal-title">
+          {{ pressureModalMode === 'add' ? 'Add Pressure Vessel Record' : 'Update Pressure Vessel Record' }}
+        </h3>
         <p class="modal-subtitle">Section 31 • Form No. 8 • Rule 61</p>
       </div>
       <button class="modal-close-btn" (click)="closePressureModal()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
       </button>
     </div>
+
     <div class="modal-body">
       <div class="form-grid">
 
@@ -817,21 +1417,31 @@
             <option *ngFor="let item of pvTestOptions" [value]="item">{{ item }}</option>
           </select>
         </div>
-        <div class="field"><label>Certificate No</label><input [(ngModel)]="pvForm.certificateNo" readonly placeholder="Auto-generated"></div>
-        <div class="field"><label>Form No</label><input [(ngModel)]="pvForm.formNo" placeholder="Form No. 8"></div>
-        <div class="field"><label>Rule Number</label><input [(ngModel)]="pvForm.ruleNumber" placeholder="Rule 61"></div>
-        <div class="field"><label>Date of Examination</label><input type="date" [(ngModel)]="pvForm.dateOfExamination"></div>
+
+        <div class="field">
+          <label>Certificate No</label>
+          <input [(ngModel)]="pvForm.certificateNo" placeholder="Auto-generated" readonly>
+        </div>
+        <div class="field">
+          <label>Date of Examination</label>
+        <input type="date" [(ngModel)]="pvForm.dateOfExamination" (change)="onPvExaminationDateChange()">
+        </div>
+
         <div class="field full">
           <label>Next Due Date for Examination</label>
           <div class="due-date-group">
             <div class="duration-btn-group">
-              <button type="button" class="duration-btn" [class.active]="pvDuration === '6months'" (click)="setPvDuration('6months')">6 Months</button>
-              <button type="button" class="duration-btn" [class.active]="pvDuration === '1year'" (click)="setPvDuration('1year')">1 Year</button>
-              <button type="button" class="duration-btn" [class.active]="pvDuration === '2years'" (click)="setPvDuration('2years')">2 Years</button>
+              <button type="button" class="duration-btn" [class.active]="pvDuration === '6months'"
+                (click)="setPvDuration('6months')">6 Months</button>
+              <button type="button" class="duration-btn" [class.active]="pvDuration === '1year'"
+                (click)="setPvDuration('1year')">1 Year</button>
+              <button type="button" class="duration-btn" [class.active]="pvDuration === '2years'"
+                (click)="setPvDuration('2years')">2 Years</button>
             </div>
             <input type="date" class="due-date-input" [(ngModel)]="pvForm.nextDueDateForExamination">
           </div>
         </div>
+
         <div class="field">
           <label>Competent Person</label>
           <select [(ngModel)]="pvForm.competentPersonName">
@@ -841,12 +1451,19 @@
         </div>
 
         <div class="field full section-divider"><span>1. Name of Occupier</span></div>
-        <div class="field full"><label>Name of Occupier</label><input [(ngModel)]="pvForm.nameOfOccupier"></div>
+        <div class="field full">
+          <label>Name of Occupier</label>
+          <input [(ngModel)]="pvForm.nameOfOccupier">
+        </div>
 
         <div class="field full section-divider"><span>2. Address of Factory</span></div>
-        <div class="field full"><label>Address of Factory</label><textarea rows="3" [(ngModel)]="pvForm.addressOfFactory"></textarea></div>
+        <div class="field full">
+          <label>Address of Factory</label>
+          <textarea rows="3" [(ngModel)]="pvForm.addressOfFactory"></textarea>
+        </div>
 
         <div class="field full section-divider"><span>3. Vessel Description &amp; Identification</span></div>
+
         <div class="field">
           <label>Vessel Description</label>
           <select [(ngModel)]="pvForm.vesselDescription" (change)="generatePvCertificateNo()">
@@ -854,32 +1471,60 @@
             <option *ngFor="let item of vesselDescriptionOptions" [value]="item">{{ item }}</option>
           </select>
         </div>
-        <div class="field"><label>Sr. No.</label><input [(ngModel)]="pvForm.vesselSrNo" placeholder="e.g. SR-001"></div>
-        <div class="field"><label>Capacity</label><input [(ngModel)]="pvForm.vesselCapacity" placeholder="e.g. 5000 Ltr"></div>
-        <div class="field"><label>ID No.</label><input [(ngModel)]="pvForm.vesselIdNo" placeholder="e.g. PV-01"></div>
-        <div class="field"><label>Location</label><input [(ngModel)]="pvForm.vesselLocation" placeholder="e.g. Plant outside DG area"></div>
+
+        <div class="field">
+          <label>Sr. No.</label>
+          <input [(ngModel)]="pvForm.serialNo" placeholder="e.g. SR-001">
+        </div>
+
+        <div class="field">
+          <label>Capacity</label>
+          <input [(ngModel)]="pvForm.vesselCapacity" placeholder="e.g. 5000 Ltr">
+        </div>
+
+        <div class="field">
+          <label>Model No.</label>
+          <input [(ngModel)]="pvForm.modelNo" placeholder="e.g. N/A">
+        </div>
+
+        <div class="field">
+          <label>ID No.</label>
+          <input [(ngModel)]="pvForm.vesselIdNo" placeholder="e.g. PV-01">
+        </div>
+
+        <div class="field">
+          <label>Location</label>
+          <input [(ngModel)]="pvForm.vesselLocation" placeholder="e.g. Plant outside DG area">
+        </div>
 
         <div class="field full section-divider"><span>4. Manufacturer</span></div>
-        <div class="field full"><label>Manufacturer Name</label><input [(ngModel)]="pvForm.manufacturerName" placeholder="NA if unknown"></div>
+        <div class="field full">
+          <label>Manufacturer Name</label>
+          <input [(ngModel)]="pvForm.manufacturerName" placeholder="NA if unknown">
+        </div>
 
         <div class="field full section-divider"><span>5. Nature of Process</span></div>
-        <div class="field full"><label>Nature of Process</label><input [(ngModel)]="pvForm.natureOfProcess"></div>
+        <div class="field full">
+          <label>Nature of Process</label>
+          <input [(ngModel)]="pvForm.natureOfProcess">
+        </div>
 
         <div class="field full section-divider"><span>6. Particulars of Vessel</span></div>
         <div class="field"><label>(a) Date of Construction</label><input [(ngModel)]="pvForm.dateOfConstruction" placeholder="e.g. 2023"></div>
         <div class="field"><label>(b) Thickness of Walls</label><input [(ngModel)]="pvForm.thicknessOfWalls"></div>
         <div class="field"><label>(c) Date First Taken Into Use</label><input [(ngModel)]="pvForm.dateFirstTakenIntoUse" placeholder="e.g. 2023"></div>
-        <div class="field"><label>(d) Safe Working Pressure by Manufacturer</label><input [(ngModel)]="pvForm.maxPermissibleWorkingPressureByManufacturer" (ngModelChange)="onManufacturerPressureChange($event)"></div>
+        <div class="field">
+          <label>(d) Safe Working Pressure by Manufacturer</label>
+          <input [(ngModel)]="pvForm.maxPermissibleWorkingPressureByManufacturer"
+            (ngModelChange)="onManufacturerPressureChange($event)">
+        </div>
         <div class="field"><label>(e) Design Pressure</label><input [(ngModel)]="pvForm.designPressure" placeholder="NA if unknown"></div>
         <div class="field"><label>(f) Previous History &amp; Last Report Seen</label><input [(ngModel)]="pvForm.previousHistoryAndLastReportSeen" placeholder="NA / First time tested by us"></div>
 
-        <div class="field full section-divider"><span>7. Exposure to Weather</span></div>
+        <div class="field full section-divider"><span>7. Whether Exposed to Weather / Parts Inaccessible</span></div>
         <div class="field">
-          <label>Exposed to Weather</label>
-          <select [(ngModel)]="pvForm.exposedToWeather">
-            <option value="Yes">Open / Exposed</option>
-            <option value="No">In Shed / Not Exposed</option>
-          </select>
+          <label>(a) Exposed to Weather</label>
+          <input [(ngModel)]="pvForm.exposedToWeather" placeholder="e.g. Yes / No">
         </div>
 
         <div class="field full section-divider"><span>8. Last Hydrostatic Test</span></div>
@@ -887,74 +1532,92 @@
         <div class="field"><label>Pressure Applied</label><input [(ngModel)]="pvForm.pressureAppliedLastHydrostatic" placeholder="e.g. 10.0 Kg/cm²"></div>
 
         <div class="field full section-divider"><span>9. Examination &amp; Tests</span></div>
-        <div class="field full"><label>Examination &amp; Tests Made</label><textarea rows="3" [(ngModel)]="pvForm.examinationAndTestsMade"></textarea></div>
-
-        <div class="field full section-divider"><span>10. Inaccessible Parts</span></div>
-        <div class="field full"><label>Parts Inaccessible</label><input [(ngModel)]="pvForm.partsInaccessible" placeholder="e.g. Internal inaccessible"></div>
+        <div class="field full">
+          <label>Examination &amp; Tests Made</label>
+          <textarea rows="3" [(ngModel)]="pvForm.examinationAndTestsMade"></textarea>
+        </div>
 
         <div class="field full section-divider"><span>11. Condition of Vessel</span></div>
-        <div class="field"><label>External Condition</label><input [(ngModel)]="pvForm.conditionExternal" placeholder="e.g. OK"></div>
-        <div class="field"><label>Internal Condition</label><input [(ngModel)]="pvForm.conditionInternal" placeholder="e.g. Inaccessible"></div>
+        <div class="field"><label>External Condition</label><input [(ngModel)]="pvForm.conditionExternal" placeholder="e.g. OK" readonly></div>
+        <div class="field"><label>Internal Condition</label><input [(ngModel)]="pvForm.conditionInternal" placeholder="e.g. Inaccessible" readonly></div>
 
-        <div class="field full section-divider"><span>12 – 14. Fittings &amp; Repairs</span></div>
+        <div class="field full section-divider"><span>12–14. Fittings &amp; Repairs</span></div>
         <div class="field full"><label>Fittings Provided</label><input [(ngModel)]="pvForm.fittingsProvided" placeholder="Yes / No / details"></div>
         <div class="field full"><label>Fittings Maintained &amp; Checked</label><input [(ngModel)]="pvForm.fittingsMaintainedAndChecked" placeholder="e.g. Safety Valve, Pressure Gauge &amp; Drain Valve: O.K"></div>
         <div class="field full"><label>Repairs Required</label><input [(ngModel)]="pvForm.repairsRequired" placeholder="Nil"></div>
-
-        <div class="field full"><label>Calculated Max Working Pressure</label><input [value]="computedMaxWorkingPressure" readonly></div>
-
-        <div class="field full section-divider"><span>16. Working Pressure (Where Repairs Required)</span></div>
-        <div class="field full"><label>(a) Before Expiration of Period</label><input [(ngModel)]="pvForm.beforeExpirationPeriod" placeholder="Nill"></div>
-        <div class="field full"><label>(b) After Expiration if Repairs Not Completed</label><input [(ngModel)]="pvForm.afterExpirationIfNotCompleted" placeholder="Nill"></div>
-        <div class="field full"><label>(c) After Completion of Repairs</label><input [(ngModel)]="pvForm.afterCompletionOfRepairs" placeholder="Nill"></div>
+        <div class="field full" style="display:none">
+          <label>Calculated Max Working Pressure</label>
+          <input [value]="computedMaxWorkingPressureValue" readonly>
+        </div>
 
         <div class="field full section-divider"><span>17. Other Observations</span></div>
-        <div class="field full"><label>Other Observations</label><textarea rows="2" [(ngModel)]="pvForm.otherObservations" placeholder="e.g. Pressure Safety Valve and Pressure Gauge must be calibrated on time"></textarea></div>
-      </div>
-    </div>
+        <div class="field full">
+          <label>Other Observations</label>
+          <textarea rows="2" [(ngModel)]="pvForm.otherObservations"
+            placeholder="e.g. Pressure Safety Valve and Pressure Gauge must be calibrated on time"></textarea>
+        </div>
+
+      </div><!-- /form-grid -->
+    </div><!-- /modal-body -->
+
     <div class="modal-footer">
       <button class="btn-secondary" (click)="closePressureModal()">Cancel</button>
       <button class="btn-primary btn-primary-pv" (click)="savePressure()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+          <polyline points="17 21 17 13 7 13 7 21" />
+          <polyline points="7 3 7 8 15 8" />
+        </svg>
         Save Record
       </button>
     </div>
   </div>
-</div>
+</div><!-- /pressure vessel modal -->
 
 <!-- ══════════════════════════════════════════════════════════
      POWER PRESS MODAL
 ══════════════════════════════════════════════════════════ -->
-<div class="modal-overlay" [class.modal-overlay-open]="showPowerPressModal" (click)="closePowerPressModal()">
+<div class="modal-overlay" [class.modal-overlay-open]="showPowerPressModal">
   <div class="modal modal-lg" (click)="$event.stopPropagation()">
     <div class="modal-header modal-header-pp">
       <div>
-        <h3 class="modal-title">{{ powerPressModalMode === 'add' ? 'Add Power Press Record' : 'Update Power Press Record' }}</h3>
+        <h3 class="modal-title">
+          {{ powerPressModalMode === 'add' ? 'Add Power Press Record' : 'Update Power Press Record' }}
+        </h3>
         <p class="modal-subtitle">Section 21(2) • Factories Act 1948</p>
       </div>
       <button class="modal-close-btn" (click)="closePowerPressModal()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
       </button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
         <div class="field full section-divider"><span>Certificate Details</span></div>
-        <div class="field"><label>Certificate No</label><input [(ngModel)]="ppForm.certificateNo" readonly placeholder="Auto-generated"></div>
-        <div class="field"><label>Date of Examination</label><input type="date" [(ngModel)]="ppForm.dateOfExamination" (change)="generatePpCertificateNo()"></div>
-        <div class="field full">
-          <label>Next Due Date</label>
+        <div class="field"><label>Certificate No</label><input [(ngModel)]="ppForm.certificateNo" placeholder="Auto-generated" readonly></div>
+        <div class="field"><label>Date of Examination</label><!-- Power Press modal -->
+        <!-- Power Press modal -->
+        <input type="date" [(ngModel)]="ppForm.dateOfExamination" (change)="onPpExaminationDateChange()"></div>
+        <div class="field full"><label>Next Due Date</label>
           <div class="due-date-group">
             <div class="duration-btn-group">
-              <button type="button" class="duration-btn" [class.active]="ppDuration === '6months'" (click)="setPpDuration('6months')">6 Months</button>
-              <button type="button" class="duration-btn" [class.active]="ppDuration === '1year'" (click)="setPpDuration('1year')">1 Year</button>
-              <button type="button" class="duration-btn" [class.active]="ppDuration === '2years'" (click)="setPpDuration('2years')">2 Years</button>
+              <button type="button" class="duration-btn" [class.active]="ppDuration === '6months'"
+                (click)="setPpDuration('6months')">6 Months</button>
+              <button type="button" class="duration-btn" [class.active]="ppDuration === '1year'"
+                (click)="setPpDuration('1year')">1 Year</button>
+              <button type="button" class="duration-btn" [class.active]="ppDuration === '2years'"
+                (click)="setPpDuration('2years')">2 Years</button>
             </div>
             <input type="date" class="due-date-input" [(ngModel)]="ppForm.nextDueDate">
           </div>
         </div>
+
         <div class="field full section-divider"><span>1. Factory Details</span></div>
         <div class="field full"><label>Name of Occupier</label><input [(ngModel)]="ppForm.occupierName"></div>
         <div class="field full"><label>Address of Factory</label><textarea rows="2" [(ngModel)]="ppForm.factoryAddress"></textarea></div>
+
         <div class="field full section-divider"><span>2. Machine Details</span></div>
         <div class="field">
           <label>Machine Type</label>
@@ -963,13 +1626,24 @@
             <option *ngFor="let item of powerPressMachineList" [value]="item">{{ item }}</option>
           </select>
         </div>
+        <div class="field">
+          <label>Model No.</label>
+          <input [(ngModel)]="ppForm.modelNo" placeholder="e.g. PP-100 / H-Type">
+        </div>
         <div class="field"><label>Serial No.</label><input [(ngModel)]="ppForm.serialNo" placeholder="e.g. SR-001"></div>
-        <div class="field"><label>Model No.</label><input [(ngModel)]="ppForm.modelNo" placeholder="e.g. N/A"></div>
+        <div class="field">
+     <label>ID No.</label>
+     <input [(ngModel)]="ppForm.idNumber" placeholder="e.g. PP-01 / M-Type-01">
+   </div>
         <div class="field"><label>Capacity</label><input [(ngModel)]="ppForm.capacity" placeholder="e.g. 100 Ton"></div>
         <div class="field"><label>Manufacturer Name</label><input [(ngModel)]="ppForm.manufacturerName" placeholder="NA if unknown"></div>
-        <div class="field"><label>Year of Manufacture</label><input [(ngModel)]="ppForm.yearOfManufacture" placeholder="e.g. 2018"></div>
+        <div class="field">
+          <label>Year of Manufacture</label>
+          <input type="number" [(ngModel)]="ppForm.yearOfManufacture" placeholder="e.g. 2010" min="1950" max="2100">
+        </div>
         <div class="field"><label>Location</label><input [(ngModel)]="ppForm.location" placeholder="e.g. Shop Floor-1"></div>
-        <div class="field"><label>Date First Taken Into Use</label><input [(ngModel)]="ppForm.dateFirstUse" placeholder="e.g. 2018"></div>
+        <div class="field"><label>Date First Use</label><input [(ngModel)]="ppForm.dateFirstUse" placeholder="e.g. 2015"></div>
+
         <div class="field full section-divider"><span>3. Examination Details</span></div>
         <div class="field">
           <label>Last Examined By</label>
@@ -980,6 +1654,7 @@
         </div>
         <div class="field"><label>Last Examination Date</label><input type="date" [(ngModel)]="ppForm.lastExaminationDate"></div>
         <div class="field full"><label>Defects / Observations</label><textarea rows="3" [(ngModel)]="ppForm.defectsObservation" placeholder="Nil / details of defects and steps taken"></textarea></div>
+
         <div class="field full section-divider"><span>4. Certification Details</span></div>
         <div class="field">
           <label>Certified By</label>
@@ -993,65 +1668,67 @@
         <div class="field full"><label>Approval Details</label><textarea rows="2" [(ngModel)]="ppForm.approvalDetails" placeholder="e.g. Approved by CIF Haryana Vide Lic. No. 2968 dated 27.06.2019"></textarea></div>
       </div>
     </div>
+
     <div class="modal-footer">
       <button class="btn-secondary" (click)="closePowerPressModal()">Cancel</button>
       <button class="btn-primary btn-primary-pp" (click)="savePowerPress()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+          <polyline points="17 21 17 13 7 13 7 21" />
+          <polyline points="7 3 7 8 15 8" />
+        </svg>
         Save Record
       </button>
     </div>
   </div>
-</div>
+</div><!-- /power press modal -->
 
 <!-- ══════════════════════════════════════════════════════════
      SAFETY BELT MODAL
 ══════════════════════════════════════════════════════════ -->
-<div class="modal-overlay" [class.modal-overlay-open]="showSafetyBeltModal" (click)="closeSafetyBeltModal()">
+<div class="modal-overlay" [class.modal-overlay-open]="showSafetyBeltModal">
   <div class="modal modal-lg" (click)="$event.stopPropagation()">
     <div class="modal-header modal-header-sb">
       <div>
-        <h3 class="modal-title">{{ safetyBeltModalMode === 'add' ? 'Add Safety Belt Record' : 'Update Safety Belt Record' }}</h3>
+        <h3 class="modal-title">
+          {{ safetyBeltModalMode === 'add' ? 'Add Safety Belt Record' : 'Update Safety Belt Record' }}
+        </h3>
         <p class="modal-subtitle">Section 87 • IS 3521 / IS 1891</p>
       </div>
       <button class="modal-close-btn" (click)="closeSafetyBeltModal()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
       </button>
     </div>
+
     <div class="modal-body">
       <div class="form-grid">
-
         <div class="field full section-divider"><span>Certificate Details</span></div>
-        <div class="field">
-          <label>Certificate No</label>
-          <input [(ngModel)]="sbForm.certificateNumber" readonly placeholder="Auto-generated">
-        </div>
-        <div class="field">
-          <label>Date of Examination</label>
-          <input type="date" [(ngModel)]="sbForm.dateOfExamination" (change)="generateSbCertificateNo()">
-        </div>
+        <div class="field"><label>Certificate No</label><input [(ngModel)]="sbForm.certificateNumber" placeholder="Auto-generated" readonly></div>
+        <div class="field"><label>Date of Examination</label><!-- Safety Belt modal -->
+<input type="date" [(ngModel)]="sbForm.dateOfExamination" (change)="generateSbCertificateNo()"></div>
         <div class="field full">
           <label>Next Due Date</label>
           <div class="due-date-group">
             <div class="duration-btn-group">
-              <button type="button" class="duration-btn" [class.active]="sbDuration === '6months'" (click)="setSbDuration('6months')">6 Months</button>
-              <button type="button" class="duration-btn" [class.active]="sbDuration === '1year'" (click)="setSbDuration('1year')">1 Year</button>
-              <button type="button" class="duration-btn" [class.active]="sbDuration === '2years'" (click)="setSbDuration('2years')">2 Years</button>
+              <button type="button" class="duration-btn" [class.active]="sbDuration === '6months'"
+                (click)="setSbDuration('6months')">6 Months</button>
+              <button type="button" class="duration-btn" [class.active]="sbDuration === '1year'"
+                (click)="setSbDuration('1year')">1 Year</button>
+              <button type="button" class="duration-btn" [class.active]="sbDuration === '2years'"
+                (click)="setSbDuration('2years')">2 Years</button>
             </div>
             <input type="date" class="due-date-input" [(ngModel)]="sbForm.nextDueDate">
           </div>
         </div>
 
         <div class="field full section-divider"><span>1. Name of Occupier</span></div>
-        <div class="field full">
-          <label>Name of Occupier</label>
-          <input [(ngModel)]="sbForm.occupierName" placeholder="e.g. ABC Industries Pvt. Ltd.">
-        </div>
+        <div class="field full"><label>Name of Occupier</label><input [(ngModel)]="sbForm.occupierName" placeholder="e.g. ABC Industries Pvt. Ltd."></div>
 
         <div class="field full section-divider"><span>2. Factory Name &amp; Address</span></div>
-        <div class="field full">
-          <label>Factory Name &amp; Address</label>
-          <textarea rows="2" [(ngModel)]="sbForm.factoryAddress" placeholder="Full factory name and address"></textarea>
-        </div>
+        <div class="field full"><label>Factory Name &amp; Address</label><textarea rows="2" [(ngModel)]="sbForm.factoryAddress" placeholder="Full factory name and address"></textarea></div>
 
         <div class="field full section-divider"><span>3. Item &amp; 4. Manufacturer</span></div>
         <div class="field">
@@ -1061,39 +1738,56 @@
             <option *ngFor="let item of safetyBeltTypeList" [value]="item">{{ item }}</option>
           </select>
         </div>
-        <div class="field">
-          <label>Model No.</label>
-          <input [(ngModel)]="sbForm.modelNo" placeholder="e.g. N/A">
-        </div>
-        <div class="field full">
-          <label>Make / Brand / Manufacturer Name</label>
-          <input [(ngModel)]="sbForm.make" placeholder="e.g. Udyogi, Karam, Saviour">
-        </div>
 
-        <div class="field full section-divider"><span>5. Mark and S. No. &amp; 6. Location</span></div>
-        <div class="field">
-          <label>Serial No.</label>
-          <input [(ngModel)]="sbForm.serialNo" placeholder="e.g. SR-001">
-        </div>
-        <div class="field">
-          <label>Batch No.</label>
-          <input [(ngModel)]="sbForm.batchNo" placeholder="e.g. B-2024-01">
-        </div>
-        <div class="field full">
-          <label>Location / Department</label>
-          <input [(ngModel)]="sbForm.location" placeholder="e.g. Shop Floor-1, Maintenance Dept.">
-        </div>
+      <div class="field full">
+  <label>Make / Brand / Manufacturer Name</label>
+  <input [(ngModel)]="sbForm.make" placeholder="e.g. Udyogi, Karam, Saviour">
+</div>
 
-        <div class="field full section-divider"><span>7. Date of Manufacture &amp; 9. First Use</span></div>
-        <div class="field">
-          <label>Year of Manufacture</label>
-          <input [(ngModel)]="sbForm.yearOfManufacture" placeholder="e.g. 2022">
-        </div>
-        <div class="field">
-          <label>Date First Taken Into Use</label>
-          <input [(ngModel)]="sbForm.dateFirstUse" placeholder="e.g. 2022">
-        </div>
+<div class="field">
+  <label>Year of Manufacture</label>
+  <input 
+    type="text" 
+    [(ngModel)]="sbForm.yearOfManufacture" 
+    placeholder="e.g. 2024">
+</div>
 
+<div class="field">
+  <label>Date First Taken Into Use</label>
+  <input 
+    type="text" 
+    [(ngModel)]="sbForm.dateFirstUse">
+</div>
+
+<!-- Replace the existing single "Details" field with these three: -->
+<div class="field">
+  <label>Serial No.</label>
+  <input [(ngModel)]="sbForm.serialNo" placeholder="e.g. SR-001">
+</div>
+
+<div class="field">
+  <label>Capacity</label>
+  <input [(ngModel)]="sbForm.modelNo" placeholder="e.g. FS-302 / N/A">
+</div>
+
+<div class="field">
+  <label>ID No.</label>
+  <input [(ngModel)]="sbForm.idNumber" placeholder="e.g. BT-01 / N/A">
+</div>
+
+<div class="field">
+  <label>Batch No.</label>
+  <input [(ngModel)]="sbForm.batchNo" placeholder="e.g. BT-2024-01 / N/A">
+</div>
+
+<div class="field full">
+  <label>Location / Department</label>
+  <input [(ngModel)]="sbForm.location" placeholder="e.g. Shop Floor-1, Maintenance Dept.">
+</div><div class="field full">
+
+  <label>Class of Sefaty Belt</label>
+  <input [(ngModel)]="sbForm.classOfBelt" placeholder="">
+</div>
         <div class="field full section-divider"><span>10. Examination</span></div>
         <div class="field">
           <label>Examined By (Competent Person)</label>
@@ -1102,32 +1796,14 @@
             <option *ngFor="let inspector of inspectorList" [value]="inspector">{{ inspector }}</option>
           </select>
         </div>
-        <div class="field">
-          <label>Date of Examination</label>
-          <input type="date" [(ngModel)]="sbForm.lastExaminationDate">
-        </div>
+        <!-- <div class="field"><label>Date of Examination</label><input type="date" [(ngModel)]="sbForm.lastExaminationDate"></div> -->
 
         <div class="field full section-divider"><span>11–15. Component Condition Checks</span></div>
-        <div class="field">
-          <label>11. Waist Belt</label>
-          <input type="text" [(ngModel)]="sbForm.webbing" placeholder="Enter condition (e.g. OK / Damaged)">
-        </div>
-        <div class="field">
-          <label>12. Shoulder Strap</label>
-          <input type="text" [(ngModel)]="sbForm.buckles" placeholder="Enter condition">
-        </div>
-        <div class="field">
-          <label>13. Hoisting Straps</label>
-          <input type="text" [(ngModel)]="sbForm.dRings" placeholder="Enter condition">
-        </div>
-        <div class="field">
-          <label>14. Shoulder Strap Retainer Buckles</label>
-          <input type="text" [(ngModel)]="sbForm.lanyardCondition" placeholder="Enter condition">
-        </div>
-        <div class="field">
-          <label>15. Rivets &amp; Washers &amp; Sewing Stitches</label>
-          <input type="text" [(ngModel)]="sbForm.stitching" placeholder="Enter condition">
-        </div>
+        <div class="field"><label>11. Waist Belt</label><input type="text" [(ngModel)]="sbForm.webbing" placeholder="Enter condition (e.g. OK / Damaged)"></div>
+        <div class="field"><label>12. Shoulder Strap</label><input type="text" [(ngModel)]="sbForm.buckles" placeholder="Enter condition"></div>
+        <div class="field"><label>13. Hoisting Straps</label><input type="text" [(ngModel)]="sbForm.dRings" placeholder="Enter condition"></div>
+        <div class="field"><label>14. Shoulder Strap Retainer Buckles</label><input type="text" [(ngModel)]="sbForm.lanyardCondition" placeholder="Enter condition"></div>
+        <div class="field"><label>15. Rivets &amp; Washers &amp; Sewing Stitches</label><input type="text" [(ngModel)]="sbForm.stitching" placeholder="Enter condition"></div>
         <div class="field">
           <label>Overall Condition</label>
           <select [(ngModel)]="sbForm.overallCondition">
@@ -1137,10 +1813,7 @@
         </div>
 
         <div class="field full section-divider"><span>16. Observations</span></div>
-        <div class="field full">
-          <label>Observations / Defects &amp; Steps Taken</label>
-          <textarea rows="3" [(ngModel)]="sbForm.defectsObservation" placeholder="Nil / details of defects and steps taken to remedy"></textarea>
-        </div>
+        <div class="field full"><label>Observations / Defects &amp; Steps Taken</label><textarea rows="3" [(ngModel)]="sbForm.defectsObservation" placeholder="Nil / details of defects and steps taken to remedy"></textarea></div>
 
         <div class="field full section-divider"><span>Certification Details</span></div>
         <div class="field">
@@ -1150,100 +1823,75 @@
             <option *ngFor="let inspector of inspectorList" [value]="inspector">{{ inspector }}</option>
           </select>
         </div>
-        <div class="field">
-          <label>License No.</label>
-          <input [(ngModel)]="sbForm.licenseNo" placeholder="e.g. 2986">
-        </div>
-        <div class="field full">
-          <label>Designation</label>
-          <input [(ngModel)]="sbForm.designation" placeholder="e.g. Competent Person U/s 21(2), 28, 29, 31">
-        </div>
-        <div class="field full">
-          <label>Approval Details</label>
-          <textarea rows="2" [(ngModel)]="sbForm.approvalDetails" placeholder="e.g. Approved by CIF Haryana Vide Lic. No. 2968 dated 27.06.2019"></textarea>
-        </div>
-
+        <div class="field"><label>License No.</label><input [(ngModel)]="sbForm.licenseNo" placeholder="e.g. 2986"></div>
+        <div class="field full"><label>Designation</label><input [(ngModel)]="sbForm.designation" placeholder="e.g. Competent Person U/s 21(2), 28, 29, 31"></div>
+        <div class="field full"><label>Approval Details</label><textarea rows="2" [(ngModel)]="sbForm.approvalDetails" placeholder="e.g. Approved by CIF Haryana Vide Lic. No. 2968 dated 27.06.2019"></textarea></div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" (click)="closeSafetyBeltModal()">Cancel</button>
       <button class="btn-primary btn-primary-sb" (click)="saveSafetyBelt()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+          <polyline points="17 21 17 13 7 13 7 21" />
+          <polyline points="7 3 7 8 15 8" />
+        </svg>
         Save Record
       </button>
     </div>
   </div>
-</div>
+</div><!-- /safety belt modal -->
 
 <!-- ══════════════════════════════════════════════════════════
-     PRINT SECTIONS (unchanged — paste your existing print HTML here)
+     BULK PRINT CHILD COMPONENTS
 ══════════════════════════════════════════════════════════ -->
-<div id="pp-print-section" *ngIf="selectedPpItem && selectedItemsForPrint.length === 0" class="pp-print-container">
-  <!-- ...existing pp print content unchanged... -->
-</div>
+<!-- <app-bulk-print-lifting [liftingItems]="liftingItemsForPrint" [companyId]="companyId" [showStamp]="showStampOnPrint"
+  [signatureImageUrl]="signatureBase64" [stampImageUrl]="stampBase64" [counterSignImageUrl]="counterSignBase64"
+  [getSectionText]="getSectionText.bind(this)" [getApprovalText]="getApprovalText.bind(this)"
+  [generateQrSvg]="generateQrSvg.bind(this)">
+</app-bulk-print-lifting> -->
 
-<div id="pv-print-section" *ngIf="selectedPvItem && selectedItemsForPrint.length === 0" class="pv-print-container">
-  <!-- ...existing pv print content unchanged... -->
-</div>
-
-<div id="sb-print-section" *ngIf="selectedSbItem && selectedItemsForPrint.length === 0" class="sb-print-container">
-  <!-- ...existing sb print content unchanged... -->
-</div>
-
-<!-- BULK PRINT COMPONENTS (unchanged) -->
-<app-bulk-print-lifting
-  [liftingItems]="liftingItemsForPrint"
-  [companyId]="companyId"
+<app-bulk-print-lifting 
+  [liftingItems]="liftingItemsForPrint" 
+  [companyId]="companyId" 
   [showStamp]="showStampOnPrint"
-  [signatureImageUrl]="signatureBase64"
-  [stampImageUrl]="stampBase64"
+  [signatureImageUrl]="signatureBase64" 
+  [stampImageUrl]="stampBase64" 
   [counterSignImageUrl]="counterSignBase64"
-  [getSectionText]="getSectionText.bind(this)"
+  [watermarkImageUrl]="watermarkBase64"
+  [getSectionText]="getSectionText.bind(this)" 
   [getApprovalText]="getApprovalText.bind(this)"
   [generateQrSvg]="generateQrSvg.bind(this)">
 </app-bulk-print-lifting>
 
-<app-bulk-print-pv
-  [pvItems]="pvItemsForPrint"
-  [companyId]="companyId"
-  [safeDateFormat]="safeDateFormat.bind(this)"
-  [generateQrSvg]="generateQrSvg.bind(this)"
-  [getSectionText]="getSectionText.bind(this)"
-  [getApprovalText]="getApprovalText.bind(this)"
-  [getShellValue]="getShellValue.bind(this)"
-  [getDishValue]="getDishValue.bind(this)"
-  [showStamp]="showStampOnPrint"
-  [signatureImageUrl]="signatureBase64"
-  [stampImageUrl]="stampBase64"
-  [counterSignImageUrl]="counterSignBase64">
+<app-bulk-print-pv [pvItems]="pvItemsForPrint" [companyId]="companyId" [safeDateFormat]="safeDateFormat.bind(this)"
+  [generateQrSvg]="generateQrSvg.bind(this)" [getSectionText]="getSectionText.bind(this)"
+  [getApprovalText]="getApprovalText.bind(this)" [getShellValue]="getShellValue.bind(this)"
+  [getDishValue]="getDishValue.bind(this)" [showStamp]="showStampOnPrint" [signatureImageUrl]="signatureBase64"
+  [watermarkImageUrl]="watermarkBase64"
+  [stampImageUrl]="stampBase64" [counterSignImageUrl]="counterSignBase64">
 </app-bulk-print-pv>
 
-<app-bulk-print-pp
-  [ppItems]="ppItemsForPrint"
-  [companyId]="companyId"
-  [safeDateFormat]="safeDateFormat.bind(this)"
-  [generateQrSvg]="generateQrSvg.bind(this)"
-  [getSectionText]="getSectionText.bind(this)"
-  [getApprovalText]="getApprovalText.bind(this)"
-  [showStamp]="showStampOnPrint"
-  [signatureImageUrl]="signatureBase64"
-  [stampImageUrl]="stampBase64"
-  [counterSignImageUrl]="counterSignBase64">
-</app-bulk-print-pp>
+<app-bulk-print-pp [ppItems]="ppItemsForPrint" [companyId]="companyId" [safeDateFormat]="safeDateFormat.bind(this)"
+  [generateQrSvg]="generateQrSvg.bind(this)" [getSectionText]="getSectionText.bind(this)"
+  [getApprovalText]="getApprovalText.bind(this)" [showStamp]="showStampOnPrint" [signatureImageUrl]="signatureBase64"
+  [stampImageUrl]="stampBase64" [counterSignImageUrl]="counterSignBase64"  [watermarkImageUrl]="watermarkBase64"></app-bulk-print-pp>
 
-<app-bulk-safety-belt
-  [sbItems]="sbItemsForPrint"
-  [companyId]="companyId"
-  [safeDateFormat]="safeDateFormat.bind(this)"
-  [generateQrSvg]="generateQrSvg.bind(this)"
-  [getSectionText]="getSectionText.bind(this)"
-  [getApprovalText]="getApprovalText.bind(this)"
-  [showStamp]="showStampOnPrint"
-  [signatureImageUrl]="signatureBase64"
-  [stampImageUrl]="stampBase64"
-  [counterSignImageUrl]="counterSignBase64">
+
+<app-bulk-safety-belt [sbItems]="sbItemsForPrint" [companyId]="companyId" [safeDateFormat]="safeDateFormat.bind(this)"
+  [generateQrSvg]="generateQrSvg.bind(this)" [getSectionText]="getSectionText.bind(this)"
+  [getApprovalText]="getApprovalText.bind(this)" [showStamp]="showStampOnPrint" [signatureImageUrl]="signatureBase64"
+  [stampImageUrl]="stampBase64" [counterSignImageUrl]="counterSignBase64"
+  [watermarkImageUrl]="watermarkBase64">
 </app-bulk-safety-belt>
 
+<app-bulk-print-sv [svItems]="svItemsForPrint" [companyId]="companyId"
+  [safeDateFormat]="safeDateFormat.bind(this)"
+  [generateQrSvg]="generateQrSvg.bind(this)" [getSectionText]="getSectionText.bind(this)"
+  [getApprovalText]="getApprovalText.bind(this)" [showStamp]="showStampOnPrint"
+  [signatureImageUrl]="signatureBase64" [stampImageUrl]="stampBase64"
+  [counterSignImageUrl]="counterSignBase64" [watermarkImageUrl]="watermarkBase64">
+</app-bulk-print-sv>
 <!-- ── TOAST ── -->
 <div class="toast-container" *ngIf="toastVisible">
   <div class="toast" [class.toast-success]="toastType === 'success'" [class.toast-error]="toastType === 'error'">
@@ -1251,3 +1899,349 @@
     <span class="toast-msg">{{ toastMessage }}</span>
   </div>
 </div>
+
+<!-- ══════════════════════════════════════════════════════════
+     DELETE CONFIRMATION MODAL
+══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" [class.modal-overlay-open]="showDeleteConfirm">
+  <div class="modal modal-confirm-report" (click)="$event.stopPropagation()">
+
+    <div class="confirm-report-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6l-1 14H6L5 6"/>
+        <path d="M10 11v6M14 11v6"/>
+        <path d="M9 6V4h6v2"/>
+      </svg>
+    </div>
+
+    <h3 class="confirm-report-title">Delete Record?</h3>
+
+    <p class="confirm-report-msg">
+      You are about to permanently delete the
+      <strong>{{ deleteRecordType === 'lifting' ? 'Lifting Equipment' :
+                  deleteRecordType === 'pv'      ? 'Pressure Vessel'   :
+                  deleteRecordType === 'pp'      ? 'Power Press'       : 'Safety Belt' }}</strong>
+      record for <strong>{{ deleteRecordLabel }}</strong>.
+      This action <span class="confirm-cannot-undo">cannot be undone</span>.
+    </p>
+
+    <div class="confirm-report-footer">
+      <button class="btn-secondary" [disabled]="isDeleting" (click)="cancelDelete()">Cancel</button>
+      <button class="btn-confirm-delete" [disabled]="isDeleting" (click)="confirmDelete()">
+        <span *ngIf="!isDeleting">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14H6L5 6"/>
+          </svg>
+          Yes, Delete
+        </span>
+        <span *ngIf="isDeleting" class="deleting-dots">
+          Deleting<span>.</span><span>.</span><span>.</span>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     RENEW MODAL
+══════════════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════════
+     RENEW MODAL
+══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" [class.modal-overlay-open]="showRenewModal"
+     (click)="closeRenewModal()">
+  <div class="modal modal-renew" (click)="$event.stopPropagation()">
+
+    <div class="modal-header modal-header-renew">
+      <div class="modal-header-left">
+        <div class="renew-modal-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="modal-title">
+            {{ renewIsBulk ? 'Bulk Renew' : 'Renew Certificate' }}
+          </h3>
+          <p class="modal-subtitle">
+            {{ renewIsBulk ? 'Update dates for all selected records' : 'Update examination & due dates only' }}
+          </p>
+        </div>
+      </div>
+      <button class="modal-close-btn" (click)="closeRenewModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- ── Single record info card ── -->
+      <div class="renew-record-card" *ngIf="!renewIsBulk">
+        <div class="renew-record-card-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </div>
+        <div class="renew-record-card-body">
+          <span class="renew-record-card-label">Renewing record</span>
+          <span class="renew-record-card-value">{{ renewRecordLabel }}</span>
+        </div>
+      </div>
+
+      <!-- ── Bulk summary chips ── -->
+      <div class="renew-bulk-summary" *ngIf="renewIsBulk">
+        <div class="renew-bulk-header">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <path d="M8 21h8M12 17v4"/>
+          </svg>
+          <span>{{ totalSelected }} records selected for renewal</span>
+        </div>
+        <div class="renew-chips-row">
+          <span class="renew-chip renew-chip-lifting" *ngIf="bulkRenewIds.lifting.length > 0">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5">
+              <path d="M12 2v20M2 12h20"/>
+            </svg>
+            {{ bulkRenewIds.lifting.length }} Lifting
+          </span>
+          <span class="renew-chip renew-chip-pv" *ngIf="bulkRenewIds.pv.length > 0">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>
+            {{ bulkRenewIds.pv.length }} Pressure Vessel
+          </span>
+          <span class="renew-chip renew-chip-pp" *ngIf="bulkRenewIds.pp.length > 0">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+            </svg>
+            {{ bulkRenewIds.pp.length }} Power Press
+          </span>
+          <span class="renew-chip renew-chip-sb" *ngIf="bulkRenewIds.sb.length > 0">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            {{ bulkRenewIds.sb.length }} Safety Belt
+          </span>
+
+<span class="renew-chip renew-chip-sv" *ngIf="bulkRenewIds.sv.length > 0">
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <circle cx="12" cy="12" r="3"/>
+  </svg>
+  {{ bulkRenewIds.sv.length }} Safety Valve
+</span>
+
+        </div>
+      </div>
+
+      <!-- ── Date fields ── -->
+      <div class="renew-date-section">
+
+        <div class="renew-date-field">
+          <label class="renew-field-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            Date of Examination
+          </label>
+          <input type="date" class="renew-date-input"
+                 [(ngModel)]="renewForm.dateOfExamination"
+                 (change)="onRenewDateChange()">
+        </div>
+
+        <div class="renew-divider-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+
+        <div class="renew-date-field">
+          <label class="renew-field-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Next Due Date
+          </label>
+          <div class="renew-due-group">
+            <div class="renew-duration-pills">
+              <button type="button" class="renew-pill"
+                [class.renew-pill-active]="renewDuration === '6months'"
+                (click)="setRenewDuration('6months')">6 Mo</button>
+              <button type="button" class="renew-pill"
+                [class.renew-pill-active]="renewDuration === '1year'"
+                (click)="setRenewDuration('1year')">1 Yr</button>
+              <button type="button" class="renew-pill"
+                [class.renew-pill-active]="renewDuration === '2years'"
+                (click)="setRenewDuration('2years')">2 Yr</button>
+            </div>
+            <input type="date" class="renew-date-input"
+                   [(ngModel)]="renewForm.nextDueDate">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Warning note ── -->
+      <div class="renew-warning-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>Only examination date and next due date will be updated. All other certificate data stays unchanged.</span>
+      </div>
+
+    </div><!-- /modal-body -->
+
+    <div class="modal-footer">
+      <button class="btn-secondary" [disabled]="isRenewing" (click)="closeRenewModal()">
+        Cancel
+      </button>
+      <button class="btn-primary btn-renew-confirm"
+        [disabled]="isRenewing || !renewForm.dateOfExamination || !renewForm.nextDueDate"
+        (click)="confirmRenew()">
+        <span *ngIf="isRenewing" class="deleting-dots">
+          Renewing<span>.</span><span>.</span><span>.</span>
+        </span>
+        <ng-container *ngIf="!isRenewing">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+          {{ renewIsBulk ? 'Renew ' + totalSelected + ' Records' : 'Confirm Renew' }}
+        </ng-container>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SAFETY VALVE MODAL  ← THIS WAS MISSING
+══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" [class.modal-overlay-open]="showSafetyValveModal">
+  <div class="modal modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-header modal-header-sv">
+      <div>
+        <h3 class="modal-title">
+          {{ safetyValveModalMode === 'add' ? 'Add Safety Valve Record' : 'Update Safety Valve Record' }}
+        </h3>
+        <p class="modal-subtitle">Pressure Relief Device Examination</p>
+      </div>
+      <button class="modal-close-btn" (click)="closeSafetyValveModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-grid">
+
+        <div class="field full section-divider"><span>Certificate Details</span></div>
+        <div class="field"><label>Certificate No</label><input [(ngModel)]="svForm.certificateNo" placeholder="Auto-generated" readonly></div>
+        <div class="field"><label>Date of Examination</label><input type="date" [(ngModel)]="svForm.dateOfExamination" (change)="onSvExaminationDateChange()"></div>
+
+        <div class="field full">
+          <label>Next Due Date</label>
+          <div class="due-date-group">
+            <div class="duration-btn-group">
+              <button type="button" class="duration-btn" [class.active]="svDuration === '6months'"
+                (click)="setSvDuration('6months')">6 Months</button>
+              <button type="button" class="duration-btn" [class.active]="svDuration === '1year'"
+                (click)="setSvDuration('1year')">1 Year</button>
+              <button type="button" class="duration-btn" [class.active]="svDuration === '2years'"
+                (click)="setSvDuration('2years')">2 Years</button>
+            </div>
+            <input type="date" class="due-date-input" [(ngModel)]="svForm.nextDueDate">
+          </div>
+        </div>
+        <div class="field full section-divider"><span>1. Name of Occupier &amp; Factory</span></div>
+        <div class="field full"><label>Name of Occupier</label><input [(ngModel)]="svForm.occupierName"></div>
+        <div class="field full"><label>Address of Factory</label><textarea rows="2" [(ngModel)]="svForm.factoryAddress"></textarea></div>
+        <div class="field full section-divider"><span>2. Equipment Identification</span></div>
+        <div class="field">
+          <label>Valve Type</label>
+          <input 
+  type="text"
+  [(ngModel)]="svForm.valveType"
+  placeholder="Enter Valve Type">
+        </div>
+        <div class="field"><label>Equipment Name</label><select [(ngModel)]="svForm.equipmentName">
+  <option value="">Select Equipment</option>
+  <option *ngFor="let item of equipmentNameList" [value]="item">
+    {{ item }}
+  </option>
+</select>
+</div>
+        <div class="field"><label>Size</label><input [(ngModel)]="svForm.size" placeholder="e.g. 3/4 Inch"></div>
+        <div class="field"><label>Serial No.</label><input [(ngModel)]="svForm.serialNo" placeholder="e.g. SV-01"></div>
+        <div class="field"><label>ID No.</label><input [(ngModel)]="svForm.idNumber" placeholder="e.g. SV-ID-01 / N/A"></div>
+        <div class="field">
+     <label>Model No.</label>
+     <input [(ngModel)]="svForm.modelNo" placeholder="e.g. SVL-15 / N/A">
+   </div>
+        <div class="field full"><label>Location</label><input [(ngModel)]="svForm.location" placeholder="e.g. Fitted on Air Receiver"></div>
+
+        <div class="field full section-divider"><span>3. Pressure Details</span></div>
+        <div class="field"><label>Pressure Setting</label><input 
+ [(ngModel)]="svForm.pressureSetting"
+ placeholder="Auto calculated"
+ readonly></div>
+        <div class="field"><label>Safe Working Pressure</label><input  type="text" [(ngModel)]="svForm.safeWorkingPressure" (ngModelChange)="calculatePressureSetting()"></div>
+        <div class="field full section-divider"><span>4. Manufacturer Details</span></div>
+        <div class="field">
+  <label>Manufacturer Name</label>
+  <input [(ngModel)]="svForm.manufacturerName">
+</div>
+        <div class="field">
+          <label>Manufacturing Year</label>
+          <input type="number" [(ngModel)]="svForm.manufacturingYear" min="1950" max="2100">
+        </div>
+        
+        <!-- <div class="field full"><label>Manufacturer Address</label><input [(ngModel)]="svForm.manufacturerAddress" placeholder="NA if unknown"></div> -->
+        <div class="field full section-divider"><span>5. Process &amp; Test Details</span></div>
+        <div class="field full"><label>Nature of Process</label><input [(ngModel)]="svForm.natureOfProcess"></div>
+        <div class="field full"><label>Last Hydraulic Pressure Applied</label><input [(ngModel)]="svForm.lastHydraulicPressureApplied" placeholder="e.g. 10.0 Kg/cm² on dd-mm-yyyy"></div>
+        <div class="field full"><label>Examination &amp; Tests Made</label><textarea rows="2" [(ngModel)]="svForm.examinationTestsMade"></textarea></div>
+        <div class="field full"><label>Recommendation</label><textarea rows="2" [(ngModel)]="svForm.recommendation"></textarea></div>
+      </div><!-- /form-grid -->
+    </div><!-- /modal-body -->
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeSafetyValveModal()">Cancel</button>
+      <button class="btn-primary btn-primary-sv" (click)="saveSafetyValve()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+          <polyline points="17 21 17 13 7 13 7 21" />
+          <polyline points="7 3 7 8 15 8" />
+        </svg>
+        Save Record
+      </button>
+    </div>
+  </div>
+</div><!-- /safety valve modal -->

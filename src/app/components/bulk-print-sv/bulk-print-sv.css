@@ -1,32 +1,33 @@
 /* ═══════════════════════════════════════════════════════════════
-   BULK-PRINT-LIFTING.COMPONENT.CSS
-   Scope prefix : bpl-   (Bulk Print Lifting)
+   BULK-PRINT-SV.COMPONENT.CSS
+   Scope prefix : bpsv-   (Bulk Print Safety Valve)
    Font         : Calibri, no italic anywhere
+   Mirrors bulk-print-lifting.component.css conventions
 ═══════════════════════════════════════════════════════════════ */
 
 /* ── CSS Variables ── */
 :root {
-  --bpl-font: "Calibri", "Calibri Body", "Trebuchet MS", Arial, sans-serif;
-  --bpl-base: 10px;
-  --bpl-title: 10px;
-  --bpl-subtitle: 10px;
-  --bpl-cert-row: 10px;
-  --bpl-table-desc: 10px;
-  --bpl-table-val: 10px;
-  --bpl-table-num: 10px;
-  --bpl-eq-meta: 10px;
-  --bpl-footer: 10px;
-  --bpl-sig-name: 10px;
-  --bpl-sig-title: 10px;
-  --bpl-next-due: 10px;
-  --bpl-disclaimer: 7px;
-  --bpl-qr-label: 7px;
-  --bpl-index-th: 7pt;
-  --bpl-index-td: 7.5pt;
+  --bpsv-font: "Calibri", "Calibri Body", "Trebuchet MS", Arial, sans-serif;
+  --bpsv-base: 10px;
+  --bpsv-title: 10px;
+  --bpsv-subtitle: 10px;
+  --bpsv-cert-row: 10px;
+  --bpsv-table-desc: 10px;
+  --bpsv-table-val: 10px;
+  --bpsv-table-num: 10px;
+  --bpsv-eq-meta: 10px;
+  --bpsv-footer: 10px;
+  --bpsv-sig-name: 10px;
+  --bpsv-sig-title: 10px;
+  --bpsv-next-due: 10px;
+  --bpsv-disclaimer: 7px;
+  --bpsv-qr-label: 7px;
+  --bpsv-index-th: 7pt;
+  --bpsv-index-td: 7.5pt;
 }
 
 /* ── Hide on screen ── */
-#bulk-print-lifting-section {
+#sv-bulk-print-section {
   display: none !important;
   visibility: hidden !important;
 }
@@ -35,32 +36,32 @@
    SHARED LAYOUT
 ═══════════════════════════════════════════════════════════════ */
 
-.bpl-root {
-  font-family: var(--bpl-font);
+.bpsv-root {
+  font-family: var(--bpsv-font);
   font-style: normal;
   color: #111;
 }
 
 /* ── Index page ── */
-.bpl-index-page {
+.bpsv-index-page {
   width: 100%;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   color: #111;
   padding: 0;
 }
 
-.bpl-index-header {
+.bpsv-index-header {
   text-align: center;
   margin-bottom: 8px;
   padding-bottom: 6px;
   border-bottom: 2px solid #1e293b;
 }
 
-.bpl-index-title {
+.bpsv-index-title {
   font-size: 13pt;
   font-weight: 700;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -68,38 +69,38 @@
   margin-bottom: 2px;
 }
 
-.bpl-index-subtitle {
+.bpsv-index-subtitle {
   font-size: 9pt;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   color: #475569;
   margin-top: 2px;
 }
 
 /* ── Index table ── */
-.bpl-index-table {
+.bpsv-index-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: var(--bpl-index-td);
-  font-family: var(--bpl-font);
+  font-size: var(--bpsv-index-td);
+  font-family: var(--bpsv-font);
   font-style: normal;
   margin-top: 6px;
 }
 
-.bpl-index-table thead tr {
+.bpsv-index-table thead tr {
   background: #1e293b;
   color: #fff;
 }
 
-.bpl-index-table th {
+.bpsv-index-table th {
   background: #1e293b;
   color: #fff;
   font-weight: 600;
   padding: 5px 4px;
   text-align: center;
-  font-size: var(--bpl-index-th);
-  font-family: var(--bpl-font);
+  font-size: var(--bpsv-index-th);
+  font-family: var(--bpsv-font);
   font-style: normal;
   line-height: 1.3;
   border: 0.5pt solid #aaa;
@@ -107,11 +108,11 @@
   word-break: break-word;
 }
 
-.bpl-index-table td {
+.bpsv-index-table td {
   padding: 4px;
   border: 0.5pt solid #ccc;
-  font-size: var(--bpl-index-td);
-  font-family: var(--bpl-font);
+  font-size: var(--bpsv-index-td);
+  font-family: var(--bpsv-font);
   font-style: normal;
   vertical-align: middle;
   color: #1e293b;
@@ -120,83 +121,66 @@
   word-break: break-word;
 }
 
-.bpl-index-table tbody tr:nth-child(even) td {
+.bpsv-index-table tbody tr:nth-child(even) td {
   background: #f8fafc;
 }
-/* ── INDEX TABLE COLUMN WIDTHS (after removing Type column) ── */
 
-.bpl-index-table th:nth-child(1),
-.bpl-index-table td:nth-child(1) {
+/* ── INDEX TABLE COLUMN WIDTHS ── */
+
+/* Sl No. */
+.bpsv-index-table th:nth-child(1),
+.bpsv-index-table td:nth-child(1) {
   width: 4%;
   text-align: center;
 }
 
-/* Certificate No — wider now that Sr.No is removed */
-.bpl-index-table th:nth-child(2),
-.bpl-index-table td:nth-child(2) {
-  width: 17%;
+/* Certificate No */
+.bpsv-index-table th:nth-child(2),
+.bpsv-index-table td:nth-child(2) {
+  width: 16%;
 }
 
-/* ID No */
-.bpl-index-table th:nth-child(3),
-.bpl-index-table td:nth-child(3) {
-  width: 8%;
-  text-align: center;
+/* Valve Type */
+.bpsv-index-table th:nth-child(3),
+.bpsv-index-table td:nth-child(3) {
+  width: 12%;
 }
 
-/* Equipment */
-.bpl-index-table th:nth-child(4),
-.bpl-index-table td:nth-child(4) {
-  width: 17%;
-}
-
-/* Manufacturer — was nth-child(6), now nth-child(5) */
-.bpl-index-table th:nth-child(5),
-.bpl-index-table td:nth-child(5) {
-  width: 13%;
-}
-
-/* Year */
-.bpl-index-table th:nth-child(6),
-.bpl-index-table td:nth-child(6) {
-  width: 6%;
-  text-align: center;
-}
-
-/* Capacity */
-.bpl-index-table th:nth-child(7),
-.bpl-index-table td:nth-child(7) {
-  width: 10%;
+/* Serial No */
+.bpsv-index-table th:nth-child(4),
+.bpsv-index-table td:nth-child(4) {
+  width: 12%;
   text-align: center;
 }
 
 /* Location */
-.bpl-index-table th:nth-child(8),
-.bpl-index-table td:nth-child(8) {
-  width: 12%;
+.bpsv-index-table th:nth-child(5),
+.bpsv-index-table td:nth-child(5) {
+  width: 18%;
 }
 
 /* Testing Date */
-.bpl-index-table th:nth-child(9),
-.bpl-index-table td:nth-child(9) {
-  width: 7%;
+.bpsv-index-table th:nth-child(6),
+.bpsv-index-table td:nth-child(6) {
+  width: 10%;
   text-align: center;
 }
 
 /* Due Date */
-.bpl-index-table th:nth-child(10),
-.bpl-index-table td:nth-child(10) {
-  width: 7%;
+.bpsv-index-table th:nth-child(7),
+.bpsv-index-table td:nth-child(7) {
+  width: 10%;
   text-align: center;
 }
 
-/* Remark */
-.bpl-index-table th:nth-child(11),
-.bpl-index-table td:nth-child(11) {
+/* QR / Remark */
+.bpsv-index-table th:nth-child(8),
+.bpsv-index-table td:nth-child(8) {
   width: 8%;
   text-align: center;
 }
-.bpl-cert-no {
+
+.bpsv-cert-no {
   font-family: monospace;
   font-size: 6.8pt;
   font-weight: 600;
@@ -205,36 +189,36 @@
   word-break: break-word;
 }
 
-.bpl-badge {
+.bpsv-badge {
   font-weight: 600;
   font-size: 6.5pt;
   text-align: center;
   padding: 2px 3px;
   border-radius: 2px;
   white-space: normal;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   background: #eff6ff;
   color: #1d4ed8;
 }
 
-.bpl-remark-qr-cell {
+.bpsv-remark-qr-cell {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
   text-align: center;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
 }
 
-.bpl-index-qr-block {
+.bpsv-index-qr-block {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.bpl-index-qr-img {
+.bpsv-index-qr-img {
   width: 36px;
   height: 36px;
   object-fit: contain;
@@ -243,11 +227,11 @@
   background: #fff;
 }
 
-.bpl-index-footer {
+.bpsv-index-footer {
   margin-top: 8px;
   font-size: 8pt;
   font-weight: 600;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   color: #334155;
   text-align: right;
@@ -256,58 +240,51 @@
 }
 
 /* ── Page break ── */
-.bpl-page-break {
+.bpsv-page-break {
   height: 0;
 }
 
 /* ── Print page wrapper ── */
-.bpl-print-page {
+.bpsv-print-page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
 /* ── Print header ── */
-.bpl-print-header-row {
+.bpsv-print-header-row {
   margin-bottom: 4px;
 }
 
-.bpl-print-title {
+.bpsv-print-title {
   display: block;
-  font-size: var(--bpl-title);
+  font-size: var(--bpsv-title);
   font-weight: 700;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin: 0 0 2px;
 }
 
-.bpl-print-sub {
+.bpsv-print-sub {
   display: block;
-  font-size: var(--bpl-subtitle);
-  font-family: var(--bpl-font);
+  font-size: var(--bpsv-subtitle);
+  font-family: var(--bpsv-font);
   font-style: normal;
   margin: 0;
 }
 
-.bpl-cert-value {
-   font-size: 14px !important;
-   font-weight: 300 !important;
-}
-
-.bpl-cert-top-row {
+.bpsv-cert-top-row {
   display: flex;
-  font-size: 14px !important;
-  font-weight: 600;
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
-  font-weight: 600; 
+  font-weight: 600;
   margin: 3px 0 5px;
-  background: #e3e3e3;
+  background: transparent;
   color: #000;
   padding: 5px 12px;
   box-sizing: border-box;
@@ -315,110 +292,108 @@
   letter-spacing: 0.02em;
 }
 
-.bpl-print-label { 
-   font-size: 14px !important;
-  font-weight: 300;  /* ← was 700 */
-  font-family: var(--bpl-font);
+.bpsv-print-label {
+  font-weight: normal;
+  font-family: var(--bpsv-font);
   font-style: normal;
+  font-size: 14px;
 }
 
 /* ── Main table ── */
-.bpl-print-table {
+.bpsv-print-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 2px;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   flex-shrink: 0;
 }
 
-.bpl-print-table td {
+.bpsv-print-table td {
   padding: 3px 7px;
   vertical-align: top;
-  font-size: var(--bpl-base);
+  font-size: var(--bpsv-base);
   line-height: 1.0;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   border: none;
-  background: transparent;
 }
 
-.bpl-print-table tbody tr:nth-child(even) td { background: transparent; }
-.bpl-print-table tbody tr:nth-child(odd)  td { background: transparent; }
+.bpsv-print-table tbody tr:nth-child(even) td { background: transparent; }
+.bpsv-print-table tbody tr:nth-child(odd)  td { background: transparent; }
 
-.bpl-cn {
+.bpsv-cn {
   width: 20px;
   text-align: center;
-  font-weight: normal;  /* ← was 700 */
-  font-size: var(--bpl-table-num);
+  font-weight: normal;
+  font-size: var(--bpsv-table-num);
   vertical-align: top;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
-  background: transparent;
 }
 
-.bpl-cd {
+.bpsv-cd {
   width: 45%;
-  font-size: var(--bpl-table-desc);
-  font-family: var(--bpl-font);
+  font-size: var(--bpsv-table-desc);
+  font-family: var(--bpsv-font);
   font-style: normal;
   padding-right: 8px;
   vertical-align: top;
 }
 
-.bpl-cv {
-  font-size: var(--bpl-table-val);
-  font-family: var(--bpl-font);
+.bpsv-cv {
+  font-size: var(--bpsv-table-val);
+  font-family: var(--bpsv-font);
   font-style: normal;
   vertical-align: top;
 }
 
 /* ── Equipment meta ── */
-.bpl-equipment-main {
+.bpsv-equipment-main {
   font-weight: 700;
-  font-size: var(--bpl-table-val);
-  font-family: var(--bpl-font);
+  font-size: var(--bpsv-table-val);
+  font-family: var(--bpsv-font);
   font-style: normal;
   text-transform: uppercase;
   margin-bottom: 2px;
 }
 
-.bpl-eq-meta {
+.bpsv-eq-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 0 12px;
-  font-size: var(--bpl-eq-meta);
-  font-family: var(--bpl-font);
+  font-size: var(--bpsv-eq-meta);
+  font-family: var(--bpsv-font);
   font-style: normal;
   line-height: 1.4;
 }
 
-.bpl-eq-meta span { white-space: nowrap; }
+.bpsv-eq-meta span { white-space: nowrap; }
 
-/* ── Row 8 ── */
-.bpl-row8-block {
+/* ── Row block (examination / recommendation) ── */
+.bpsv-row-block {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.bpl-row8-status,
-.bpl-row8-item {
-  font-size: var(--bpl-base);
-  font-family: var(--bpl-font);
+.bpsv-row-status,
+.bpsv-row-item {
+  font-size: var(--bpsv-base);
+  font-family: var(--bpsv-font);
   font-style: normal;
   line-height: 1.0;
 }
 
-.bpl-row8-label {
+.bpsv-row-label {
   font-weight: 700;
   margin-right: 4px;
 }
 
 /* ── Certify / Next Due ── */
-.bpl-cert-certify {
-  font-size: var(--bpl-footer);
-  font-family: var(--bpl-font);
+.bpsv-cert-certify {
+  font-size: var(--bpsv-footer);
+  font-family: var(--bpsv-font);
   font-style: normal;
   line-height: 1.45;
   margin: 0 0 4px;
@@ -426,16 +401,15 @@
   flex-shrink: 0;
 }
 
-.bpl-cert-next-due {
-  font-size: var(--bpl-next-due);
-  font-style: normal;
-  font-family: var(--bpl-font);
+.bpsv-cert-next-due {
+  font-size: 14px;
+  font-family: var(--bpsv-font);
   font-style: normal;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   text-align: center;
   padding: 5px 12px;
-  background: #e3e3e3;
+  background: transparent;
   color: #000;
   box-sizing: border-box;
   width: 100%;
@@ -444,79 +418,79 @@
 }
 
 /* ── Footer / Signature ── */
-.bpl-cert-footer {
+.bpsv-cert-footer {
   margin-top: 10px;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   display: flex;
   flex-direction: column;
 }
 
-.bpl-cert-signature-row {
+.bpsv-cert-signature-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   padding-top: 4px;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   flex-shrink: 0;
 }
 
 /* ── Left signature block ── */
-.bpl-sign-left {
+.bpsv-sign-left {
   display: flex;
   flex-direction: column;
   min-width: 220px;
 }
 
-.bpl-sign-text-wrap {
+.bpsv-sign-text-wrap {
   position: relative;
   display: inline-block;
   padding-top: 2px;
   min-height: 70px;
 }
 
-.bpl-signature-name {
-  font-size: var(--bpl-sig-name);
+.bpsv-signature-name {
+  font-size: var(--bpsv-sig-name);
   font-weight: 700;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   margin-bottom: 2px;
 }
 
-.bpl-signature-title {
-  font-size: var(--bpl-sig-title);
-  font-family: var(--bpl-font);
+.bpsv-signature-title {
+  font-size: var(--bpsv-sig-title);
+  font-family: var(--bpsv-font);
   font-style: normal;
   line-height: 1.0;
   color: #111;
   margin: 0;
 }
 
-/* Stamp overlay */
-.bpl-stamp-overlay {
+/* Stamp overlay — sits over the left signature text */
+.bpsv-stamp-overlay {
   position: absolute;
   top: -60px;
   left: 5px;
-  width: 35mm;
-  height: 35mm;
-  opacity: 1.0;
+  width: 95mm;
+  height: 55mm;
+  opacity: 1;
   z-index: 999;
   object-fit: contain;
   pointer-events: none;
 }
 
 /* ── Right counter-sign block ── */
-.bpl-sign-right {
+.bpsv-sign-right {
   text-align: right;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 }
 
-.bpl-counter-sig-wrap {
+.bpsv-counter-sig-wrap {
   height: 65px;
   display: flex;
   justify-content: flex-end;
@@ -525,31 +499,31 @@
   margin-top: -60px;
 }
 
-.bpl-counter-sig-img {
-  height: 65px;
+.bpsv-counter-sig-img {
+  height: 55px;
   width: auto;
   object-fit: contain;
 }
 
 /* ── Bottom disclaimer ── */
-.bpl-cert-bottom-row {
+.bpsv-cert-bottom-row {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
   margin-top: 6px;
-  font-family: var(--bpl-font);
+  font-family: var(--bpsv-font);
   font-style: normal;
   flex-shrink: 0;
 }
 
-.bpl-cert-disclaimer {
+.bpsv-cert-disclaimer {
   flex: 1;
   margin-top: 1px;
   padding: 4px 10px;
   background: #fffdf0;
-  font-size: var(--bpl-disclaimer);
-  font-family: var(--bpl-font);
+  font-size: var(--bpsv-disclaimer);
+  font-family: var(--bpsv-font);
   font-style: normal;
   text-align: center;
   color: #111;
@@ -557,7 +531,7 @@
 }
 
 /* ── Header title row ── */
-.bpl-header-title-row {
+.bpsv-header-title-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -566,7 +540,7 @@
   min-height: 60px;
 }
 
-.bpl-header-title-block {
+.bpsv-header-title-block {
   flex: 1;
   text-align: center;
   display: flex;
@@ -576,12 +550,12 @@
   padding: 0;
 }
 
-.bpl-header-qr-spacer {
+.bpsv-header-qr-spacer {
   width: 52px;
   flex-shrink: 0;
 }
 
-.bpl-header-qr-block {
+.bpsv-header-qr-block {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -590,7 +564,7 @@
   flex-shrink: 0;
 }
 
-.bpl-header-qr-img {
+.bpsv-header-qr-img {
   width: 52px;
   height: 52px;
   display: block;
@@ -599,7 +573,7 @@
   background: #fff;
 }
 
-.bpl-header-qr-label {
+.bpsv-header-qr-label {
   font-size: 7px;
   color: #555;
   text-align: center;
@@ -622,12 +596,12 @@
   /* ── Hide everything, reveal only section ── */
   body > * { display: none !important; }
 
-  #bulk-print-lifting-section,
-  #bulk-print-lifting-section * {
+  #sv-bulk-print-section,
+  #sv-bulk-print-section * {
     visibility: visible !important;
   }
 
-  #bulk-print-lifting-section {
+  #sv-bulk-print-section {
     display: flex !important;
     flex-direction: column !important;
     visibility: visible !important;
@@ -636,7 +610,7 @@
     height: auto !important;
     overflow: visible !important;
     background: #fff !important;
-    font-family: var(--bpl-font) !important;
+    font-family: var(--bpsv-font) !important;
     font-style: normal !important;
     color: #111 !important;
     line-height: 1.2 !important;
@@ -644,50 +618,44 @@
     print-color-adjust: exact !important;
   }
 
-  #bulk-print-lifting-section * {
-    font-family: var(--bpl-font) !important;
+  #sv-bulk-print-section * {
+    font-family: var(--bpsv-font) !important;
     font-style: normal !important;
   }
 
-#bulk-print-lifting-section .bpl-print-label {
-  font-size: 14px !important;
-  font-weight: 300;
-}
-
-
   /* ── Index page ── */
-#bulk-print-lifting-section .bpl-index-page {
-  padding: 4mm 0mm !important;  /* ← was 6mm 8mm */
-  page-break-after: always !important;
-  break-after: page !important;
-  position: relative !important;   /* ← add this */
-  background: transparent !important;   /* ← add this */
-}
+  #sv-bulk-print-section .bpsv-index-page {
+    padding: 4mm 0mm !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    position: relative !important;
+    background: transparent !important;
+  }
 
-  #bulk-print-lifting-section .bpl-index-header {
+  #sv-bulk-print-section .bpsv-index-header {
     margin-bottom: 6px !important;
     padding-bottom: 4px !important;
     border-bottom: 2px solid #1e293b !important;
   }
 
-  #bulk-print-lifting-section .bpl-index-title {
+  #sv-bulk-print-section .bpsv-index-title {
     font-size: 13pt !important;
     font-weight: 700 !important;
   }
 
-  #bulk-print-lifting-section .bpl-index-subtitle {
+  #sv-bulk-print-section .bpsv-index-subtitle {
     font-size: 9pt !important;
   }
 
   /* Index table */
-  #bulk-print-lifting-section .bpl-index-table {
+  #sv-bulk-print-section .bpsv-index-table {
     font-size: 7pt !important;
     table-layout: fixed !important;
     width: 100% !important;
     border-collapse: collapse !important;
   }
 
-  #bulk-print-lifting-section .bpl-index-table th {
+  #sv-bulk-print-section .bpsv-index-table th {
     font-size: 6.5pt !important;
     padding: 4px 3px !important;
     background: #1e293b !important;
@@ -701,7 +669,7 @@
     print-color-adjust: exact !important;
   }
 
-  #bulk-print-lifting-section .bpl-index-table td {
+  #sv-bulk-print-section .bpsv-index-table td {
     font-size: 7pt !important;
     padding: 3px 3px !important;
     border: 0.5pt solid #ccc !important;
@@ -710,13 +678,13 @@
     word-break: break-word !important;
   }
 
-#bulk-print-lifting-section .bpl-index-table tbody tr:nth-child(even) td {
-  background: transparent !important;
-  -webkit-print-color-adjust: exact !important;
-  print-color-adjust: exact !important;
-}
+  #sv-bulk-print-section .bpsv-index-table tbody tr:nth-child(even) td {
+    background: transparent !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 
-  #bulk-print-lifting-section .bpl-badge {
+  #sv-bulk-print-section .bpsv-badge {
     font-size: 6.5pt !important;
     background: #eff6ff !important;
     color: #1d4ed8 !important;
@@ -724,43 +692,29 @@
     print-color-adjust: exact !important;
   }
 
-  #bulk-print-lifting-section .bpl-cert-no {
+  #sv-bulk-print-section .bpsv-cert-no {
     font-size: 6.8pt !important;
-  font-weight: normal;  /* ← was 600 */
+    font-weight: normal !important;
   }
 
-  #bulk-print-lifting-section .bpl-index-qr-img {
+  #sv-bulk-print-section .bpsv-index-qr-img {
     display: block !important;
     width: 32px !important;
     height: 32px !important;
     border: 0.5pt solid #999 !important;
   }
 
-  #bulk-print-lifting-section .bpl-index-footer {
+  #sv-bulk-print-section .bpsv-index-footer {
     font-size: 8pt !important;
     font-weight: 600 !important;
     text-align: right !important;
     margin-top: 6px !important;
     border-top: 1px solid #ccc !important;
     padding-top: 3px !important;
-
-
   }
 
-  /* ── Print page ── */
-  /* #bulk-print-lifting-section .bpl-print-page {
-    display: flex !important;
-    flex-direction: column !important;
-    min-height: 249mm !important;
-    page-break-before: always !important;
-    break-before: page !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    position: relative !important;
-  } */
-
   /* ── Page breaks ── */
-  .bpl-page-break {
+  .bpsv-page-break {
     display: block !important;
     page-break-after: always !important;
     break-after: page !important;
@@ -768,11 +722,11 @@
   }
 
   /* ── Header ── */
-  #bulk-print-lifting-section .bpl-print-header-row {
+  #sv-bulk-print-section .bpsv-print-header-row {
     margin-bottom: 4px !important;
   }
 
-  #bulk-print-lifting-section .bpl-header-title-row {
+  #sv-bulk-print-section .bpsv-header-title-row {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
@@ -780,7 +734,7 @@
     min-height: 85px !important;
   }
 
-  #bulk-print-lifting-section .bpl-header-title-block {
+  #sv-bulk-print-section .bpsv-header-title-block {
     flex: 1 !important;
     text-align: center !important;
     display: flex !important;
@@ -789,120 +743,118 @@
     justify-content: center !important;
   }
 
-  #bulk-print-lifting-section .bpl-header-qr-spacer {
+  #sv-bulk-print-section .bpsv-header-qr-spacer {
     display: block !important;
     width: 75px !important;
     flex-shrink: 0 !important;
   }
 
-  #bulk-print-lifting-section .bpl-header-qr-block {
+  #sv-bulk-print-section .bpsv-header-qr-block {
     flex-direction: column !important;
     align-items: center !important;
     flex-shrink: 0 !important;
   }
 
-  #bulk-print-lifting-section .bpl-header-qr-img {
+  #sv-bulk-print-section .bpsv-header-qr-img {
     display: block !important;
     width: 75px !important;
     height: 75px !important;
   }
 
-  #bulk-print-lifting-section .bpl-header-qr-label {
+  #sv-bulk-print-section .bpsv-header-qr-label {
     font-size: 7px !important;
   }
 
   /* ── Typography ── */
-  #bulk-print-lifting-section .bpl-print-title {
+  #sv-bulk-print-section .bpsv-print-title {
     font-size: 13px !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
   }
 
-  #bulk-print-lifting-section .bpl-print-sub    { font-size: var(--bpl-subtitle) !important; }
-  #bulk-print-lifting-section .bpl-cn           { font-size: var(--bpl-table-num) !important; }
-  #bulk-print-lifting-section .bpl-cd           { font-size: var(--bpl-table-desc) !important; }
-  #bulk-print-lifting-section .bpl-cv           { font-size: var(--bpl-table-val) !important; }
-  #bulk-print-lifting-section .bpl-equipment-main { font-size: var(--bpl-table-val) !important; font-weight: 700 !important; }
-  #bulk-print-lifting-section .bpl-eq-meta      { font-size: var(--bpl-eq-meta) !important; }
-  #bulk-print-lifting-section .bpl-signature-name  { font-size: var(--bpl-sig-name) !important; font-weight: 700 !important; }
-  #bulk-print-lifting-section .bpl-signature-title { font-size: var(--bpl-sig-title) !important; line-height: 1.0 !important; }
-  #bulk-print-lifting-section .bpl-row8-status,
-  #bulk-print-lifting-section .bpl-row8-item    { font-size: var(--bpl-base) !important; }
+  #sv-bulk-print-section .bpsv-print-sub        { font-size: var(--bpsv-subtitle) !important; }
+  #sv-bulk-print-section .bpsv-cn               { font-size: var(--bpsv-table-num) !important; }
+  #sv-bulk-print-section .bpsv-cd               { font-size: var(--bpsv-table-desc) !important; }
+  #sv-bulk-print-section .bpsv-cv               { font-size: var(--bpsv-table-val) !important; }
+  #sv-bulk-print-section .bpsv-equipment-main   { font-size: var(--bpsv-table-val) !important; font-weight: 700 !important; }
+  #sv-bulk-print-section .bpsv-eq-meta          { font-size: var(--bpsv-eq-meta) !important; }
+  #sv-bulk-print-section .bpsv-signature-name   { font-size: var(--bpsv-sig-name) !important; font-weight: 700 !important; }
+  #sv-bulk-print-section .bpsv-signature-title  { font-size: var(--bpsv-sig-title) !important; line-height: 1.0 !important; }
+  #sv-bulk-print-section .bpsv-row-status,
+  #sv-bulk-print-section .bpsv-row-item         { font-size: var(--bpsv-base) !important; }
 
   /* ── Cert top row ── */
-  #bulk-print-lifting-section .bpl-cert-top-row {
+  #sv-bulk-print-section .bpsv-cert-top-row {
     background: transparent !important;
     color: #000 !important;
     padding: 5px 12px !important;
     width: 100% !important;
-    font-size: 14px !important;
     box-sizing: border-box !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    font-weight: 300;  /* ← was 600 */
-    font-size: 10px !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+    font-weight: normal !important;
+    font-family: var(--bpsv-font) !important;
+    font-size: 14px !important;
+  }
+
+  #sv-bulk-print-section .bpsv-print-label {
+    font-family: var(--bpsv-font) !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 14px !important;
   }
 
   /* ── Main table ── */
-  #bulk-print-lifting-section .bpl-print-table {
+  #sv-bulk-print-section .bpsv-print-table {
     flex-shrink: 0 !important;
   }
 
-  #bulk-print-lifting-section .bpl-print-table td {
+  #sv-bulk-print-section .bpsv-print-table td {
     line-height: 1.25 !important;
     padding: 3px 5px !important;
   }
 
-  #bulk-print-lifting-section table {
+  #sv-bulk-print-section table {
     display: table !important;
     border-collapse: collapse !important;
     width: 100% !important;
   }
 
-  #bulk-print-lifting-section tbody  { display: table-row-group !important; }
-  #bulk-print-lifting-section thead  { display: table-header-group !important; }
-  #bulk-print-lifting-section tr     { display: table-row !important; page-break-inside: avoid !important; }
-  #bulk-print-lifting-section td,
-  #bulk-print-lifting-section .bpl-index-table th { display: table-cell !important; }
+  #sv-bulk-print-section tbody  { display: table-row-group !important; }
+  #sv-bulk-print-section thead  { display: table-header-group !important; }
+  #sv-bulk-print-section tr     { display: table-row !important; page-break-inside: avoid !important; }
+  #sv-bulk-print-section td,
+  #sv-bulk-print-section .bpsv-index-table th { display: table-cell !important; }
 
   /* ── Certify text ── */
-  #bulk-print-lifting-section .bpl-cert-certify {
-    font-size: var(--bpl-footer) !important;
+  #sv-bulk-print-section .bpsv-cert-certify {
+    font-size: var(--bpsv-footer) !important;
     line-height: 1.35 !important;
     flex-shrink: 0 !important;
     margin-bottom: 0 !important;
     padding: 2px 0 !important;
   }
-  
-  /* #bulk-print-lifting-section .bpl-cert-next-due {
-  font-size: 14px !important;
-  font-weight: 300 !important;
-} */
 
   /* ── Next due banner ── */
-  #bulk-print-lifting-section .bpl-cert-next-due {
+  #sv-bulk-print-section .bpsv-cert-next-due {
     background: transparent !important;
     color: #000 !important;
     padding: 5px 12px !important;
     width: 100% !important;
     box-sizing: border-box !important;
     text-align: center !important;
-    font-style: normal;
+    font-style: normal !important;
+    font-family: var(--bpsv-font) !important;
     font-size: 14px !important;
-    font-weight: 300;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
     margin: 6px 0 !important;
     flex-shrink: 0 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
   }
 
   /* ── Footer ── */
-  #bulk-print-lifting-section .bpl-cert-footer {
+  #sv-bulk-print-section .bpsv-cert-footer {
     display: flex !important;
     flex-direction: column !important;
     margin-top: 10mm !important;
@@ -910,7 +862,7 @@
   }
 
   /* ── Signature row ── */
-  #bulk-print-lifting-section .bpl-cert-signature-row {
+  #sv-bulk-print-section .bpsv-cert-signature-row {
     display: flex !important;
     justify-content: space-between !important;
     align-items: flex-end !important;
@@ -921,20 +873,20 @@
   }
 
   /* ── Stamp overlay ── */
-  #bulk-print-lifting-section .bpl-sign-text-wrap {
+  #sv-bulk-print-section .bpsv-sign-text-wrap {
     position: relative !important;
     display: inline-block !important;
     min-height: 70px !important;
   }
 
-  #bulk-print-lifting-section .bpl-stamp-overlay {
+  #sv-bulk-print-section .bpsv-stamp-overlay {
     display: block !important;
     position: absolute !important;
     top: -78px !important;
     left: 5px !important;
-    width: 160px !important;   /* match signature */
-    height: 160px !important;  /* match signature */
-    opacity: 1.0 !important;
+    width: 160px;
+    height: 160px;
+    opacity: 1 !important;
     z-index: 999 !important;
     object-fit: contain !important;
     max-width: unset !important;
@@ -944,13 +896,13 @@
   }
 
   /* ── Counter sign ── */
-  #bulk-print-lifting-section .bpl-sign-right {
+  #sv-bulk-print-section .bpsv-sign-right {
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-end !important;
   }
 
-  #bulk-print-lifting-section .bpl-counter-sig-wrap {
+  #sv-bulk-print-section .bpsv-counter-sig-wrap {
     height: 65px !important;
     display: flex !important;
     justify-content: flex-end !important;
@@ -959,14 +911,14 @@
     margin-bottom: 0 !important;
   }
 
-  #bulk-print-lifting-section .bpl-counter-sig-img {
+  #sv-bulk-print-section .bpsv-counter-sig-img {
     height: 160px !important;
     width: auto !important;
     object-fit: contain !important;
   }
 
   /* ── Disclaimer ── */
-  #bulk-print-lifting-section .bpl-cert-bottom-row {
+  #sv-bulk-print-section .bpsv-cert-bottom-row {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -974,7 +926,7 @@
     flex-shrink: 0 !important;
   }
 
-  #bulk-print-lifting-section .bpl-cert-disclaimer {
+  #sv-bulk-print-section .bpsv-cert-disclaimer {
     position: static !important;
     bottom: unset !important;
     left: unset !important;
@@ -990,102 +942,80 @@
   }
 
   /* ── Flex enforcement ── */
-  #bulk-print-lifting-section .bpl-cert-top-row,
-  #bulk-print-lifting-section .bpl-eq-meta,
-  #bulk-print-lifting-section .bpl-remark-qr-cell,
-  #bulk-print-lifting-section .bpl-index-qr-block {
+  #sv-bulk-print-section .bpsv-cert-top-row,
+  #sv-bulk-print-section .bpsv-eq-meta,
+  #sv-bulk-print-section .bpsv-remark-qr-cell,
+  #sv-bulk-print-section .bpsv-index-qr-block {
     display: flex !important;
     flex-wrap: wrap !important;
   }
 
-  #bulk-print-lifting-section .bpl-remark-qr-cell { flex-direction: column !important; align-items: center !important; }
-  #bulk-print-lifting-section .bpl-row8-block     { flex-direction: column !important; }
+  #sv-bulk-print-section .bpsv-remark-qr-cell { flex-direction: column !important; align-items: center !important; }
+  #sv-bulk-print-section .bpsv-row-block      { flex-direction: column !important; }
 
-/* ── Print page wrapper ── */
-/* #bulk-print-lifting-section .bpl-print-page {
-  position: relative !important;
-  min-height: 249mm !important;
-  height: 249mm !important;
-  overflow: hidden !important;
-} */
-
-
-#bulk-print-lifting-section .bpl-print-page {
+  /* ── Print page wrapper ── */
+  #sv-bulk-print-section .bpsv-print-page {
     position: relative !important;
     min-height: unset !important;
     height: auto !important;
     overflow: visible !important;
-}
+  }
 
-/* Watermark — matches PV implementation */
-#bulk-print-lifting-section .bpl-watermark-wrap {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  display: block !important;
-  pointer-events: none !important;
-  z-index: 1 !important;
-}
+  /* Watermark — matches BPL / PV implementation */
+  #sv-bulk-print-section .bpsv-watermark-wrap {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: block !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+  }
 
-#bulk-print-lifting-section .bpl-watermark-img {
-  width: 110mm !important;
-  height: auto !important;
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) rotate(-35deg) !important;
-  opacity: 0.02 !important;
-  object-fit: contain !important;
-}
+  #sv-bulk-print-section .bpsv-watermark-img {
+    width: 110mm !important;
+    height: auto !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(-35deg) !important;
+    opacity: 0.01 !important;
+    object-fit: contain !important;
+  }
 
-/* Keep certificate content above watermark */
-#bulk-print-lifting-section .bpl-print-header-row,
-#bulk-print-lifting-section .bpl-cert-top-row,
-#bulk-print-lifting-section .bpl-print-table,
-#bulk-print-lifting-section .bpl-cert-certify,
-#bulk-print-lifting-section .bpl-cert-next-due,
-#bulk-print-lifting-section .bpl-cert-footer,
-#bulk-print-lifting-section .bpl-cert-signature-row,
-#bulk-print-lifting-section .bpl-index-header,
-#bulk-print-lifting-section .bpl-index-table,
-#bulk-print-lifting-section .bpl-index-footer {
-  position: relative !important;
-  z-index: 2 !important;
-}
-/* #bulk-print-lifting-section .bpl-print-table,
-#bulk-print-lifting-section .bpl-cert-top-row,
-#bulk-print-lifting-section .bpl-cert-footer {
+  /* Keep certificate content above watermark */
+  #sv-bulk-print-section .bpsv-print-header-row,
+  #sv-bulk-print-section .bpsv-cert-top-row,
+  #sv-bulk-print-section .bpsv-print-table,
+  #sv-bulk-print-section .bpsv-cert-certify,
+  #sv-bulk-print-section .bpsv-cert-next-due,
+  #sv-bulk-print-section .bpsv-cert-footer,
+  #sv-bulk-print-section .bpsv-cert-signature-row,
+  #sv-bulk-print-section .bpsv-index-header,
+  #sv-bulk-print-section .bpsv-index-table,
+  #sv-bulk-print-section .bpsv-index-footer {
     position: relative !important;
     z-index: 2 !important;
-} */
-/* Ensure all content sits above the watermark */
-/* #bulk-print-lifting-section .bpl-print-header-row,
-#bulk-print-lifting-section .bpl-cert-top-row,
-#bulk-print-lifting-section .bpl-print-table,
-#bulk-print-lifting-section .bpl-cert-certify,
-#bulk-print-lifting-section .bpl-cert-next-due, */
-
+  }
 
 } /* end @media print */
 
 
 /* ── Watermark (screen hidden, print shown) ── */
-.bpl-watermark-wrap {
+.bpsv-watermark-wrap {
   display: none;
 }
 
-.bpl-watermark-img {
+.bpsv-watermark-img {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-30deg);
   width: 160mm;
   height: auto;
-  opacity: 0.02;
+  opacity: 0.01;
   z-index: 0;
   pointer-events: none;
   object-fit: contain;
 }
-

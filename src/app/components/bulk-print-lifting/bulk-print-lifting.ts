@@ -10,18 +10,17 @@ import { CertificateFooter } from "../../shared/certificate-footer/certificate-f
 })
 export class BulkPrintLifting {
 
-  @Input() liftingItems: { type: 'lifting'; data: any }[] = [];
+ @Input() liftingItems: { type: 'lifting'; data: any }[] = [];
   @Input() companyId = 0;
   @Input() getSectionText!: () => string;
   @Input() getApprovalText!: () => string;
   @Input() generateQrSvg!: (raw: string) => string;
-  
- // ── Stamp / Signature inputs ──
-  @Input() showStamp: boolean = true;
-  @Input() signatureImageUrl: string = '';    // Inspector signature (sign.png)
-  @Input() stampImageUrl: string = '';        // Circular stamp (stamp.png)
-  @Input() counterSignImageUrl: string = '';  // Counter sign image
 
+  @Input() showStamp: boolean = true;
+  @Input() signatureImageUrl: string = '';
+  @Input() stampImageUrl: string = '';
+  @Input() counterSignImageUrl: string = '';
+  @Input() watermarkImageUrl: string = '';
 
 
 }

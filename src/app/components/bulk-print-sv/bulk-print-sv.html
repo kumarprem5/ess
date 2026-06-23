@@ -1,0 +1,199 @@
+<!-- ══════════════════════════════════════════════════════════
+     BULK PRINT — SAFETY VALVE
+     Self-contained: mirrors bulk-print-lifting.html structure
+══════════════════════════════════════════════════════════ -->
+
+<div id="sv-bulk-print-section" *ngIf="svItems.length > 0" class="bpsv-root" data-print-type="sv">
+  <!-- ── INDEX PAGE ── -->
+  <div class="bpsv-index-page">
+    <div class="bpsv-index-header">
+      <div class="bpsv-index-title">Safety Valve Inspection Records — Index</div>
+      <div class="bpsv-index-subtitle">Summary of Safety Valve / Pressure Relief Device Inspection Report</div>
+    </div>
+    <table class="bpsv-index-table">
+      <thead>
+        <tr>
+          <th>Sl No.</th>
+          <th>Certificate No</th>
+          <th>Equipment Name</th>
+          <th>ID No</th>
+          <th>Location</th>
+          <th>Testing Date</th>
+          <th>Due Date</th>
+          <th>QR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of svItems; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td class="bpsv-cert-no">{{ entry.data.certificateNo || '—' }}</td>
+          <td>{{ entry.data.equipmentName || '—' }}</td>
+          <td>{{ entry.data.idNumber || '—' }}</td>
+          <td>{{ entry.data.location || '—' }}</td>
+          <td>{{ safeDateFormat(entry.data.dateOfExamination) }}</td>
+          <td>{{ safeDateFormat(entry.data.nextDueDate) }}</td>
+          <td>
+            <div class="bpsv-remark-qr-cell">
+              <div class="bpsv-index-qr-block" *ngIf="entry.data.qrCodeUrl">
+                <img [src]="entry.data.qrCodeUrl" alt="QR Code" class="bpsv-index-qr-img" />
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="bpsv-index-footer">
+      Total Safety Valve Records: {{ svItems.length }}
+    </div>
+  </div><!-- /bpsv-index-page -->
+  <!-- ── ONE PAGE PER SAFETY VALVE RECORD ── -->
+  <ng-container *ngFor="let entry of svItems; let last = last">
+    <div class="bpsv-print-page">
+      <div class="bpsv-watermark-wrap" *ngIf="watermarkImageUrl">
+        <img [src]="watermarkImageUrl" class="bpsv-watermark-img">
+      </div>
+      <div class="bpsv-print-header-row">
+        <div class="bpsv-header-title-row">
+          <!-- Left spacer (mirrors QR width for centering) -->
+          <div class="bpsv-header-qr-spacer"></div>
+
+          <!-- Centered title block -->
+          <div class="bpsv-header-title-block">
+            <p class="bpsv-print-title">Report of Examination of Safety Valve / Pressure Relief Device</p>
+            <!-- <p class="bpsv-print-sub">{{ getSectionText() }}</p> -->
+          </div>
+          <!-- QR code on the right -->
+          <div class="bpsv-header-qr-block">
+            <img *ngIf="entry.data.qrCodeUrl" [src]="entry.data.qrCodeUrl" class="bpsv-header-qr-img" alt="QR Code">
+            <img *ngIf="!entry.data.qrCodeUrl" [src]="generateQrSvg(entry.data.certificateNo + '|' + companyId + '|sv')" class="bpsv-header-qr-img" alt="QR Code">
+            <div class="bpsv-header-qr-label">Scan to Download</div>
+          </div>
+        </div>
+      </div>
+      <div class="bpsv-cert-top-row">
+        <span class="bpsv-print-label">Certificate No: {{ entry.data.certificateNo }}</span>
+        <span class="bpsv-print-label">Date of Examination: {{ safeDateFormat(entry.data.dateOfExamination) }}</span>
+      </div>
+      <!-- Main table -->
+      <table class="bpsv-print-table">
+        <tbody>
+          <tr>
+            <td class="bpsv-cn">1</td>
+            <td class="bpsv-cd">Name of Occupier (of the Factory)</td>
+            <td class="bpsv-cv">{{ entry.data.occupierName || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bpsv-cn">2</td>
+            <td class="bpsv-cd">Address of Factory</td>
+            <td class="bpsv-cv">{{ entry.data.factoryAddress || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bpsv-cn">3</td>
+            <td class="bpsv-cd">Distinguishing number or mark and description sufficient to identify the Safety Valve / Pressure Relief Device</td>
+            <td class="bpsv-cv">
+              <div class="bpsv-equipment-main">{{ entry.data.equipmentName || '—' }}</div>
+              <div class="bpsv-eq-meta">
+                <span>Valve Type: {{ entry.data.valveType || '—' }}</span>
+                <span>Size: {{ entry.data.size || '—' }}</span>
+                <span>Serial No.: {{ entry.data.serialNo || '—' }}</span>
+                <span>Model No.: {{ entry.data.modelNo || '—' }}</span>
+                <span>Id No.: {{ entry.data.idNumber || '—' }}</span>
+                <!-- <span>Mfg Name: {{ entry.data.manufacturerName|| '—' }}</span> -->
+                <span>Year: {{ entry.data.manufacturingYear || '—' }}</span>
+                <span>Location: {{ entry.data.location || '—' }}</span>
+              </div>
+            </td>
+          </tr>
+     <tr>
+  <td class="bpsv-cn">4</td>
+  <td class="bpsv-cd">Pressure Setting</td>
+  <td class="bpsv-cv">
+    {{ entry.data.pressureSetting || '—' }}
+  </td>
+</tr>
+<tr>
+  <td class="bpsv-cn">5</td>
+  <td class="bpsv-cd">Safe Working Pressure</td>
+  <td class="bpsv-cv">
+    {{ entry.data.safeWorkingPressure || '—' }}
+  </td>
+   </tr>
+         <tr>
+            <td class="bpsv-cn">6</td>
+            <td class="bpsv-cd">Manufacturer Name</td>
+            <td class="bpsv-cv">{{ entry.data.manufacturerName || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bpsv-cn">7</td>
+            <td class="bpsv-cd">Nature of Process</td>
+            <td class="bpsv-cv">{{ entry.data.natureOfProcess || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bpsv-cn">8</td>
+            <td class="bpsv-cd">Last Hydraulic Pressure Applied</td>
+            <td class="bpsv-cv">{{ entry.data.lastHydraulicPressureApplied || '—' }}</td>
+          </tr>
+          <tr>
+            <td class="bpsv-cn">9</td>
+            <td class="bpsv-cd">Examination &amp; Tests Made</td>
+            <td class="bpsv-cv">
+              <div class="bpsv-row-block">
+                <div class="bpsv-row-status"><span>{{ entry.data.examinationTestsMade || 'NIL' }}</span></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="bpsv-cn">10</td>
+            <td class="bpsv-cd">Recommendation</td>
+            <td class="bpsv-cv">
+              <div class="bpsv-row-block">
+                <div class="bpsv-row-status"><span>{{ entry.data.recommendation || 'NIL' }}</span></div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="bpsv-cert-next-due">
+        NEXT EXAMINATION DUE: {{ safeDateFormat(entry.data.nextDueDate) }}
+      </div>
+      <!-- Footer -->
+      <div class="bpsv-cert-footer">
+        <div class="bpsv-cert-signature-row">
+          <!-- LEFT: Inspector signature + stamp -->
+          <div class="bpsv-sign-left">
+            <div class="bpsv-sign-text-wrap">
+              <div class="bpsv-signature-name">Brijesh Kumar</div>
+              <div class="bpsv-signature-title">Authorized Signatory</div>
+              <div class="bpsv-signature-title">Factories Act, 1948 {{ getSectionText() }}</div>
+              <div class="bpsv-cert-certify">
+        {{ getApprovalText() }}
+      </div>
+              <!-- Stamp floats over the text -->
+              <img *ngIf="showStamp && stampImageUrl"
+                   [src]="stampImageUrl"
+                   class="bpsv-stamp-overlay"
+                   alt="Stamp">
+            </div>
+          </div>
+          <!-- RIGHT: Counter sign -->
+          <div class="bpsv-sign-right">
+            <div class="bpsv-counter-sig-wrap" *ngIf="showStamp && counterSignImageUrl">
+              <img [src]="counterSignImageUrl" class="bpsv-counter-sig-img" alt="Counter Sign">
+            </div>
+            <div class="bpsv-signature-title">Counter Signed</div>
+          </div>
+        </div>
+        <div class="bpsv-cert-bottom-row">
+          <div class="bpsv-cert-disclaimer">
+            DISCLAIMER: This report reflects conditions as observed on the date of examination. No liability accepted
+            for accidents/mishaps after examination date. This certificate is computer generated and valid only with
+            original signature/stamp. Verify authenticity by scanning the QR code above.
+          </div>
+        </div>
+      </div><!-- /bpsv-cert-footer -->
+    </div><!-- /bpsv-print-page -->
+    <!-- Page break between records (not after last) -->
+    <div class="bpsv-page-break" *ngIf="!last"></div>
+  </ng-container>
+
+</div><!-- /#sv-bulk-print-section -->

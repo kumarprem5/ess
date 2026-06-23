@@ -1,266 +1,300 @@
-<div id="bulk-print-sb-section"
-     *ngIf="sbItems.length > 0"
-     class="bpsb-root">
-
-  <!-- ── INDEX PAGE ── -->
-  <div class="bpsb-index-page">
-    <div class="bpsb-index-header">
-      <div class="bpsb-index-title">Safety Belt / Full Body Harness Inspection Records — Index</div>
-      <div class="bpsb-index-subtitle">Summary of Safety Belt Inspection Reports (Under Section 87 of Factories Act 1948)</div>
-    </div>
-    <table class="bpsb-index-table">
-      <thead>
-        <tr>
-          <th>Sl No.</th><th>Type</th><th>Certificate No</th><th>Belt Type</th>
-          <th>Serial No</th><th>Model No</th><th>Make</th><th>Year</th>
-          <th>Location</th><th>Occupier</th><th>Testing Date</th><th>Due Date</th><th>Remark / QR</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of sbItems; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td class="bpsb-badge">SB</td>
-          <td class="bpsb-cert-no">{{ item.data.certificateNumber || '—' }}</td>
-          <td>{{ item.data.beltType || '—' }}</td>
-          <td>{{ item.data.serialNo || '—' }}</td>
-          <td>{{ item.data.modelNo || '—' }}</td>
-          <td>{{ item.data.make || '—' }}</td>
-          <td>{{ item.data.yearOfManufacture || '—' }}</td>
-          <td>{{ item.data.location || '—' }}</td>
-          <td>{{ item.data.occupierName || '—' }}</td>
-          <td>{{ safeDateFormat(item.data.dateOfExamination) }}</td>
-          <td>{{ safeDateFormat(item.data.nextDueDate) }}</td>
-          <td>
-            <div class="bpsb-remark-qr-cell">
-              <div class="bpsb-index-qr-block" *ngIf="item.data.qrCodeUrl">
-                <img [src]="item.data.qrCodeUrl" alt="QR Code" class="bpsb-index-qr-img" />
-              </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="bpsb-index-footer">Total Safety Belt Records: {{ sbItems.length }}</div>
-  </div>
-
-  <div class="bpsb-page-break"></div>
-
-  <!-- ── ONE PAGE PER SB RECORD ── -->
-  <ng-container *ngFor="let item of sbItems; let last = last">
-    <div class="bpsb-print-page">
-
-      <!-- Header -->
-      <div class="bpsb-bulk-header">
-        <div class="bpsb-header-title-row">
-          <div class="bpsb-header-qr-spacer"></div>
-          <div class="bpsb-header-title-block">
-            <div class="bpsb-title-main">Report of Examination of Safety Belts</div>
-            <div class="bpsb-title-sub">Rule 67A: [Framed U/S 41 of the Factories Rules, 1950,</div>
-          </div>
-          <div class="bpsb-header-qr-block">
-            <img [src]="generateQrSvg(item.data.certificateNumber + '|' + companyId + '|sb')"
-                 class="bpsb-header-qr-img" alt="QR Code">
-            <div class="bpsb-header-qr-label">Scan to Download</div>
-          </div>
-        </div>
-        <div class="bpsb-cert-date-row">
-          <span><strong>Certificate No: {{ item.data.certificateNumber }}</strong></span>
-          <span><strong>Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
-        </div>
+  <div id="bulk-print-sb-section"
+      *ngIf="sbItems.length > 0"
+      class="bpsb-root">
+    <!-- ── INDEX PAGE ── -->
+    <div class="bpsb-index-page">
+      <div class="bpsb-index-header">
+        <div class="bpsb-index-title">Safety Belt / Full Body Harness Inspection Records — Index</div>
+        <div class="bpsb-index-subtitle">Summary of Safety Belt Inspection Reports (Under Section 67 of Factories Act 1948)</div>
       </div>
+<table class="bpsb-index-table">
+<colgroup>
+    <col style="width:4%">    <!-- Sl No -->
+    <col style="width:19%">   <!-- Certificate No -->
+    <col style="width:11%">   <!-- Belt Type -->
+    <col style="width:11%">   <!-- Serial No -->
+    <col style="width:9%">    <!-- Make -->
+    <col style="width:7%">    <!-- Year -->
+    <col style="width:13%">   <!-- Location -->
+    <col style="width:8%">    <!-- Testing Date -->
+    <col style="width:8%">    <!-- Due Date -->
+    <col style="width:10%">   <!-- Remark / QR ← ADDED -->
+</colgroup>
+  <thead>
+    <tr>
+      <th>Sl No.</th><th>Certificate No</th><th>Belt Type</th>
+      <th>Serial No</th><th>Make</th><th>Year</th>
+      <th>Location</th><th>Testing Date</th><th>Due Date</th><th>Remark / QR</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr *ngFor="let item of sbItems; let i = index">
 
-      <!-- ── MAIN FORM TABLE — all 16 rows flat ── -->
-      <table class="bpsb-print-table">
-        <tbody>
+<td>{{ i + 1 }}</td>
 
-          <tr>
-            <td class="bpsb-num">1)</td>
-            <td class="bpsb-desc">Name of Occupier</td>
-            <td class="bpsb-value">{{ item.data.occupierName || '—' }}</td>
-          </tr>
+<td class="bpsb-cert-no">
+  {{ item.data.certificateNumber || '—' }}
+</td>
 
-          <tr>
-            <td class="bpsb-num">2)</td>
-            <td class="bpsb-desc">Name &amp; Address of Factory</td>
-            <td class="bpsb-value">{{ item.data.factoryAddress || '—' }}</td>
-          </tr>
+<td>
+  {{ item.data.beltType || '—' }}
+</td>
 
-          <tr>
-            <td class="bpsb-num">3)</td>
-            <td class="bpsb-desc">Item &amp; Manufacturer</td>
-            <td class="bpsb-value">
-              <div class="bpsb-belt-main">{{ item.data.beltType || '—' }}</div>
-              <div class="bpsb-belt-meta">
-                <span>Model No.: {{ item.data.modelNo || '—' }}</span>
-                <span>Make / Brand: {{ item.data.make || '—' }}</span>
-              </div>
-            </td>
-          </tr>
+<td>
+  {{ item.data.serialNo || '—' }}
+</td>
 
-          <tr>
-            <td class="bpsb-num">4)</td>
-            <td class="bpsb-desc">Manufacturer Name</td>
-            <td class="bpsb-value">{{ item.data.make || '—' }}</td>
-          </tr>
+<td>
+  {{ item.data.make || '—' }}
+</td>
 
-          <tr>
-            <td class="bpsb-num">5)</td>
-            <td class="bpsb-desc">Mark and S. No.</td>
-            <td class="bpsb-value">
-              <div class="bpsb-belt-meta">
-                <span>Sr. No.: {{ item.data.serialNo || '—' }}</span>
-                <span>Batch No.: {{ item.data.batchNo || '—' }}</span>
-              </div>
-            </td>
-          </tr>
+<td>
+  {{ item.data.yearOfManufacture || '—' }}
+</td>
 
-          <tr>
-            <td class="bpsb-num">6)</td>
-            <td class="bpsb-desc">Location</td>
-            <td class="bpsb-value">{{ item.data.location || '—' }}</td>
-          </tr>
+<td>
+  {{ item.data.location || '—' }}
+</td>
 
-          <tr>
-            <td class="bpsb-num">7)</td>
-            <td class="bpsb-desc">Date of Manufacture</td>
-            <td class="bpsb-value">{{ item.data.yearOfManufacture || '—' }}</td>
-          </tr>
+<td>
+  {{ safeDateFormat(item.data.dateOfExamination) }}
+</td>
 
-          <tr>
-            <td class="bpsb-num">8)</td>
-            <td class="bpsb-desc">Type of Belt</td>
-            <td class="bpsb-value">{{ item.data.beltType || '—' }}</td>
-          </tr>
+<td>
+  {{ safeDateFormat(item.data.nextDueDate) }}
+</td>
 
-          <tr>
-            <td class="bpsb-num">9)</td>
-            <td class="bpsb-desc">Date when the safety belt was first taken into use in the factory</td>
-            <td class="bpsb-value">{{ item.data.dateFirstUse || '—' }}</td>
-          </tr>
-
-          <tr>
-            <td class="bpsb-num">10)</td>
-            <td class="bpsb-desc">
-            <strong>  Type of Examination/Safety Belts </strong> 
-              <!-- <div class="bpsb-subdesc">(Date of periodical thorough examination &amp; by whom carried out)</div> -->
-            </td>
-            <td class="bpsb-value"> <strong>
-              {{ item.data.lastExaminationDate | date:'dd-MM-yyyy' }} </strong>
-              <!-- <ng-container *ngIf="item.data.lastExaminedBy">
-                &nbsp;— Examined by {{ item.data.lastExaminedBy }}
-              </ng-container> -->
-            </td>
-          </tr>
-
-          <!-- ── Section header row for component checks ── -->
-          <!-- <tr class="bpsb-section-header-row">
-            <td colspan="3" class="bpsb-section-label">
-              Component Condition Check (11 – 15)
-            </td>
-          </tr> -->
-
-          <tr>
-            <td class="bpsb-num">11)</td>
-            <td class="bpsb-desc">Waist Belt</td>
-            <td class="bpsb-value bpsb-cond-val">{{ item.data.webbing || '—' }}</td>
-          </tr>
-
-          <tr>
-            <td class="bpsb-num">12)</td>
-            <td class="bpsb-desc">Shoulder Strap</td>
-            <td class="bpsb-value bpsb-cond-val">{{ item.data.buckles || '—' }}</td>
-          </tr>
-
-          <tr>
-            <td class="bpsb-num">13)</td>
-            <td class="bpsb-desc">Hoisting Straps</td>
-            <td class="bpsb-value bpsb-cond-val">{{ item.data.dRings || '—' }}</td>
-          </tr>
-
-          <tr>
-            <td class="bpsb-num">14)</td>
-            <td class="bpsb-desc">Shoulder Strap Retainer Buckles</td>
-            <td class="bpsb-value bpsb-cond-val">{{ item.data.lanyardCondition || '—' }}</td>
-          </tr>
-
-          <tr>
-            <td class="bpsb-num">15)</td>
-            <td class="bpsb-desc">Rivets &amp; Washers &amp; Sewing Stitches of Strap</td>
-            <td class="bpsb-value bpsb-cond-val">{{ item.data.stitching || '—' }}</td>
-          </tr>
-
-          <tr>
-            <td class="bpsb-num">16)</td>
-            <td class="bpsb-desc">Observations</td>
-            <td class="bpsb-value">
-              <div class="bpsb-row8-block">
-                <div class="bpsb-row8-status">{{ item.data.defectsObservation || 'NIL' }}</div>
-              </div>
-            </td>
-          </tr>
-
-          <!-- Overall Condition summary row
-          <tr class="bpsb-overall-row"> -->
-            <!-- <td class="bpsb-num"></td> -->
-            <!-- <td class="bpsb-desc"><strong>Overall Condition</strong></td> -->
-            <!-- <td class="bpsb-value">
-              <strong [style.color]="item.data.overallCondition === 'Satisfactory' ? '#166534' : '#991b1b'">
-                {{ item.data.overallCondition || '—' }}
-              </strong>
-            </td>
-          </tr> -->
-
-        </tbody>
-      </table>
-
-<!-- Footer -->
-<div class="bpsb-cert-footer">
-  <div class="bpsb-cert-statement">
-    I certify that on <strong>{{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong>,
-    I thoroughly examined the above safety belt / full body harness and that the above is a true report
-    of the result of the examination. The equipment has been tested and found in
-    <strong>{{ item.data.overallCondition || 'satisfactory' }}</strong> condition for safe operation,
-    subject to any observations noted above.
+<td class="bpsb-remark-qr-cell">
+  <div class="bpsb-index-qr-block">
+    <img [src]="generateQrSvg(item.data.certificateNumber + '|' + companyId + '|sb')"
+         class="bpsb-index-qr-img" alt="QR">
   </div>
+</td>
 
-  <div class="bpsb-next-due">
-    <strong>NEXT EXAMINATION DUE: {{ item.data.nextDueDate | date:'dd-MM-yyyy' }}</strong>
-  </div>
+</tr>
+  </tbody>
+</table>
+      <div class="bpsb-index-footer">Total Safety Belt Records: {{ sbItems.length }}</div>
+    </div>
+    <!-- <div class="bpsb-page-break"></div> -->
+    <!-- ── ONE PAGE PER SB RECORD ── -->
+    <ng-container *ngFor="let item of sbItems; let last = last">
+      <div class="bpsb-print-page">
+      
 
-<div class="bpsb-signature-section">
+        <div class="bpsb-watermark-wrap" *ngIf="watermarkImageUrl">
+          <img [src]="watermarkImageUrl" class="bpsb-watermark-img">
+        </div>
+        <!-- Header -->
+        <div class="bpsb-bulk-header">
+          <div class="bpsb-header-title-row">
+            <div class="bpsb-header-qr-spacer"></div>
+            <div class="bpsb-header-title-block">
+              <div class="bpsb-title-main">Report of Examination of Safety Belts</div>
+              <!-- <div class="bpsb-title-sub">Rule 67A: [Framed U/S 41 of the Factories Rules, 1950,</div> -->
+            </div>
+            <div class="bpsb-header-qr-block">
+              <img [src]="generateQrSvg(item.data.certificateNumber + '|' + companyId + '|sb')"
+                  class="bpsb-header-qr-img" alt="QR Code">
+              <div class="bpsb-header-qr-label">Scan to Download</div>
+            </div>
+          </div>
+          <div class="bpsb-cert-date-row">
+            <span>Certificate No: {{ item.data.certificateNumber }}</span>
+            <span>Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</span>
+          </div>
+        </div> 
+        <!-- ── MAIN FORM TABLE — all 16 rows flat ── -->
+        <table class="bpsb-print-table">
+          <tbody>
 
-  <!-- LEFT: Inspector signature + stamp -->
-  <div class="bpsb-sign-left">
-    <div class="bpsb-sign-text-wrap">
-      <div class="bpsb-signature-name">{{ item.data.certifiedBy || '—' }}</div>
-      <div class="bpsb-signature-title">Competent Person/Chartered Engineer</div>
-      <div class="bpsb-signature-title">Factories Act, 1948 {{ getSectionText() }}</div>
-      <ng-container *ngFor="let line of getApprovalText().split('\n')">
-        <div class="bpsb-signature-title">{{ line }}</div>
-      </ng-container>
-      <!-- Stamp overlay -->
-      <img *ngIf="showStamp && stampImageUrl"
-           [src]="stampImageUrl"
-           class="bpsb-stamp-overlay"
-           alt="Stamp">
+            <tr>
+              <td class="bpsb-num">1)</td>
+              <td class="bpsb-desc">Name of Occupier</td>
+              <td class="bpsb-value">{{ item.data.occupierName || '—' }}</td>
+            </tr>
+
+            <tr>
+              <td class="bpsb-num">2)</td>
+              <td class="bpsb-desc">Name &amp; Address of Factory</td>
+              <td class="bpsb-value">{{ item.data.factoryAddress || '—' }}</td>
+            </tr>
+            <tr>
+              <td class="bpsb-num">3)</td>
+              <td class="bpsb-desc">Item Name</td>
+              <td class="bpsb-value">
+                <div class="bpsb-belt-main">{{ item.data.beltType || '—' }}</div>
+                <div class="bpsb-belt-meta">
+                  <!-- <span>Model No.: {{ item.data.modelNo || '—' }}</span> -->
+                  <!-- <span>Make / Brand: {{ item.data.make || '—' }}</span> -->
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="bpsb-num">4)</td>
+              <td class="bpsb-desc">Manufacturer Name</td>
+              <td class="bpsb-value">{{ item.data.make || '—' }}</td>
+            </tr>
+            <tr>
+              <td class="bpsb-num">5)</td>
+              <td class="bpsb-desc">Mark and S. No.</td>
+              <td class="bpsb-value">
+                <div class="bpsb-belt-meta">
+                  <span>Capacity: {{ item.data.modelNo|| '—' }}</span>
+                  <span> ID No.: {{ item.data.idNumber|| '—' }}</span>
+                  <span> S.No.: {{ item.data.serialNo || '—' }} </span>
+                  <span> Batch No.: {{ item.data.batchNo || '—' }}</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="bpsb-num">6)</td>
+              <td class="bpsb-desc">Location</td>
+              <td class="bpsb-value">{{ item.data.location || '—' }}</td>
+            </tr>
+            <tr>
+              <td class="bpsb-num">7)</td>
+              <td class="bpsb-desc">Date of Manufacture</td>
+              <td class="bpsb-value">{{ item.data.yearOfManufacture || '—' }}</td>
+            </tr>
+
+            <tr>
+              <td class="bpsb-num">8)</td>
+              <td class="bpsb-desc">Type of Belt</td>
+              <td class="bpsb-value">{{ item.data.classOfBelt|| '—' }}</td>
+            </tr>
+
+            <tr>
+              <td class="bpsb-num">9)</td>
+              <td class="bpsb-desc">Date when the safety belt was first taken into use in the factory</td>
+              <td class="bpsb-value">{{ item.data.dateFirstUse || '—' }}</td>
+            </tr>
+
+            <tr>
+              <td class="bpsb-num">10)</td>
+              <td class="bpsb-desc">
+              Type of Examination/Safety Belts 
+                <!-- <div class="bpsb-subdesc">(Date of periodical thorough examination &amp; by whom carried out)</div> -->
+              </td>
+              <td class="bpsb-value"> <strong>
+                Visual Examination </strong>
+                <!-- <ng-container *ngIf="item.data.lastExaminedBy">
+                  &nbsp;— Examined by {{ item.data.lastExaminedBy }}
+                </ng-container> -->
+              </td>
+            </tr>
+
+            <!-- ── Section header row for component checks ── -->
+            <!-- <tr class="bpsb-section-header-row">
+              <td colspan="3" class="bpsb-section-label">
+                Component Condition Check (11 – 15)
+              </td>
+            </tr> -->
+
+            <tr>
+              <td class="bpsb-num">11)</td>
+              <td class="bpsb-desc">Waist Belt</td>
+              <td class="bpsb-value bpsb-cond-val">{{ item.data.webbing || '—' }}</td>
+            </tr>
+
+            <tr>
+              <td class="bpsb-num">12)</td>
+              <td class="bpsb-desc">Shoulder Strap</td>
+              <td class="bpsb-value bpsb-cond-val">{{ item.data.buckles || '—' }}</td>
+            </tr>
+
+            <tr>
+              <td class="bpsb-num">13)</td>
+              <td class="bpsb-desc">Hoisting Straps</td>
+              <td class="bpsb-value bpsb-cond-val"> Normal
+          <!-- {{ item.data.dRings || '—' }}  -->
+              </td>
+            </tr>
+
+            <tr>
+              <td class="bpsb-num">14)</td>
+              <td class="bpsb-desc">Shoulder Strap Retainer Buckles</td>
+              <td class="bpsb-value bpsb-cond-val">
+                {{ item.data.lanyardCondition || '—' }}</td>
+            </tr>
+
+            <tr>
+              <td class="bpsb-num">15)</td>
+              <td class="bpsb-desc">Rivets &amp; Washers &amp; Sewing Stitches of Strap</td>
+              <td class="bpsb-value bpsb-cond-val">{{ item.data.stitching || '—' }}</td>
+            </tr>
+
+            <tr>
+              <td class="bpsb-num">16)</td>
+              <td class="bpsb-desc">Observations</td>
+              <td class="bpsb-value">
+                <div class="bpsb-row8-block">
+                  <div class="bpsb-row8-status">{{ item.data.defectsObservation || 'NIL' }}</div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Overall Condition summary row
+            <tr class="bpsb-overall-row"> -->
+              <!-- <td class="bpsb-num"></td> -->
+              <!-- <td class="bpsb-desc"><strong>Overall Condition</strong></td> -->
+              <!-- <td class="bpsb-value">
+                <strong [style.color]="item.data.overallCondition === 'Satisfactory' ? '#166534' : '#991b1b'">
+                  {{ item.data.overallCondition || '—' }}
+                </strong>
+                            </td>
+            </tr> -->
+
+          </tbody>
+        </table>
+
+  <!-- Footer -->
+  <div class="bpsb-cert-footer">
+    <div class="bpsb-cert-statement">
+      I certify that on <strong>{{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong>,
+      I thoroughly examined the above safety belt / full body harness and that the above is a true report
+      of the result of the examination. The equipment has been tested and found in
+      <strong>{{ item.data.overallCondition || 'satisfactory' }}</strong> condition for safe operation,
+      subject to any observations noted above.
+    </div>
+
+    <div class="bpsb-next-due">
+      NEXT DUE: {{ item.data.nextDueDate | date:'dd-MM-yyyy' }}
+    </div>
+
+  <div class="bpsb-signature-section">
+
+    <!-- LEFT: Inspector signature + stamp -->
+    <div class="bpsb-sign-left">
+      <div class="bpsb-sign-text-wrap">
+        <div class="bpsb-signature-name">{{ item.data.certifiedBy || '—' }}</div>
+        <div class="bpsb-signature-title">Competent Person/Chartered Engineer</div>
+        <div class="bpsb-signature-title">Factories Act, 1948 {{ getSectionText() }}</div>
+        <ng-container *ngFor="let line of getApprovalText().split('\n')">
+          <div class="bpsb-signature-title">{{ line }}</div>
+        </ng-container>
+        <!-- Stamp overlay -->
+        <img *ngIf="showStamp && stampImageUrl"
+            [src]="stampImageUrl"
+            class="bpsb-stamp-overlay"
+            alt="Stamp">
+      </div>
+    </div>
+
+    <!-- RIGHT: Counter sign -->
+    <div class="bpsb-sign-right">
+      <div class="bpsb-counter-sig-wrap" *ngIf="showStamp && counterSignImageUrl">
+        <img [src]="counterSignImageUrl" class="bpsb-counter-sig-img" alt="Counter Sign">
+      </div>
+      <div class="bpsb-signature-title">Counter Signed</div>
     </div>
   </div>
-
-  <!-- RIGHT: Counter sign -->
-  <div class="bpsb-sign-right">
-    <div class="bpsb-counter-sig-wrap" *ngIf="showStamp && counterSignImageUrl">
-      <img [src]="counterSignImageUrl" class="bpsb-counter-sig-img" alt="Counter Sign">
-    </div>
-    <div class="bpsb-signature-title">Counter Signed</div>
-  </div>
-
-</div>
-  <div class="bpsb-cert-bottom-row">
-    <div class="bpsb-cert-disclaimer">
-      DISCLAIMER: This report reflects conditions as observed on the date of examination.
-      No liability accepted for accidents/mishaps after examination date.
-      Safety belts / harnesses must be inspected before each use.
+    <div class="bpsb-cert-bottom-row">
+      <div class="bpsb-cert-disclaimer">
+        DISCLAIMER: This report reflects conditions as observed on the date of examination.
+        No liability accepted for accidents/mishaps after examination date.
+        Safety belts / harnesses must be inspected before each use.
+      </div>
     </div>
   </div>
-</div>
-</div>
+  </div>

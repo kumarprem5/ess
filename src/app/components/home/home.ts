@@ -1,143 +1,247 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnInit,
+  OnDestroy
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
-import { filter } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 import { AuthService } from '../../auth/auth-service';
 import { ApiService } from '../../service/api-service';
+import { CompanyProfile } from '../../model/models.model';
 
-type StatKey = 'companies' | 'lifting' | 'pressure' | 'completed';
+export interface NavItem {
+  path: string;
+  label: string;
+  icon: string;
+  exact: boolean;
+  badge?: number;
+}
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, RouterOutlet],
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })
-export class LayoutComponent implements OnInit {
-  stats: Record<StatKey, number> = {
-    companies: 0,
-    lifting: 0,
-    pressure: 0,
-    completed: 0
-  };
+export class LayoutComponent implements OnInit, OnDestroy {
 
-  cards: {
-    key: StatKey;
-    label: string;
-    route: string;
-    color: string;
-    icon: string;
-  }[] = [
-    { key: 'companies', label: 'Companies', route: '/dashboard/companies', color: 'blue', icon: 'building' },
-    { key: 'lifting', label: 'Lifting Equipment', route: '/dashboard/lifting-equipment', color: 'green', icon: 'lifting' },
-    { key: 'pressure', label: 'Pressure Vessels', route: '/dashboard/pressure-vessel', color: 'orange', icon: 'pressure' },
-    { key: 'completed', label: 'Completed', route: '/dashboard', color: 'purple', icon: 'check' }
+  // ── Navigation (Companies only) ────────────────────────
+  navItems: NavItem[] = [
+    { path: '/dashboard',           label: 'Overview',  icon: 'ti-layout-dashboard',    exact: true  },
+    { path: '/dashboard/companies', label: 'Companies', icon: 'ti-building-skyscraper', exact: false }
   ];
 
-  sidebarOpen = true;
-  mobileOpen = false;
+  // ── UI State ───────────────────────────────────────────
+  sidebarOpen  = true;
+  mobileOpen   = false;
   currentRoute = '';
+  loading      = false;
+  currentTime  = new Date();
+
+  // ── Data ───────────────────────────────────────────────
   admin: any;
-  currentTime = new Date();
+  companies: any[]    = [];
+  filteredCompanies: any[] = [];
+  searchTerm          = '';
 
-  loading = false;
-  companies: any[] = [];
+  // ── Add Company Form ───────────────────────────────────
+  showAddForm   = false;
+  formLoading   = false;
+  formSuccess   = false;
+  formError     = '';
+  editingId: number | null = null;
 
-  recentActivity = [
-    { action: 'Added', entity: 'New Company', time: '2 min ago', type: 'success' },
-    { action: 'Updated', entity: 'Lifting Equipment', time: '10 min ago', type: 'info' },
-    { action: 'Approved', entity: 'Pressure Vessel', time: '1 hour ago', type: 'warning' }
-  ];
+  newCompany: Partial<CompanyProfile> = this.blankCompany();
 
-  navItems = [
-    { path: '/dashboard', label: 'Overview', icon: 'overview', exact: true },
-    { path: '/dashboard/companies', label: 'Companies', icon: 'companies', exact: false },
-    { path: '/dashboard/lifting-equipment', label: 'Lifting Equipment', icon: 'lifting', exact: false },
-    { path: '/dashboard/pressure-vessel', label: 'Pressure Vessels', icon: 'pressure', exact: false }
-  ];
+ private blankCompany(): Partial<CompanyProfile> {
+  return {
+    companyName:        '',
+    factoryAddress:     '',
+    contactPerson:      '',
+    mobileNumber:       '',
+    email:              '',
+    gstNumber:          '',
+    factoryLicenseNo:   '',
+    state:              '',
+    city:               '',
+    pincode:            ''
+  };
+}
+  private timerSub!: ReturnType<typeof setInterval>;
+  private routerSub!: Subscription;
 
   constructor(
-    private auth: AuthService,
+    private auth:   AuthService,
     private router: Router,
-    private api: ApiService,
-    private cdr: ChangeDetectorRef
+    private api:    ApiService,
+    private cdr:    ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.admin = this.auth.getAdmin();
+    this.admin        = this.auth.getAdmin();
     this.currentRoute = this.router.url;
 
     this.loadCompanies();
 
-    setInterval(() => {
+    this.timerSub = setInterval(() => {
       this.currentTime = new Date();
+      this.cdr.markForCheck();
     }, 1000);
 
-    this.router.events
+    this.routerSub = this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((e: NavigationEnd) => {
         this.currentRoute = e.urlAfterRedirects;
-
-        if (window.innerWidth < 768) {
-          this.mobileOpen = false;
-        }
+        if (window.innerWidth < 768) this.mobileOpen = false;
+        this.cdr.markForCheck();
       });
 
-    if (window.innerWidth < 1024) {
-      this.sidebarOpen = false;
-    }
+    if (window.innerWidth < 1024) this.sidebarOpen = false;
   }
 
+  ngOnDestroy(): void {
+    clearInterval(this.timerSub);
+    this.routerSub?.unsubscribe();
+  }
+
+  // ── Data Loading ───────────────────────────────────────
   loadCompanies(): void {
     this.loading = true;
-
     this.api.getAllCompanies().subscribe({
       next: (res: any) => {
-        this.companies = res.data ?? [];
-        this.stats.companies = this.companies.length;
-        this.loading = false;
+        this.companies         = res.data ?? [];
+        this.filteredCompanies = [...this.companies];
+        this.loading           = false;
         this.cdr.detectChanges();
       },
-
       error: (err) => {
-        console.error('Load Company Error:', err);
+        console.error('Load Companies Error:', err);
         this.loading = false;
-         this.cdr.detectChanges();
+        this.cdr.detectChanges();
       }
     });
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(e: Event): void {
-    const width = (e.target as Window).innerWidth;
-
-    if (width >= 1024) {
-      this.sidebarOpen = true;
-      this.mobileOpen = false;
-    } else {
-      this.sidebarOpen = false;
-    }
+  // ── Search ─────────────────────────────────────────────
+onSearch(): void {
+  const term = this.searchTerm.toLowerCase().trim();
+  this.filteredCompanies = term
+    ? this.companies.filter(c =>
+        c.companyName?.toLowerCase().includes(term)     ||
+        c.email?.toLowerCase().includes(term)           ||
+        c.contactPerson?.toLowerCase().includes(term)   ||
+        c.mobileNumber?.toLowerCase().includes(term)    ||
+        c.city?.toLowerCase().includes(term)            ||
+        c.state?.toLowerCase().includes(term)           ||
+        c.gstNumber?.toLowerCase().includes(term)
+      )
+    : [...this.companies];
+}
+  // ── Add / Edit Company ─────────────────────────────────
+  openAddForm(): void {
+    this.editingId   = null;
+    this.newCompany  = this.blankCompany();
+    this.formError   = '';
+    this.formSuccess = false;
+    this.showAddForm = true;
   }
 
+ openEditForm(company: any): void {
+  this.editingId  = company.id;
+  this.newCompany = {
+    companyName:       company.companyName       ?? '',
+    factoryAddress:    company.factoryAddress     ?? '',
+    contactPerson:     company.contactPerson      ?? '',
+    mobileNumber:      company.mobileNumber       ?? '',
+    email:             company.email              ?? '',
+    gstNumber:         company.gstNumber          ?? '',
+    factoryLicenseNo:  company.factoryLicenseNo   ?? '',
+    state:             company.state              ?? '',
+    city:              company.city               ?? '',
+    pincode:           company.pincode            ?? ''
+  };
+  this.formError   = '';
+  this.formSuccess = false;
+  this.showAddForm = true;
+}
+
+  cancelForm(): void {
+    this.showAddForm = false;
+    this.formError   = '';
+    this.formSuccess = false;
+    this.editingId   = null;
+    this.newCompany  = this.blankCompany();
+  }
+
+  submitCompany(): void {
+    if (!this.newCompany.companyName?.trim()) {
+  this.formError = 'Company name is required.';
+  return;
+}
+    this.formLoading = true;
+    this.formError   = '';
+
+    const payload = this.newCompany as CompanyProfile;
+    const call = this.editingId
+      ? this.api.updateCompany(this.editingId, payload)
+      : this.api.createCompany(payload);
+
+    call.subscribe({
+      next: () => {
+        this.formLoading = false;
+        this.formSuccess = true;
+        this.showAddForm = false;
+        this.newCompany  = this.blankCompany();
+        this.editingId   = null;
+        this.loadCompanies();
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.formLoading = false;
+        this.formError   = err?.error?.message ?? 'Something went wrong. Please try again.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  // ── Delete ─────────────────────────────────────────────
+  deleteCompany(id: number): void {
+    if (!confirm('Delete this company? This action cannot be undone.')) return;
+    this.api.deleteCompany(id).subscribe({
+      next: () => this.loadCompanies(),
+      error: (err) => console.error('Delete error:', err)
+    });
+  }
+
+  // ── Helpers ────────────────────────────────────────────
   isActive(path: string, exact: boolean): boolean {
-    return exact ? this.currentRoute === path : this.currentRoute.startsWith(path);
+    return exact
+      ? this.currentRoute === path
+      : this.currentRoute.startsWith(path);
   }
 
+  trackByPath(_: number, item: NavItem): string { return item.path; }
+  trackByIdx (i: number): number               { return i;          }
+
+  // ── Actions ────────────────────────────────────────────
   logout(): void {
     this.auth.logout();
     this.router.navigate(['/login']);
   }
 
-  toggleMobile(): void {
-    this.mobileOpen = !this.mobileOpen;
-  }
+  toggleMobile (): void { this.mobileOpen  = !this.mobileOpen;  }
+  toggleSidebar(): void { this.sidebarOpen = !this.sidebarOpen; }
+  closeMobile  (): void { this.mobileOpen  = false;             }
 
-  toggleSidebar(): void {
-    this.sidebarOpen = !this.sidebarOpen;
-  }
-
-  closeMobile(): void {
-    this.mobileOpen = false;
+  @HostListener('window:resize', ['$event'])
+  onResize(e: Event): void {
+    const w = (e.target as Window).innerWidth;
+    if (w >= 1024) { this.sidebarOpen = true;  this.mobileOpen = false; }
+    else           { this.sidebarOpen = false; }
   }
 }

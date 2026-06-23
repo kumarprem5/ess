@@ -23,8 +23,8 @@
   --bppv-next-due  : 10px;
   --bppv-disclaimer: 7px;
   --bppv-qr-label  : 7px;
-  --bppv-index-th  : 10px;
-  --bppv-index-td  : 10px;
+  --bppv-index-th  : 7pt;
+  --bppv-index-td  : 7.5pt;
 }
 
 
@@ -45,38 +45,30 @@
 /* Stamp overlay — 2.5 in × 1.5 in @ 96dpi */
 .bppv-stamp-overlay {
   position: absolute;
-  top: -75px;
-  left: 0px;
-  width: 240px;
-  height: 144px;
-  opacity: 0.75;
-  z-index: 10;
+  top: -120px;
+  left: 5px;
+   height: 160px;
+   width: 160px;
+  opacity: 1;
+  z-index: 999;
   object-fit: contain;
   pointer-events: none;
 }
 
-/* Counter sign wrapper */
-.bppv-sign-right {
-  text-align: right;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+.bppv-counter-sig-img {
+  height: 160px;
+  width: auto;
+  object-fit: contain;
 }
-
 .bppv-counter-sig-wrap {
-  height: 65px;
+  height: 160px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 0;
-  margin-top: -60px;
+  margin-top: -100px;
 }
 
-.bppv-counter-sig-img {
-  height: 55px;
-  width: auto;
-  object-fit: contain;
-}
 /* ── Hide on screen ── */
 #bulk-print-pv-section {
   display: none !important;
@@ -89,25 +81,235 @@
 
 .bppv-root { font-family: var(--bppv-font); font-style: normal; color: #111; }
 
-/* ── Index page ── */
-.bppv-index-page    { width: 100%; font-family: var(--bppv-font); font-style: normal; color: #111; padding: 0; }
-.bppv-index-header  { text-align: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #111; }
-.bppv-index-title   { font-size: 14px; font-weight: 700; font-family: var(--bppv-font); font-style: normal; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
-.bppv-index-subtitle{ font-size: 11.5px; font-family: var(--bppv-font); font-style: normal; color: #444; }
+/* ═══════════════════════════════════════════════════════════════
+   PV INDEX PAGE — MATCH LIFTING STYLE
+═══════════════════════════════════════════════════════════════ */
 
-.bppv-index-table   { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: var(--bppv-index-td); font-family: var(--bppv-font); font-style: normal; margin-top: 6px; }
-.bppv-index-table th{ background: #e3e3e3; color: #000; font-weight: 600; padding: 4px 3px; text-align: center; font-size: var(--bppv-index-th); font-family: var(--bppv-font); font-style: normal; line-height: 1.0; border: 1px solid #999; white-space: normal; word-break: break-word; }
-.bppv-index-table td{ padding: 4px 3px; border: 1px solid #d1d5db; font-size: var(--bppv-index-td); font-family: var(--bppv-font); font-style: normal; vertical-align: middle; color: #111; line-height: 1.2; white-space: normal; }
-.bppv-index-table tbody tr:nth-child(even) td { background: #f8fafc; }
+/* Index page */
+.bppv-index-page {
+  width: 100%;
+  font-family: var(--bppv-font);
+  font-style: normal;
+  color: #111;
+  padding: 0;
+}
 
-.bppv-cert-no   { font-family: monospace; font-size: 10px; white-space: normal; word-break: break-word; }
-.bppv-badge     { font-weight: 700; font-size: 10px; text-align: center; padding: 2px 3px; border-radius: 2px; white-space: normal; font-family: var(--bppv-font); font-style: normal; background: #fef3c7; color: #92400e; }
+.bppv-index-header {
+  text-align: center;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #1e293b;
+}
 
-.bppv-remark-qr-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
-.bppv-index-qr-block { display: flex; justify-content: center; align-items: center; }
-.bppv-index-qr-img   { width: 40px; height: 40px; object-fit: contain; border: 1px solid #d1d5db; padding: 2px; background: #fff; }
+.bppv-index-title {
+  font-size: 13pt;
+  font-weight: 700;
+  font-family: var(--bppv-font);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
 
-.bppv-index-footer { margin-top: 8px; font-size: 11px; font-family: var(--bppv-font); font-style: normal; color: #555; text-align: right; border-top: 1px solid #ccc; padding-top: 4px; }
+.bppv-index-subtitle {
+  font-size: 9pt;
+  font-family: var(--bppv-font);
+  font-style: normal;
+  color: #475569;
+  margin-top: 2px;
+}
+
+/* ── Index table ── */
+.bppv-index-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: var(--bppv-index-td);
+  font-family: var(--bppv-font);
+  font-style: normal;
+  margin-top: 6px;
+}
+
+.bppv-index-table thead tr {
+  background: #1e293b;
+  color: #fff;
+}
+
+.bppv-index-table th {
+  background: #1e293b;
+  color: #fff;
+  font-weight: 600;
+  padding: 5px 4px;
+  text-align: center;
+  font-size: var(--bppv-index-th);
+  font-family: var(--bppv-font);
+  font-style: normal;
+  line-height: 1.3;
+  border: 0.5pt solid #aaa;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.bppv-index-table td {
+  padding: 4px;
+  border: 0.5pt solid #ccc;
+  font-size: var(--bppv-index-td);
+  font-family: var(--bppv-font);
+  font-style: normal;
+  vertical-align: middle;
+  color: #1e293b;
+  line-height: 1.3;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.bppv-index-table tbody tr:nth-child(even) td {
+  background: transparent;
+}
+
+/* ── INDEX TABLE COLUMN WIDTHS ── */
+
+/* Sl No. */
+.bppv-index-table th:nth-child(1),
+.bppv-index-table td:nth-child(1) {
+  width: 4%;
+  text-align: center;
+}
+
+/* Certificate No */
+.bppv-index-table th:nth-child(2),
+.bppv-index-table td:nth-child(2) {
+  width: 20%;
+}
+
+/* ID No. */
+.bppv-index-table th:nth-child(3),
+.bppv-index-table td:nth-child(3) {
+  width: 8%;
+  text-align: center;
+}
+
+/* Vessel */
+.bppv-index-table th:nth-child(4),
+.bppv-index-table td:nth-child(4) {
+  width: 17%;
+}
+
+/* Sr.No
+.bppv-index-table th:nth-child(5),
+.bppv-index-table td:nth-child(5) {
+  width: 13%;
+} */
+
+/* Manufacturer */
+.bppv-index-table th:nth-child(5),
+.bppv-index-table td:nth-child(5) {
+  width: 13%;
+}
+
+/* Year */
+.bppv-index-table th:nth-child(6),
+.bppv-index-table td:nth-child(6) {
+  width: 6%;
+  text-align: center;
+}
+
+/* Capacity / S */
+.bppv-index-table th:nth-child(7),
+.bppv-index-table td:nth-child(7) {
+  width: 10%;
+  text-align: center;
+}
+
+/* Location */
+.bppv-index-table th:nth-child(8),
+.bppv-index-table td:nth-child(8) {
+  width: 12%;
+}
+
+/* Testing Date */
+.bppv-index-table th:nth-child(9),
+.bppv-index-table td:nth-child(9) {
+  width: 7%;
+  text-align: center;
+}
+
+/* Due Date */
+.bppv-index-table th:nth-child(10),
+.bppv-index-table td:nth-child(10) {
+  width: 7%;
+  text-align: center;
+}
+
+/* Remark / QR */
+.bppv-index-table th:nth-child(11),
+.bppv-index-table td:nth-child(11) {
+  width: 8%;
+  text-align: center;
+}
+
+/* ── Certificate no / badge ── */
+.bppv-cert-no {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.bppv-badge {
+  font-weight: 600;
+  font-size: 6.5pt;
+  text-align: center;
+  padding: 2px 3px;
+  border-radius: 2px;
+  white-space: normal;
+  font-family: var(--bppv-font);
+  font-style: normal;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+/* ── QR cell ── */
+.bppv-remark-qr-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  font-family: var(--bppv-font);
+  font-style: normal;
+}
+
+.bppv-index-qr-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bppv-index-qr-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border: 0.5pt solid #ccc;
+  padding: 2px;
+  background: #fff;
+}
+
+/* ── Index footer ── */
+.bppv-index-footer {
+  margin-top: 8px;
+  font-size: 8pt;
+  font-weight: 600;
+  font-family: var(--bppv-font);
+  font-style: normal;
+  color: #334155;
+  text-align: right;
+  border-top: 1px solid #ccc;
+  padding-top: 4px;
+}
 
 /* ── Page break ── */
 .bppv-page-break { height: 0; }
@@ -116,7 +318,8 @@
 .bppv-print-page { display: flex; flex-direction: column; min-height: 100vh; }
 
 /* ── Print header ── */
-.bppv-bulk-header  { margin-bottom: 4px; }
+.bppv-bulk-header { margin-bottom: 4px; }
+
 .bppv-header-title-row {
   display: flex;
   align-items: center;
@@ -125,6 +328,7 @@
   margin-bottom: 4px;
   min-height: 60px;
 }
+
 .bppv-header-title-block {
   flex: 1;
   text-align: center;
@@ -134,6 +338,7 @@
   justify-content: center;
   padding: 0;
 }
+
 .bppv-header-qr-block {
   display: flex;
   flex-direction: column;
@@ -144,11 +349,9 @@
 }
 
 .bppv-header-qr-img  { width: 52px; height: 52px; display: block; border: 1px solid #ccc; padding: 2px; background: #fff; }
-.bppv-header-qr-label{ font-size: var(--bppv-qr-label); color: #555; text-align: center; font-family: var(--bppv-font); font-style: normal; }
-.bppv-header-qr-spacer {
-  width: 52px;
-  flex-shrink: 0;
-}
+.bppv-header-qr-label { font-size: var(--bppv-qr-label); color: #555; text-align: center; font-family: var(--bppv-font); font-style: normal; }
+.bppv-header-qr-spacer { width: 52px; flex-shrink: 0; }
+
 .bppv-title-main { font-size: var(--bppv-title); font-weight: 700; font-family: var(--bppv-font); font-style: normal; margin-bottom: 3px; }
 .bppv-title-sub  { font-size: var(--bppv-subtitle); font-family: var(--bppv-font); font-style: normal; }
 
@@ -156,25 +359,28 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: var(--bppv-cert-row);
+  font-size: 14px;
   font-family: var(--bppv-font);
   font-style: normal;
   font-weight: 600;
   margin: 3px 0 5px;
-  background: #e3e3e3;
+  background: transparent;
   color: #000;
   padding: 5px 12px;
   box-sizing: border-box;
   width: 100%;
   letter-spacing: 0.02em;
 }
+
 /* ── Main table ── */
 .bppv-print-table { width: 100%; border-collapse: collapse; font-family: var(--bppv-font); font-style: normal; flex-shrink: 0; }
-.bppv-print-table td { padding: 2px 4px; vertical-align: top; font-size: var(--bppv-base); font-family: var(--bppv-font); font-style: normal; color: #000; line-height: 1.0; }
-.bppv-num   { width: 26px; text-align: center; white-space: nowrap; font-size: var(--bppv-table-num); }
+.bppv-print-table td { padding: 2px 4px; vertical-align: top; font-size: var(--bppv-base); font-family: var(--bppv-font); font-style: normal; color: #000; line-height: 1.0; background: transparent; }
+.bppv-print-table tbody tr:nth-child(even) td { background: transparent; }
+.bppv-print-table tbody tr:nth-child(odd)  td { background: transparent; }
+.bppv-num   { width: 26px; text-align: center; white-space: nowrap; font-size: var(--bppv-table-num);  font-weight: normal;  /* ← add this */ }
 .bppv-desc  { width: 45%; font-size: var(--bppv-table-desc); white-space: pre-line; }
 .bppv-value { font-size: var(--bppv-table-val); font-weight: 500; }
-/* ── Row 16 aligned values ── */
+
 /* ── Row 16 aligned values ── */
 .bppv-16-desc,
 .bppv-16-values {
@@ -222,13 +428,13 @@
   text-align: justify; margin-bottom: 0; line-height: 1.0; flex-shrink: 0;
 }
 .bppv-next-due {
-  font-weight: 700;
-  font-size: var(--bppv-next-due);
+  font-weight: normal;
+  font-size: 14px;
   font-family: var(--bppv-font);
   font-style: normal;
   margin: auto 0 6px;
   flex-shrink: 0;
-  background: #e3e3e3;
+  background: transparent;
   color: #000;
   padding: 5px 12px;
   box-sizing: border-box;
@@ -260,25 +466,42 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   SCREEN MODE WATERMARK (hidden)
+═══════════════════════════════════════════════════════════════ */
+
+.bppv-watermark-wrap {
+  display: none;
+}
+
+.bppv-watermark-img {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    @media print
 ═══════════════════════════════════════════════════════════════ */
 @media print {
 
-  @page { size: A4 portrait; margin: 30mm 8mm 20mm 8mm; }
+  html, body {
+    font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  }
 
-  .bppv-index-page { page: bppvIndexPage; }
-  @page bppvIndexPage { size: A4 landscape; margin: 8mm; }
+  @page { size: A4 portrait; margin: 9mm 10mm 19mm 10mm; }
 
-  #bulk-print-pv-section .bppv-signature-section {
-  padding-top: 15mm !important;
-}
+  /* ── Hide everything, reveal only section ── */
+  body > * { display: none !important; }
+
+  #bulk-print-pv-section,
+  #bulk-print-pv-section * {
+    visibility: visible !important;
+  }
 
   /* Reveal section */
   #bulk-print-pv-section {
     display: flex !important;
     flex-direction: column !important;
     visibility: visible !important;
-    position: absolute !important;
+    position: static !important;
     top: 0 !important; left: 0 !important;
     width: 100% !important;
     height: auto !important;
@@ -292,13 +515,11 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+
   #bulk-print-pv-section * {
-    visibility: visible !important;
     font-family: var(--bppv-font) !important;
     font-style: normal !important;
   }
-
-  
 
   /* Global font-size reset */
   #bulk-print-pv-section,
@@ -313,54 +534,8 @@
     break-before: page !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+    position: relative !important;
   }
-
-  /* Footer pinned */
-  #bulk-print-pv-section .bppv-cert-footer {
-    display: flex !important;
-    flex-direction: column !important;
-    margin-top: 5px !important;
-  }
-
-  /* Next-due */
-.bppv-next-due {
-  font-weight: 700;
-  font-size: var(--bppv-next-due);
-  font-family: var(--bppv-font);
-  font-style: normal;
-
-  margin: auto 0 6px;
-  flex-shrink: 0;
-
-  /* ✅ ADD THESE */
-  text-align: center;
-  width: 100%;
-}
-
-  /* Certify / statement */
-  #bulk-print-pv-section .bppv-cert-statement {
-    flex-shrink: 0 !important;
-    margin-bottom: 0 !important;
-    padding: 2px 0 !important;
-    line-height: 1.0 !important;
-  }
-
-  /* Signature */
-  #bulk-print-pv-section .bppv-signature-section {
-    flex-shrink: 0 !important;
-    flex-wrap: nowrap !important;
-    margin-top: 4px !important;
-    padding-bottom: 0 !important;
-  }
-
-  /* Bottom row */
-  #bulk-print-pv-section .bppv-cert-bottom-row {
-    flex-shrink: 0 !important;
-    margin-top: 0 !important;
-  }
-
-  /* Tables */
-  #bulk-print-pv-section .bppv-print-table { flex-shrink: 0 !important; }
 
   /* Page breaks */
   .bppv-page-break {
@@ -369,66 +544,198 @@
     break-after: page !important;
     height: 0 !important;
   }
+
+  /* ── INDEX PAGE ── */
   #bulk-print-pv-section .bppv-index-page {
+    padding: 4mm 0mm !important;
     page-break-after: always !important;
     break-after: page !important;
   }
 
+  #bulk-print-pv-section .bppv-index-header {
+    margin-bottom: 6px !important;
+    padding-bottom: 4px !important;
+    border-bottom: 2px solid #1e293b !important;
+  }
+
+  #bulk-print-pv-section .bppv-index-title {
+    font-size: 13pt !important;
+    font-weight: 700 !important;
+  }
+
+  #bulk-print-pv-section .bppv-index-subtitle {
+    font-size: 9pt !important;
+  }
+
+  #bulk-print-pv-section .bppv-index-table {
+    font-size: 7pt !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+  }
+
+  #bulk-print-pv-section .bppv-index-table th {
+    font-size: 6.5pt !important;
+    padding: 4px 3px !important;
+    background: #1e293b !important;
+    color: #fff !important;
+    border: 0.5pt solid #aaa !important;
+    text-align: center !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #bulk-print-pv-section .bppv-index-table td {
+    font-size: 7pt !important;
+    padding: 3px 3px !important;
+    border: 0.5pt solid #ccc !important;
+    vertical-align: middle !important;
+    line-height: 1.3 !important;
+    word-break: break-word !important;
+  }
+
+  #bulk-print-pv-section .bppv-index-table tbody tr:nth-child(even) td {
+    background: transparent !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #bulk-print-pv-section .bppv-cert-no {
+    font-size: 14px !important;
+    font-weight: normal !important;
+  }
+
+  #bulk-print-pv-section .bppv-badge {
+    font-size: 6.5pt !important;
+    background: #eff6ff !important;
+    color: #1d4ed8 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #bulk-print-pv-section .bppv-index-qr-img {
+    display: block !important;
+    width: 32px !important;
+    height: 32px !important;
+    object-fit: contain !important;
+    border: 0.5pt solid #999 !important;
+  }
+
+  #bulk-print-pv-section .bppv-index-footer {
+    font-size: 8pt !important;
+    font-weight: normal !important;
+    text-align: right !important;
+    margin-top: 6px !important;
+    border-top: 1px solid #ccc !important;
+    padding-top: 3px !important;
+  }
+
+  /* ── Signature section spacing ── */
+  #bulk-print-pv-section .bppv-signature-section {
+    padding-top: 15mm !important;
+  }
+
+  /* ── Footer ── */
+  #bulk-print-pv-section .bppv-cert-footer {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: 5px !important;
+  }
+
+  /* ── Certify / statement ── */
+  #bulk-print-pv-section .bppv-cert-statement {
+    flex-shrink: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 2px 0 !important;
+    line-height: 1.0 !important;
+  }
+
+  /* ── Next due ── */
+  #bulk-print-pv-section .bppv-next-due {
+    background: transparent !important;
+    color: #000 !important;
+    padding: 5px 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+   font-weight: 300 !important;
+    font-size: 14px !important;
+    letter-spacing: 0.02em !important;
+    margin: auto 0 6px !important;
+    flex-shrink: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* ── Signature ── */
+  #bulk-print-pv-section .bppv-signature-section {
+    flex-shrink: 0 !important;
+    flex-wrap: nowrap !important;
+    margin-top: 4px !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* ── Bottom row ── */
+  #bulk-print-pv-section .bppv-cert-bottom-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-top: 8px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* ── Disclaimer ── */
+  #bulk-print-pv-section .bppv-cert-disclaimer {
+    position: static !important;
+    bottom: unset !important;
+    left: unset !important;
+    width: 100% !important;
+    font-size: 7px !important;
+    line-height: 1.2 !important;
+    padding: 4px 10px !important;
+    background: #fffdf0 !important;
+    text-align: center !important;
+    margin-top: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* ── Main print table ── */
+  #bulk-print-pv-section .bppv-print-table { flex-shrink: 0 !important; }
+  #bulk-print-pv-section .bppv-print-table td {
+    border: none !important;
+    padding: 3px 5px !important;
+    font-size: var(--bppv-base) !important;
+    font-style: normal !important;
+    vertical-align: top !important;
+    line-height: 1.0 !important;
+  }
+
   /* ── Font-size semantic overrides ── */
-  #bulk-print-pv-section .bppv-title-main  { font-size: 16px !important; font-weight: 700 !important; font-style: normal !important; text-transform: uppercase !important; }
-  #bulk-print-pv-section .bppv-title-sub   { font-size: var(--bppv-subtitle)   !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-cert-date-row { font-size: var(--bppv-cert-row) !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-num         { font-size: var(--bppv-table-num)  !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-desc        { font-size: var(--bppv-table-desc) !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-value       { font-size: var(--bppv-table-val)  !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-vessel-main { font-size: var(--bppv-table-val)  !important; font-weight: 700 !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-vessel-meta { font-size: var(--bppv-eq-meta)    !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-cert-statement { font-size: var(--bppv-footer)  !important; font-style: normal !important; line-height: 1.0 !important; }
-  #bulk-print-pv-section .bppv-next-due    { font-size: var(--bppv-next-due)   !important; font-weight: 700 !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-signature-name  { font-size: var(--bppv-sig-name)  !important; font-weight: 700 !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-signature-title { font-size: var(--bppv-sig-title) !important; font-style: normal !important; line-height: 1.0 !important; }
-  #bulk-print-pv-section .bppv-cert-disclaimer { font-size: 7px !important; font-style: normal !important; margin-top: 1px !important; }
-  #bulk-print-pv-section .bppv-index-table th,
-  #bulk-print-pv-section .bppv-index-table td  { font-size: 14px !important; padding: 3px !important; font-style: normal !important; border: 1px solid #999 !important; }
-  #bulk-print-pv-section .bppv-badge,
-  #bulk-print-pv-section .bppv-cert-no         { font-size: 14px !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-title-main       { font-size: 16px !important; font-weight: 700 !important; font-style: normal !important; text-transform: uppercase !important; }
+  #bulk-print-pv-section .bppv-title-sub        { font-size: var(--bppv-subtitle)   !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-cert-date-row    { font-size: var(--bppv-cert-row)   !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-num              { font-size: var(--bppv-table-num)  !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-desc             { font-size: var(--bppv-table-desc) !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-value            { font-size: var(--bppv-table-val)  !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-vessel-main      { font-size: var(--bppv-table-val)  !important; font-weight: 700 !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-vessel-meta      { font-size: var(--bppv-eq-meta)    !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-cert-statement   { font-size: var(--bppv-footer)     !important; font-style: normal !important; line-height: 1.0 !important; }
+  #bulk-print-pv-section .bppv-next-due         { font-size: 14px   !important; font-weight: 300 !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-signature-name   { font-size: var(--bppv-sig-name)   !important; font-weight: 700 !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-signature-title  { font-size: var(--bppv-sig-title)  !important; font-style: normal !important; line-height: 1.0 !important; }
+  #bulk-print-pv-section .bppv-cert-disclaimer  { font-size: 7px !important; font-style: normal !important; margin-top: 1px !important; }
 
-  #bulk-print-pv-section .bppv-print-table td  { border: none !important; padding: 3px 5px !important; font-size: var(--bppv-base) !important; font-style: normal !important; vertical-align: top !important; line-height: 1.0 !important; }
+  /* ── QR ── */
+  #bulk-print-pv-section .bppv-header-qr-img  { display: block !important; width: 75px !important; height: 75px !important; }
+  #bulk-print-pv-section .bppv-index-qr-img   { display: block !important; width: 36px !important; height: 36px !important; border: 1px solid #999 !important; }
 
-  /* QR */
-  #bulk-print-pv-section .bppv-header-qr-img   { display: block !important; width: 75px !important; height: 75px !important; }
-  #bulk-print-pv-section .bppv-index-qr-img    { display: block !important; width: 36px !important; height: 36px !important; border: 1px solid #999 !important; }
-
-  /* Flex layout enforcement */
-  #bulk-print-pv-section .bppv-cert-date-row,
-  #bulk-print-pv-section .bppv-vessel-meta,
-  #bulk-print-pv-section .bppv-signature-section,
-  #bulk-print-pv-section .bppv-cert-bottom-row,
-  #bulk-print-pv-section .bppv-remark-qr-cell,
-  #bulk-print-pv-section .bppv-index-qr-block  { display: flex !important; flex-wrap: wrap !important; }
-
-  #bulk-print-pv-section .bppv-cert-date-row      { justify-content: space-between !important; }
-  #bulk-print-pv-section .bppv-signature-section   { justify-content: space-between !important; align-items: flex-end !important; }
-  #bulk-print-pv-section .bppv-cert-bottom-row     { align-items: flex-end !important; justify-content: space-between !important; }
-  #bulk-print-pv-section .bppv-remark-qr-cell      { flex-direction: column !important; align-items: center !important; }
-  #bulk-print-pv-section .bppv-header-title-row    { justify-content: space-between !important; align-items: flex-start !important; flex-wrap: nowrap !important; }
-  #bulk-print-pv-section .bppv-header-title-block  { flex: 1 !important; text-align: center !important; }
-  #bulk-print-pv-section .bppv-header-qr-block     { flex-direction: column !important; align-items: center !important; flex-shrink: 0 !important; align-self: flex-start !important; }
-
-  /* Table structure */
-  #bulk-print-pv-section table  { display: table !important; border-collapse: collapse !important; width: 100% !important; }
-  #bulk-print-pv-section tbody  { display: table-row-group !important; }
-  #bulk-print-pv-section thead  { display: table-header-group !important; }
-  #bulk-print-pv-section tr     { display: table-row !important; page-break-inside: avoid !important; break-inside: avoid !important; }
-  #bulk-print-pv-section td     { display: table-cell !important; }
-  #bulk-print-pv-section .bppv-index-table th { display: table-cell !important; }
-
-  /* Compact overrides */
-  #bulk-print-pv-section .bppv-bulk-header { margin-bottom: 4px !important; }
-
-
-    #bulk-print-pv-section .bppv-cert-date-row {
-    background: #e3e3e3 !important;
+  /* ── Cert date row ── */
+  #bulk-print-pv-section .bppv-cert-date-row {
+    background: transparent !important;
     color: #000 !important;
     padding: 5px 12px !important;
     width: 100% !important;
@@ -436,44 +743,51 @@
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    font-weight: 600 !important;
-    font-size: 10px !important;
+    font-weight: normal !important;
+    font-size: 14px !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+
   #bulk-print-pv-section .bppv-cert-date-row strong {
-    font-weight: 700 !important;
+    font-weight: normal !important;
     color: #000 !important;
   }
 
-/* Row 16 aligned values */
+  /* ── Flex layout enforcement ── */
+  #bulk-print-pv-section .bppv-cert-date-row,
+  #bulk-print-pv-section .bppv-vessel-meta,
+  #bulk-print-pv-section .bppv-signature-section,
+  #bulk-print-pv-section .bppv-cert-bottom-row,
+  #bulk-print-pv-section .bppv-remark-qr-cell,
+  #bulk-print-pv-section .bppv-index-qr-block  { display: flex !important; flex-wrap: wrap !important; }
+
+  #bulk-print-pv-section .bppv-cert-date-row     { justify-content: space-between !important; }
+  #bulk-print-pv-section .bppv-signature-section  { justify-content: space-between !important; align-items: flex-end !important; }
+  #bulk-print-pv-section .bppv-remark-qr-cell     { flex-direction: column !important; align-items: center !important; }
+  #bulk-print-pv-section .bppv-header-title-row   { justify-content: space-between !important; align-items: center !important; flex-wrap: nowrap !important; min-height: 85px !important; }
+  #bulk-print-pv-section .bppv-header-title-block { flex: 1 !important; text-align: center !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; padding: 0 !important; }
+  #bulk-print-pv-section .bppv-header-qr-block    { flex-direction: column !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; }
+  #bulk-print-pv-section .bppv-header-qr-spacer   { display: block !important; width: 75px !important; flex-shrink: 0 !important; }
+
+  /* ── Table structure ── */
+  #bulk-print-pv-section table  { display: table !important; border-collapse: collapse !important; width: 100% !important; }
+  #bulk-print-pv-section tbody  { display: table-row-group !important; }
+  #bulk-print-pv-section thead  { display: table-header-group !important; }
+  #bulk-print-pv-section tr     { display: table-row !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+  #bulk-print-pv-section td     { display: table-cell !important; }
+  #bulk-print-pv-section .bppv-index-table th { display: table-cell !important; }
+
+  /* ── Compact overrides ── */
+  #bulk-print-pv-section .bppv-bulk-header { margin-bottom: 4px !important; }
+
+  /* ── Row 16 aligned values ── */
   #bulk-print-pv-section .bppv-16-values {
     display: table-cell !important;
     vertical-align: top !important;
     padding: 3px 5px !important;
-  }
-  #bulk-print-pv-section .bppv-16-values div {
-    display: flex !important;
-    align-items: flex-start !important;
-    margin-bottom: 4px !important;
-    line-height: 1.2 !important;
-  }
-  #bulk-print-pv-section .bppv-16-values div::before {
-    content: attr(data-label) !important;
-    font-weight: 700 !important;
-    min-width: 18px !important;
-    margin-right: 4px !important;
-    flex-shrink: 0 !important;
-    font-family: var(--bppv-font) !important;
-    font-style: normal !important;
   }
 
- /* Row 16 aligned values */
-  #bulk-print-pv-section .bppv-16-values {
-    display: table-cell !important;
-    vertical-align: top !important;
-    padding: 3px 5px !important;
-  }
   #bulk-print-pv-section .bppv-16-header {
     display: block !important;
     min-height: 1.2em !important;
@@ -482,6 +796,7 @@
     font-size: 10px !important;
     font-style: normal !important;
   }
+
   #bulk-print-pv-section .bppv-16-item {
     display: flex !important;
     align-items: flex-start !important;
@@ -491,6 +806,7 @@
     font-size: 10px !important;
     font-style: normal !important;
   }
+
   #bulk-print-pv-section .bppv-16-values .bppv-16-item::before {
     content: attr(data-label) !important;
     font-weight: 700 !important;
@@ -500,50 +816,16 @@
     font-family: var(--bppv-font) !important;
     font-style: normal !important;
   }
-/* Row 16 inner table */
-  #bulk-print-pv-section .bppv-16-inner        { display: table !important; width: 100% !important; border-collapse: collapse !important; }
-  #bulk-print-pv-section .bppv-16-inner tr      { display: table-row !important; page-break-inside: avoid !important; }
-  #bulk-print-pv-section .bppv-16-inner td      { display: table-cell !important; border: none !important; padding: 0 !important; font-size: 10px !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-16-head          { padding-bottom: 3px !important; vertical-align: top !important; line-height: 1.2 !important; }
-  #bulk-print-pv-section .bppv-16-label         { font-weight: 700 !important; white-space: nowrap !important; vertical-align: top !important; padding-top: 3px !important; width: 22px !important; }
-  #bulk-print-pv-section .bppv-16-text          { vertical-align: top !important; padding-top: 3px !important; line-height: 1.2 !important; }
 
+  /* ── Row 16 inner table ── */
+  #bulk-print-pv-section .bppv-16-inner     { display: table !important; width: 100% !important; border-collapse: collapse !important; }
+  #bulk-print-pv-section .bppv-16-inner tr  { display: table-row !important; page-break-inside: avoid !important; }
+  #bulk-print-pv-section .bppv-16-inner td  { display: table-cell !important; border: none !important; padding: 0 !important; font-size: 10px !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-16-head      { padding-bottom: 3px !important; vertical-align: top !important; line-height: 1.2 !important; }
+  #bulk-print-pv-section .bppv-16-label     { font-weight: 700 !important; white-space: nowrap !important; vertical-align: top !important; padding-top: 3px !important; width: 22px !important; }
+  #bulk-print-pv-section .bppv-16-text      { vertical-align: top !important; padding-top: 3px !important; line-height: 1.2 !important; }
 
-#bulk-print-pv-section .bppv-header-qr-spacer {
-    display: block !important;
-    width: 75px !important;
-    flex-shrink: 0 !important;
-  }
-
-  #bulk-print-pv-section .bppv-header-title-row {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    flex-wrap: nowrap !important;
-    min-height: 85px !important;
-  }
-  #bulk-print-pv-section .bppv-header-title-block {
-    flex: 1 !important;
-    text-align: center !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center  !important;
-    padding: 0 !important;
-  }
-  #bulk-print-pv-section .bppv-header-qr-block {
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-shrink: 0 !important;
-  }
-  #bulk-print-pv-section .bppv-header-qr-spacer {
-    display: block !important;
-    width: 75px !important;
-    flex-shrink: 0 !important;
-  }
-
-/* ── PV Signature layout ── */
+  /* ── PV Signature layout ── */
   #bulk-print-pv-section .bppv-sign-left {
     display: flex !important;
     flex-direction: column !important;
@@ -556,44 +838,83 @@
     min-height: 70px !important;
   }
 
-  /* Stamp — 2.5 in × 1.5 in */
   #bulk-print-pv-section .bppv-stamp-overlay {
     display: block !important;
     position: absolute !important;
-    width: 180pt !important;
-    height: 108pt !important;
-    top: -75px !important;
-    left: 0px !important;
-    opacity: 0.90 !important;
-    z-index: 10 !important;
+    width: 160px !important;
+    height: 160px !important;
+    top: -120px !important;
+    left: 5px !important;
+    opacity: 1 !important;
+    z-index: 999 !important;
     object-fit: contain !important;
+    max-width: unset !important;
+    max-height: unset !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* Counter sign */
-  #bulk-print-pv-section .bppv-sign-right {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
-  }
-
   #bulk-print-pv-section .bppv-counter-sig-wrap {
-    height: 65px !important;
+    height: 80px !important;
     display: flex !important;
     justify-content: flex-end !important;
     align-items: center !important;
-    margin-top: -60px !important;
+    margin-top: -130px !important;
     margin-bottom: 0 !important;
   }
 
   #bulk-print-pv-section .bppv-counter-sig-img {
     display: block !important;
-    height: 55px !important;
+    height: 160px !important;
     width: auto !important;
+    object-fit: contain !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
+  /* ═════════════════════════════════════════════════════════════
+     WATERMARK — MATCHES LIFTING CSS IMPLEMENTATION
+     ═════════════════════════════════════════════════════════════ */
+
+  #bulk-print-pv-section .bppv-watermark-wrap {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: block !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+  }
+
+  #bulk-print-pv-section .bppv-watermark-img {
+    display: block !important;
+    position: absolute !important;
+    width: 110mm !important;
+    height: auto !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(-35deg) !important;
+    opacity: 0.04 !important;
+    z-index: 1 !important;
+    object-fit: contain !important;
+    pointer-events: none !important;
+  }
+
+  /* Keep PV content above watermark (z-index: 2) */
+  #bulk-print-pv-section .bppv-bulk-header,
+  #bulk-print-pv-section .bppv-cert-date-row,
+  #bulk-print-pv-section .bppv-print-table,
+  #bulk-print-pv-section .bppv-cert-statement,
+  #bulk-print-pv-section .bppv-next-due,
+  #bulk-print-pv-section .bppv-cert-footer,
+  #bulk-print-pv-section .bppv-signature-section,
+  #bulk-print-pv-section .bppv-index-page,
+  #bulk-print-pv-section .bppv-index-header,
+  #bulk-print-pv-section .bppv-index-table,
+  #bulk-print-pv-section .bppv-index-footer {
+    position: relative !important;
+    z-index: 2 !important;
+  }
 
 } /* end @media print */

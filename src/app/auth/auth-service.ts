@@ -26,30 +26,29 @@ export class AuthService {
   }
 
   login(req: AdminLogInRequest): Observable<RestApiResponse> {
-    return this.api.login(req).pipe(
-      tap((res: RestApiResponse) => {
 
-        console.log('Login Response:', res);
+  return this.api.login(req).pipe(
 
-        const token = res?.data?.authentication?.token;
-        const profile = res?.data?.profile;
+    tap((res: RestApiResponse) => {
 
-        if (res?.status === 'SUCCESS' && token) {
-console.log(res.status);
+      console.log('Login Response:', res);
 
-          localStorage.setItem(this.TOKEN_KEY, token);
-          localStorage.setItem(this.ADMIN_KEY, JSON.stringify(profile || {}));
+      const token = res?.data?.authentication?.token;
+      const profile = res?.data?.profile;
 
-          this._isLoggedIn$.next(true);
-
-          // Optional auto redirect after login
-          this.router.navigate(['/dashboard']);
-        } else {
-          console.warn('Login successful response but token missing');
-        }
-      })
-    );
-  }
+      if (res?.status === 'SUCCESS' && token) {
+        localStorage.setItem(this.TOKEN_KEY, token);
+        localStorage.setItem(
+          this.ADMIN_KEY,
+          JSON.stringify(profile || {})
+        );
+        this._isLoggedIn$.next(true);
+      } else {
+        throw new Error('Token missing');
+      }
+    })
+  );
+}
 
   logout(): void {
     this.api.logout().subscribe({

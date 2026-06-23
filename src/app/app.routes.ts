@@ -5,47 +5,28 @@ import { LayoutComponent } from './components/home/home';
 import { Companies } from './components/companies/companies';
 import { CompanyReport } from './components/report/report';
 import { VerifyComponent } from './components/verify-component/verify-component';
+import { authGuard } from './auth-gaurd/gaurd-guard';
 
 export const routes: Routes = [
 
- { path: 'verify', component: VerifyComponent },
+  // ✅ Public routes — no auth required
+  { path: 'login',  component: LoginComponent },
+  { path: 'verify', component: VerifyComponent },
 
-
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
-  },
-
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-
-
+  // ✅ Protected routes — auth required
+  // LayoutComponent is the SHELL (sidebar + header visible on ALL children)
   {
     path: 'dashboard',
-    component: Dashboard,
+    component: LayoutComponent,
+    canActivate: [authGuard],
     children: [
-      {
-        path: '',
-        component: LayoutComponent
-      },
-      {
-        path: 'companies',
-        component: Companies
-      },{
-         path: 'report/:id',
-        component: CompanyReport
-      }
+      { path: '',           component: Dashboard },       // /dashboard → Overview
+      { path: 'companies',  component: Companies },       // /dashboard/companies → Companies list
+      { path: 'report/:id', component: CompanyReport }   // /dashboard/report/123 → Company details
     ]
   },
 
-  {
-    path: '**',
-    redirectTo: 'login'
-  },
-
-  // { path: 'verify', loadComponent: () => import('..../verify-component').then(m => m.VerifyComponent) }
-
+  // Default + wildcard
+  { path: '',   redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' }
 ];

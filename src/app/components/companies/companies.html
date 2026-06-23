@@ -1,131 +1,275 @@
 <div class="companies-page">
 
-  <!-- Header -->
+  <!-- ── Page Title (content area header) ── -->
   <div class="page-header">
-    <h2>All Companies</h2>
-    <button class="btn-add" (click)="openAdd()">+ Add Company</button>
+    <div>
+      <h1 class="page-header__title">Companies</h1>
+      <p class="page-header__sub">Manage all registered companies</p>
+    </div>
+    <button class="btn-primary" (click)="openAdd()">
+      <i class="ti ti-plus"></i>
+      Add Company
+    </button>
   </div>
 
-  <!-- Filters -->
+  <!-- ── Toast Container ── -->
+  <div class="toast-container">
+    <div
+      *ngFor="let toast of toasts"
+      class="toast"
+      [class.toast-success]="toast.type === 'success'"
+      [class.toast-error]="toast.type === 'error'"    >
+      <span class="toast-icon">{{ toast.type === 'success' ? '✓' : '✕' }}</span>
+      <span class="toast-msg">{{ toast.message }}</span>
+      <button class="toast-close" (click)="dismissToast(toast.id)">&#x2715;</button>
+    </div>
+  </div>
+
+  <!-- ── Filters ── -->
   <div class="filters-grid">
     <input type="text" placeholder="Search Company Name"
-           [(ngModel)]="filters.companyName" (input)="applyFilters()">
+          [(ngModel)]="filters.companyName" (input)="applyFilters()">
     <input type="text" placeholder="Search Contact Person"
-           [(ngModel)]="filters.contactPerson" (input)="applyFilters()">
+          [(ngModel)]="filters.contactPerson" (input)="applyFilters()">
     <input type="text" placeholder="Search City"
-           [(ngModel)]="filters.city" (input)="applyFilters()">
+          [(ngModel)]="filters.city" (input)="applyFilters()">
     <input type="text" placeholder="Search State"
-           [(ngModel)]="filters.state" (input)="applyFilters()">
+          [(ngModel)]="filters.state" (input)="applyFilters()">
     <input type="text" placeholder="GST Number"
-           [(ngModel)]="filters.gstNumber" (input)="applyFilters()">
+          [(ngModel)]="filters.gstNumber" (input)="applyFilters()">
     <input type="text" placeholder="Factory License"
-           [(ngModel)]="filters.factoryLicenseNo" (input)="applyFilters()">
+          [(ngModel)]="filters.factoryLicenseNo" (input)="applyFilters()">
   </div>
 
-  <!-- Table -->
-  <div class="table-wrapper">
-    <table class="company-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Company Name</th>
-          <th>Contact Person</th>
-          <th>Mobile</th>
-          <th>Email</th>
-          <th>City</th>
-          <th>State</th>
-          <th>GST</th>
-          <th>License No</th>
-          <th>Created</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let company of filteredCompanies; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td class="company-name">{{ company.companyName }}</td>
-          <td>{{ company.contactPerson }}</td>
-          <td>{{ company.mobileNumber }}</td>
-          <td>{{ company.email }}</td>
-          <td>{{ company.city }}</td>
-          <td>{{ company.state }}</td>
-          <td><span class="badge badge-gst">{{ company.gstNumber || '-' }}</span></td>
-          <td><span class="badge badge-lic">{{ company.factoryLicenseNo || '-' }}</span></td>
-          <td>{{ company.createdAt | date:'dd MMM yyyy' }}</td>
-          <td>
-            <div class="actions">
-              <button class="btn-update" (click)="openUpdate(company)">Update</button>
-              <button class="btn-report" (click)="openReport(company)">Report</button>
-            </div>
-          </td>
-        </tr>
+  <!-- ── Table ── -->
+<!-- ── Table ── -->
+<!-- ── Table ── -->
+<div class="table-wrapper">
+  <table class="company-table">
 
-        <tr *ngIf="filteredCompanies.length === 0">
-          <td colspan="11" class="no-data">No companies found</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <thead>
+  <tr>
+    <th>#</th>
+    <th>Company Name</th>
+    <th>City</th>
+    <th>Division</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+
+    <tbody>
+
+     <tr *ngFor="let company of filteredCompanies; let i = index">
+
+  <td>{{ i + 1 }}</td>
+
+  <td class="company-name">
+    {{ company.companyName }}
+  </td>
+
+  <td>
+    {{ company.city }}
+  </td>
+
+  <td>
+    <span class="badge badge-lic">
+      {{ company.factoryLicenseNo || '—' }}
+    </span>
+  </td>
+
+  <td>
+    <div class="actions">
+
+      <button class="btn-update"
+              (click)="openUpdate(company)">
+        Update
+      </button>
+
+      <button class="btn-report"
+              (click)="openReport(company)">
+        Report
+      </button>
+
+      <button class="btn-delete"
+              (click)="openDeleteConfirm(company)">
+        Delete
+      </button>
+
+    </div>
+  </td>
+
+</tr>
+
+      <tr *ngIf="filteredCompanies.length === 0">
+        <td colspan="6" class="no-data">
+          No companies found
+        </td>
+      </tr>
+
+
+    </tbody>
+
+  </table>
 </div>
 
-<!-- ── Add / Update Modal Only ── -->
-<div class="overlay" [class.open]="showModal" (click)="closeModal()">
-  <div class="modal" (click)="$event.stopPropagation()">
+<!-- ── Add / Update Modal ── -->
+<div class="overlay" [class.open]="showModal">
+  <div class="modal">
     <button class="modal-close" (click)="closeModal()">&#x2715;</button>
 
     <ng-container *ngIf="showModal">
       <h3>{{ modalMode === 'add' ? 'Add Company' : 'Update Company' }}</h3>
 
-      <div class="form-grid">
-        <div class="field full">
-          <label>Company Name</label>
-          <input type="text" [(ngModel)]="form.companyName" placeholder="Enter company name">
-        </div>
-        <div class="field full">
-          <label>Factory Address</label>
-          <textarea [(ngModel)]="form.factoryAddress" placeholder="Enter factory address"></textarea>
-        </div>
-        <div class="field">
-          <label>Contact Person</label>
-          <input type="text" [(ngModel)]="form.contactPerson" placeholder="Enter contact person">
-        </div>
-        <div class="field">
-          <label>Mobile Number</label>
-          <input type="text" [(ngModel)]="form.mobileNumber" placeholder="Enter mobile number">
-        </div>
-        <div class="field">
-          <label>Email</label>
-          <input type="email" [(ngModel)]="form.email" placeholder="Enter email">
-        </div>
-        <div class="field">
-          <label>GST Number</label>
-          <input type="text" [(ngModel)]="form.gstNumber" placeholder="Enter GST number">
-        </div>
-        <div class="field">
-          <label>Factory License No</label>
-          <input type="text" [(ngModel)]="form.factoryLicenseNo" placeholder="Enter license number">
-        </div>
-        <div class="field">
-          <label>City</label>
-          <input type="text" [(ngModel)]="form.city" placeholder="Enter city">
-        </div>
-        <div class="field">
-          <label>State</label>
-          <input type="text" [(ngModel)]="form.state" placeholder="Enter state">
-        </div>
-        <div class="field">
-          <label>Pincode</label>
-          <input type="text" [(ngModel)]="form.pincode" placeholder="Enter pincode">
-        </div>
-      </div>
+      <form [formGroup]="companyForm" novalidate>
+        <div class="form-grid">
 
-      <div class="modal-footer">
-        <button class="btn-cancel" (click)="closeModal()">Cancel</button>
-        <button class="btn-save" (click)="saveCompany()">
-          {{ modalMode === 'add' ? 'Save Company' : 'Update Company' }}
-        </button>
-      </div>
+          <!-- Company Name (full width) -->
+          <div class="field full" [class.field-error]="isInvalid('companyName')" [class.field-success]="isValid('companyName')">
+            <label>Company Name <span class="req">*</span></label>
+            <input type="text" formControlName="companyName" placeholder="Enter company name">
+            <span class="field-msg" *ngIf="isInvalid('companyName')">{{ getError('companyName') }}</span>
+          </div>
+
+          <!-- Factory Address (full width) -->
+          <div class="field full" [class.field-error]="isInvalid('factoryAddress')" [class.field-success]="isValid('factoryAddress')">
+            <label>Factory Address <span class="hint">(optional)</span></label>
+            <textarea formControlName="factoryAddress" placeholder="Enter factory address"></textarea>
+            <span class="field-msg" *ngIf="isInvalid('factoryAddress')">{{ getError('factoryAddress') }}</span>
+          </div>
+
+          <!-- Contact Person -->
+          <div class="field" [class.field-error]="isInvalid('contactPerson')" [class.field-success]="isValid('contactPerson')">
+            <label>Contact Person <span class="hint">(optional)</span></label>
+            <input type="text" formControlName="contactPerson" placeholder="Enter contact person">
+            <span class="field-msg" *ngIf="isInvalid('contactPerson')">{{ getError('contactPerson') }}</span>
+          </div>
+
+          <!-- Mobile Number -->
+          <div class="field" [class.field-error]="isInvalid('mobileNumber')" [class.field-success]="isValid('mobileNumber')">
+            <label>Mobile Number <span class="hint">(optional)</span></label>
+            <input type="text" formControlName="mobileNumber" placeholder="10-digit mobile number" maxlength="10">
+            <span class="field-msg" *ngIf="isInvalid('mobileNumber')">{{ getError('mobileNumber') }}</span>
+          </div>
+
+          <!-- Email -->
+          <div class="field" [class.field-error]="isInvalid('email')" [class.field-success]="isValid('email')">
+            <label>Email <span class="hint">(optional)</span></label>
+            <input type="email" formControlName="email" placeholder="Enter email address">
+            <span class="field-msg" *ngIf="isInvalid('email')">{{ getError('email') }}</span>
+          </div>
+
+          <!-- GST Number -->
+          <div class="field" [class.field-error]="isInvalid('gstNumber')" [class.field-success]="isValid('gstNumber')">
+            <label>GST Number <span class="hint">(optional)</span></label>
+            <input type="text" formControlName="gstNumber" placeholder="e.g. 27AAAAA0000A1Z5" maxlength="15">
+            <span class="field-msg" *ngIf="isInvalid('gstNumber')">{{ getError('gstNumber') }}</span>
+          </div>
+
+          <!-- Factory Division -->
+          <div class="field" [class.field-error]="isInvalid('factoryLicenseNo')" [class.field-success]="isValid('factoryLicenseNo')">
+            <label>Factory Division <span class="hint">(optional)</span></label>
+            <input type="text" formControlName="factoryLicenseNo" placeholder="Enter license number">
+          </div>
+
+          <!-- City -->
+          <div class="field" [class.field-error]="isInvalid('city')" [class.field-success]="isValid('city')">
+            <label>City <span class="req">*</span></label>
+            <input type="text" formControlName="city" placeholder="Enter city">
+            <span class="field-msg" *ngIf="isInvalid('city')">{{ getError('city') }}</span>
+          </div>
+
+          <!-- State -->
+          <div class="field" [class.field-error]="isInvalid('state')" [class.field-success]="isValid('state')">
+            <label>State <span class="req">*</span></label>
+            <select formControlName="state">
+              <option value="">-- Select State --</option>
+              <option value="Andhra Pradesh">Andhra Pradesh</option>
+              <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+              <option value="Assam">Assam</option>
+              <option value="Bihar">Bihar</option>
+              <option value="Chhattisgarh">Chhattisgarh</option>
+              <option value="Goa">Goa</option>
+              <option value="Gujarat">Gujarat</option>
+              <option value="Haryana">Haryana</option>
+              <option value="Himachal Pradesh">Himachal Pradesh</option>
+              <option value="Jharkhand">Jharkhand</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Kerala">Kerala</option>
+              <option value="Madhya Pradesh">Madhya Pradesh</option>
+              <option value="Maharashtra">Maharashtra</option>
+              <option value="Manipur">Manipur</option>
+              <option value="Meghalaya">Meghalaya</option>
+              <option value="Mizoram">Mizoram</option>
+              <option value="Nagaland">Nagaland</option>
+              <option value="Odisha">Odisha</option>
+              <option value="Punjab">Punjab</option>
+              <option value="Rajasthan">Rajasthan</option>
+              <option value="Sikkim">Sikkim</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="Telangana">Telangana</option>
+              <option value="Tripura">Tripura</option>
+              <option value="Uttar Pradesh">Uttar Pradesh</option>
+              <option value="Uttarakhand">Uttarakhand</option>
+              <option value="West Bengal">West Bengal</option>
+              <!-- Union Territories -->
+              <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+              <option value="Chandigarh">Chandigarh</option>
+              <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+              <option value="Ladakh">Ladakh</option>
+              <option value="Lakshadweep">Lakshadweep</option>
+              <option value="Puducherry">Puducherry</option>
+            </select>
+            <span class="field-msg" *ngIf="isInvalid('state')">{{ getError('state') }}</span>
+          </div>
+
+          <!-- Pincode -->
+          <div class="field" [class.field-error]="isInvalid('pincode')" [class.field-success]="isValid('pincode')">
+            <label>Pincode <span class="hint">(optional)</span></label>
+            <input type="text" formControlName="pincode" placeholder="6-digit pincode" maxlength="6">
+            <span class="field-msg" *ngIf="isInvalid('pincode')">{{ getError('pincode') }}</span>
+          </div>
+
+        </div>
+
+        <!-- Validation Summary -->
+        <div class="validation-summary" *ngIf="companyForm.invalid && companyForm.touched">
+          <span class="vs-icon">⚠</span>
+          Please fix the errors above before saving.
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="closeModal()">Cancel</button>
+          <button
+            type="button"
+            class="btn-save"
+            [class.btn-saving]="isSaving"
+            [disabled]="isSaving"
+            (click)="saveCompany()"
+          >
+            <span *ngIf="!isSaving">{{ modalMode === 'add' ? 'Save Company' : 'Update Company' }}</span>
+            <span *ngIf="isSaving" class="saving-dots">Saving<span>.</span><span>.</span><span>.</span></span>
+          </button>
+        </div>
+      </form>
     </ng-container>
+  </div>
+</div>
 
+<!-- ── Delete Confirmation Modal ── -->
+<div class="overlay" [class.open]="showDeleteConfirm">
+  <div class="modal modal-confirm">
+    <div class="confirm-icon">🗑</div>
+    <h3>Delete Company?</h3>
+    <p class="confirm-msg">
+      You are about to delete
+      <strong>{{ companyToDelete?.companyName }}</strong>.
+      This action cannot be undone.
+    </p>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+      <button class="btn-danger" (click)="confirmDelete()">Yes, Delete</button>
+    </div>
   </div>
 </div>

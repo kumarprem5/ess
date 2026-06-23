@@ -38,7 +38,7 @@
 /* ── Component section header row ── */
 .bpsb-section-header-row td { padding: 0 !important; }
 .bpsb-section-label {
-  background: #e3e3e3;
+  background: transparent !important;
   color: #000;
   font-weight: 700;
   font-size: 9px;
@@ -69,12 +69,13 @@
 .bpsb-index-subtitle { font-size: 11.5px; font-family: var(--bpsb-font); font-style: normal; color: #444; }
 
 .bpsb-index-table    { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: var(--bpsb-index-td); font-family: var(--bpsb-font); font-style: normal; margin-top: 6px; }
-.bpsb-index-table th { background: #e3e3e3; color: #000; font-weight: 600; padding: 4px 3px; text-align: center; font-size: var(--bpsb-index-th); font-family: var(--bpsb-font); font-style: normal; line-height: 1.0; border: 1px solid #999; white-space: normal; word-break: break-word; }
+.bpsb-index-table th { background: #e3e3e3; color: #000; font-weight: 600; padding: 4px 3px; text-align: center; font-size: var(--bpsb-index-th); font-family: var(--bpsb-font); font-style: normal; line-height: 1.4; border: 1px solid #999; white-space: normal; word-break: break-word; }
 .bpsb-index-table td { padding: 4px 3px; border: 1px solid #d1d5db; font-size: var(--bpsb-index-td); font-family: var(--bpsb-font); font-style: normal; vertical-align: middle; color: #111; line-height: 1.2; white-space: normal; }
 .bpsb-index-table tbody tr:nth-child(even) td { background: #f8fafc; }
 
-.bpsb-cert-no  { font-family: monospace; font-size: 10px; white-space: normal; word-break: break-word; }
-.bpsb-badge    { font-weight: 700; font-size: 10px; text-align: center; padding: 2px 3px; border-radius: 2px; white-space: normal; font-family: var(--bpsb-font); font-style: normal; background: #ecfdf5; color: #065f46; }
+.bpsb-cert-no  { font-family: monospace; font-size: 10px; white-space: normal; word-break: break-word; font-weight: normal;  /* ← add this */}
+.bpsb-badge    {  font-weight: normal;  /* ← was 700 */ font-size: 10px; text-align: center; padding: 2px 3px; border-radius: 2px; 
+  white-space: normal; font-family: var(--bpsb-font); font-style: normal; background: #ecfdf5; color: #065f46; }
 
 .bpsb-remark-qr-cell  { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
 .bpsb-index-qr-block  { display: flex; justify-content: center; align-items: center; }
@@ -86,7 +87,14 @@
 .bpsb-page-break { height: 0; }
 
 
-/* ── SB Left signature block ── */
+/* ── SB Left signature block ──
+   .bpsb-signature-section (the parent row) is align-items: flex-end,
+   so sign-left and sign-right already share one bottom baseline.
+   The stamp and counter-sign are anchored from that shared bottom
+   edge (bottom: 100%, i.e. "just above my own box") rather than from
+   a fixed negative top offset measured against a text block whose
+   height varies with the number of approval-text lines. This keeps
+   them level with each other no matter how tall the text above grows. */
 .bpsb-sign-left {
   display: flex;
   flex-direction: column;
@@ -100,39 +108,42 @@
   min-height: 70px;
 }
 
-/* Stamp overlay — 2.5 in × 1.5 in @ 96dpi */
+/* Stamp overlay — anchored to the bottom of the text block via bottom:100%,
+   so its vertical position is fixed relative to the signature baseline
+   instead of drifting with text height. */
 .bpsb-stamp-overlay {
   position: absolute;
-  top: -75px;
-  left: 0px;
-  width: 240px;
-  height: 144px;
-  opacity: 0.75;
-  z-index: 10;
+  top: -60px;
+  left: 5px;
+  width: 160px;
+  height: 160px;
+  opacity: 1;
+  z-index: 999;
   object-fit: contain;
   pointer-events: none;
 }
 
-/* Counter sign wrapper */
+/* Counter sign wrapper — sits in a fixed-height box bottom-aligned
+   within sign-right, which itself bottom-aligns with sign-left via
+   the parent row's align-items: flex-end. No negative margins needed. */
 .bpsb-sign-right {
   text-align: right;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .bpsb-counter-sig-wrap {
   height: 65px;
   display: flex;
   justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 0;
-  margin-top: -60px;
+  align-items: flex-end;
 }
 
 .bpsb-counter-sig-img {
-  height: 55px;
-  width: auto;
+  height: 160px;
+  width: 160px;
   object-fit: contain;
 }
 
@@ -219,15 +230,28 @@
 
 /* ── Main table ── */
 .bpsb-print-table { width: 100%; border-collapse: collapse; font-family: var(--bpsb-font); font-style: normal; flex-shrink: 0; }
-.bpsb-print-table td { padding: 2px 4px; vertical-align: top; font-size: var(--bpsb-base); font-family: var(--bpsb-font); font-style: normal; color: #000; line-height: 1.0; }
+.bpsb-print-table td { padding: 2px 4px; vertical-align: top; font-size: var(--bpsb-base); 
+  font-family: var(--bpsb-font); font-style: normal; color: #000; line-height: 1.4; background: transparent; }
+.bpsb-print-table tbody tr:nth-child(even) td { background: transparent; }
+.bpsb-print-table tbody tr:nth-child(odd)  td { background: transparent; }
 .bpsb-num   { width: 26px; text-align: center; white-space: nowrap; font-size: var(--bpsb-table-num); }
 .bpsb-desc  { width: 45%; font-size: var(--bpsb-table-desc); white-space: pre-line; }
 .bpsb-value { font-size: var(--bpsb-table-val); font-weight: 500; }
 
 /* ── Belt meta ── */
 .bpsb-belt-main { font-weight: 700; font-size: var(--bpsb-table-val); font-family: var(--bpsb-font); font-style: normal; text-transform: uppercase; margin-bottom: 2px; }
-.bpsb-belt-meta { display: flex; flex-wrap: wrap; gap: 0 12px; font-size: var(--bpsb-eq-meta); font-family: var(--bpsb-font); font-style: normal; line-height: 1.4; }
-.bpsb-belt-meta span { white-space: nowrap; }
+.bpsb-belt-meta { display: flex; 
+  flex-wrap: wrap; gap: 4px 20px;; 
+  font-size: var(--bpsb-eq-meta); 
+  font-family: var(--bpsb-font);
+  line-height: 1.6; 
+   font-style: normal; line-height: 1.4; }
+.bpsb-belt-meta span {
+  white-space: normal;   /* allow text break */
+  word-break: break-word;
+  display: inline-block;
+  min-width: 120px;      /* creates proper spacing */
+}
 
 /* ── Condition check table ── */
 .bpsb-condition-table { width: 100%; border-collapse: collapse; font-family: var(--bpsb-font); font-style: normal; margin-top: 2px; }
@@ -237,7 +261,7 @@
 
 /* ── Row 8 ── */
 .bpsb-row8-block  { display: flex; flex-direction: column; gap: 2px; }
-.bpsb-row8-status { display: block; font-size: var(--bpsb-base); font-family: var(--bpsb-font); font-style: normal; line-height: 1.0; }
+.bpsb-row8-status { display: block; font-size: var(--bpsb-base); font-family: var(--bpsb-font); font-style: normal; line-height: 1.4; }
 
 /* ── Cert footer (flex column — footer pinned to bottom) ── */
 .bpsb-cert-footer {
@@ -253,17 +277,17 @@
   font-style: normal;
   text-align: justify;
   margin-bottom: 0;
-  line-height: 1.0;
+  line-height: 1.4;
   flex-shrink: 0;
 }
 .bpsb-next-due {
-  font-weight: 700;
+  font-weight: normal;  /* ← was 700 */
   font-size: var(--bpsb-next-due);
   font-family: var(--bpsb-font);
   font-style: normal;
   margin: auto 0 6px;
   flex-shrink: 0;
-  background: #e3e3e3;
+  background: transparent;
   color: #000;
   padding: 5px 12px;
   box-sizing: border-box;
@@ -293,7 +317,7 @@
   font-size: var(--bpsb-sig-title);
   font-family: var(--bpsb-font);
   font-style: normal;
-  line-height: 1.0;
+  line-height: 1.4;
   color: #111;
   margin: 0;
 }
@@ -323,7 +347,7 @@
   font-style: normal;
   text-align: center;
   color: #111;
-  line-height: 1.0;
+  line-height: 1.4;
 }
 
 
@@ -389,7 +413,7 @@
 
   /* Next-due banner: margin-top:auto = key spacer */
   #bulk-print-sb-section .bpsb-next-due {
-    font-weight: 700 !important;
+    font-weight: normal !important;  /* ← was 700 */
     font-size: var(--bpsb-next-due) !important;
     font-family: var(--bpsb-font) !important;
     font-style: normal !important;
@@ -398,7 +422,7 @@
     flex-shrink: 0 !important;
     text-align: center !important;
     width: 100% !important;
-    background: #e3e3e3 !important;
+     background: transparent !important;
     color: #000 !important;
     padding: 5px 12px !important;
     -webkit-print-color-adjust: exact !important;
@@ -444,7 +468,7 @@
 
   /* ── Cert date row styling ── */
   #bulk-print-sb-section .bpsb-cert-date-row {
-    background: #e3e3e3 !important;
+    background: transparent !important;
     color: #000 !important;
     padding: 5px 12px !important;
     width: 100% !important;
@@ -452,7 +476,7 @@
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    font-weight: 600 !important;
+    font-weight: normal;  /* ← was 600 */
     font-size: 10px !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
@@ -460,8 +484,8 @@
 
   /* ── Font-size semantic overrides ── */
   #bulk-print-sb-section .bpsb-title-main       { font-size: 16px !important; font-weight: 700 !important; font-style: normal !important; text-transform: uppercase !important; }
-  #bulk-print-sb-section .bpsb-title-sub        { font-size: var(--bpsb-subtitle)   !important; font-style: normal !important; }
-  #bulk-print-sb-section .bpsb-num              { font-size: var(--bpsb-table-num)  !important; font-style: normal !important; }
+  #bulk-print-sb-section .bpsb-title-sub        { font-size: var(--bpsb-subtitle)   !important; font-style: normal !important; font-weight: normal;  /* ← add this */ }
+  #bulk-print-sb-section .bpsb-num              { font-size: var(--bpsb-table-num)  !important; font-style: normal !important;  font-weight: normal;  /* ← add this */}
   #bulk-print-sb-section .bpsb-desc             { font-size: var(--bpsb-table-desc) !important; font-style: normal !important; }
   #bulk-print-sb-section .bpsb-value            { font-size: var(--bpsb-table-val)  !important; font-style: normal !important; }
   #bulk-print-sb-section .bpsb-belt-main        { font-size: var(--bpsb-table-val)  !important; font-weight: 700 !important; font-style: normal !important; }
@@ -559,14 +583,32 @@
     position: relative !important;
   }
 
-  #bulk-print-sb-section .bpsb-cert-disclaimer {
-    position: absolute !important;
-    bottom: 25mm !important;   /* your required spacing */
-    left: 0 !important;
-    width: 100% !important;
-  }
+  #bulk-print-sb-section .bpsb-cert-bottom-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-top: 8px !important;
+    flex-shrink: 0 !important;
+}
 
-/* ── SB Signature layout ── */
+#bulk-print-sb-section .bpsb-cert-disclaimer {
+    position: static !important;
+    bottom: unset !important;
+    left: unset !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    padding: 4px 10px !important;
+    background: #fffdf0 !important;
+    font-size: 7px !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+}
+
+/* ── SB Signature layout ──
+   Same baseline-anchored approach as the screen rules: the parent
+   row's align-items: flex-end keeps sign-left and sign-right level,
+   and bottom:100% on the stamp ties its position to its own column's
+   bottom edge instead of an arbitrary top offset against variable-height text. */
   #bulk-print-sb-section .bpsb-sign-left {
     display: flex !important;
     flex-direction: column !important;
@@ -579,26 +621,30 @@
     min-height: 70px !important;
   }
 
-  /* Stamp — 2.5 in × 1.5 in */
+  /* Stamp — 2.5 in × 1.5 in, anchored top-offset to match Lifting exactly */
   #bulk-print-sb-section .bpsb-stamp-overlay {
     display: block !important;
     position: absolute !important;
-    width: 180pt !important;
-    height: 108pt !important;
-    top: -75px !important;
-    left: 0px !important;
-    opacity: 0.90 !important;
-    z-index: 10 !important;
+    top: -78px !important;
+    left: 5px !important;
+    width: 160px !important;
+    height: 160px !important;
+    opacity: 1 !important;
+    z-index: 999 !important;
     object-fit: contain !important;
+    max-width: unset !important;
+    max-height: unset !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* Counter sign */
+  /* Counter sign — bottom-aligned in its own fixed-height box,
+     leveling with sign-left via the parent row's flex-end alignment */
   #bulk-print-sb-section .bpsb-sign-right {
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-end !important;
+    justify-content: flex-end !important;
   }
 
   #bulk-print-sb-section .bpsb-counter-sig-wrap {
@@ -612,11 +658,67 @@
 
   #bulk-print-sb-section .bpsb-counter-sig-img {
     display: block !important;
-    height: 55px !important;
-    width: auto !important;
+    height: 160px !important;
+    width: 160px !important;
+    object-fit: contain !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
 
+/* ── Watermark ── */
+  #bulk-print-sb-section .bpsb-watermark-wrap {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: block !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+  }
+
+  #bulk-print-sb-section .bpsb-watermark-img {
+    width: 110mm !important;
+    height: auto !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(-35deg) !important;
+    opacity: 0.04 !important;
+    object-fit: contain !important;
+  }
+
+  /* Keep SB content above watermark */
+  #bulk-print-sb-section .bpsb-bulk-header,
+  #bulk-print-sb-section .bpsb-cert-date-row,
+  #bulk-print-sb-section .bpsb-print-table,
+  #bulk-print-sb-section .bpsb-cert-statement,
+  #bulk-print-sb-section .bpsb-next-due,
+  #bulk-print-sb-section .bpsb-cert-footer,
+  #bulk-print-sb-section .bpsb-signature-section {
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+#bulk-print-sb-section .bpsb-belt-meta {
+  line-height: 1.0 !important;
+  row-gap: 5px !important;
+}
+
+#bulk-print-sb-section .bpsb-belt-meta span {
+  white-space: normal !important;
+}
+
+#bulk-print-sb-section .bpsb-address {
+  font-size: var(--bpsb-table-val) !important;
+  line-height: 1.0 !important;
+  white-space: normal !important;
+}
+
 } /* end @media print */
+
+/* ── Watermark (screen hidden) ── */
+.bpsb-watermark-wrap {
+  display: none;
+}

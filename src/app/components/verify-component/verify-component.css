@@ -1,68 +1,786 @@
-/* Shared print styles — same as report.css print section */
-body { font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
+/* ═══════════════════════════════════════════════════════════════
+   VERIFY-COMPONENT.CSS
+   Scope prefix : vfy-
+   Font         : Calibri (screen) / Times New Roman (print fallback)
+   Stamp/Sign   : EXACTLY mirrors bpl-, bppv-, bppp-, bpsb- patterns
+   Print layout : Matches bulk-print A4 output precisely
+═══════════════════════════════════════════════════════════════ */
 
-.verify-state {
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; min-height: 100vh; gap: 16px; font-size: 14px;
-}
-.error-text { color: #dc2626; font-size: 16px; }
-.spinner {
-  width: 38px; height: 38px;
-  border: 3px solid #e2e8f0; border-top-color: #6366f1;
-  border-radius: 50%; animation: spin 0.7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.verify-banner {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 20px; background: #dcfce7; border-bottom: 1px solid #86efac;
-  font-size: 14px; font-weight: 600; color: #15803d; margin-bottom: 12px;
-}
-.verify-banner button {
-  padding: 6px 16px; background: #6366f1; color: #fff;
-  border: none; border-radius: 8px; cursor: pointer; font-size: 13px;
-}
-
-.print-wrap {
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 13px; color: #111; max-width: 800px; margin: 0 auto; padding: 20px;
+/* ── CSS Variables ── */
+:root {
+  --vfy-font       : "Calibri", "Calibri Body", "Trebuchet MS", Arial, sans-serif;
+  --vfy-print-font : "Times New Roman", Times, serif;
+  --vfy-base       : 10px;
+  --vfy-title      : 10px;
+  --vfy-subtitle   : 10px;
+  --vfy-cert-row   : 10px;
+  --vfy-table-desc : 10px;
+  --vfy-table-val  : 10px;
+  --vfy-table-num  : 10px;
+  --vfy-eq-meta    : 10px;
+  --vfy-footer     : 10px;
+  --vfy-sig-name   : 10px;
+  --vfy-sig-title  : 10px;
+  --vfy-next-due   : 10px;
+  --vfy-disclaimer : 7px;
 }
 
-/* Reuse all your existing print table classes */
-.print-table { width: 100%; border-collapse: collapse; }
-.print-table td { padding: 4px 8px; vertical-align: top; font-size: 12.5px; }
-.print-table tbody tr:nth-child(even) td { background: #f9f9f9; }
-.cn { width: 20px; text-align: center; font-weight: 700; }
-.cd { width: 42%; padding-right: 10px; }
-.pv-form-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
-.pv-form-table td { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }
-.col-num { width: 40px; text-align: center; }
-.col-desc { width: 55%; font-style: italic; }
-.print-title { font-size: 17px; font-weight: 700; text-transform: uppercase; text-align: center; }
-.print-sub { font-size: 12px; font-style: italic; text-align: center; }
-.cert-top-row { display: flex; justify-content: space-between; font-size: 12px; margin: 6px 0; font-weight: 700; }
-.cert-footer { margin-top: 12px; }
-.cert-certify { font-size: 12px; font-style: italic; line-height: 1.4; }
-.cert-next-due { font-size: 13px; font-weight: 700; text-align: center; background: #f0f0f0; padding: 4px; margin: 8px 0 20px; }
-.cert-signature-row { display: flex; justify-content: space-between; }
-.signature-name { font-size: 13px; font-weight: 700; text-transform: uppercase; }
-.signature-title { font-size: 11px; }
-.sign-right { text-align: right; }
-.cert-disclaimer { font-size: 10px; text-align: center; background: #fffdf0; padding: 4px; margin-top: 8px; }
-.equipment-main { font-weight: 700; font-size: 12px; text-transform: uppercase; }
-.eq-meta { display: flex; flex-wrap: wrap; gap: 0 12px; font-size: 11px; }
-.pv-print-header { text-align: center; margin-bottom: 10px; }
-.pv-title-main { font-size: 17px; font-weight: 700; }
-.pv-title-sub { font-size: 12px; font-style: italic; }
-.pv-cert-date-row { display: flex; justify-content: space-between; font-size: 12px; margin: 6px 0 10px; font-weight: 500; }
-.pv-cert-footer { margin-top: 12px; font-size: 11.5px; }
-.pv-certify-text { font-style: italic; line-height: 1.4; }
-.pv-next-due { font-weight: 700; font-size: 13px; margin: 8px 0 16px; }
-.pv-signature-row { display: flex; justify-content: space-between; margin-top: 12px; }
-.pv-sign-name { font-weight: 700; font-size: 13px; }
+/* ══════════════════════════════════════════════════════════════
+   BASE / SCREEN
+══════════════════════════════════════════════════════════════ */
+
+body {
+  font-family: var(--vfy-font);
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Loading / Error states ── */
+.vfy-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.vfy-error-text {
+  color: #dc2626;
+  font-size: 16px;
+}
+
+.vfy-spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: vfy-spin 0.7s linear infinite;
+}
+
+@keyframes vfy-spin { to { transform: rotate(360deg); } }
+
+/* ── Verified banner (screen only) ── */
+.vfy-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #dcfce7;
+  border-bottom: 1px solid #86efac;
+  font-size: 14px;
+  font-weight: 600;
+  color: #15803d;
+  margin-bottom: 12px;
+}
+
+.vfy-banner-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.vfy-banner button {
+  padding: 6px 16px;
+  background: #6366f1;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* ── Print wrap (screen view) ── */
+.vfy-print-wrap {
+  font-family: var(--vfy-font);
+  font-size: 13px;
+  color: #111;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HEADER ROW  (spacer | title | badge)
+   Mirrors: bpl-header-title-row / bppv-header-title-row / bpsb
+══════════════════════════════════════════════════════════════ */
+
+.vfy-header-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+  min-height: 60px;
+}
+
+.vfy-header-title-block {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.vfy-header-qr-spacer {
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.vfy-header-qr-block {
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Verified badge (replaces QR on verify page) */
+.vfy-verified-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  border-radius: 4px;
+  padding: 4px 6px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CERT TOP ROW  (Report No | Date)
+   Mirrors: bpl-cert-top-row / bppp-cert-date-row / bppv-cert-date-row
+══════════════════════════════════════════════════════════════ */
+
+.vfy-cert-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--vfy-cert-row);
+  font-family: var(--vfy-font);
+  font-style: normal;
+  font-weight: 600;
+  margin: 3px 0 5px;
+  background: #e3e3e3;
+  color: #000;
+  padding: 5px 12px;
+  box-sizing: border-box;
+  width: 100%;
+  letter-spacing: 0.02em;
+}
+
+.vfy-print-label {
+  font-weight: 700;
+  font-family: var(--vfy-font);
+  font-style: normal;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TYPOGRAPHY — Title / Sub
+══════════════════════════════════════════════════════════════ */
+
+.vfy-print-title {
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: var(--vfy-font);
+  margin: 0 0 2px;
+}
+
+.vfy-print-sub {
+  font-size: 12px;
+  font-style: normal;
+  text-align: center;
+  font-family: var(--vfy-font);
+  margin: 0;
+}
+
+.vfy-title-main {
+  font-size: var(--vfy-title);
+  font-weight: 700;
+  font-family: var(--vfy-font);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 3px;
+  text-align: center;
+}
+
+.vfy-title-sub {
+  font-size: var(--vfy-subtitle);
+  font-family: var(--vfy-font);
+  font-style: normal;
+  text-align: center;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MAIN TABLE — LIFTING  (bpl-print-table style)
+══════════════════════════════════════════════════════════════ */
+
+.vfy-print-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--vfy-font);
+  font-style: normal;
+}
+
+.vfy-print-table td {
+  padding: 3px 7px;
+  vertical-align: top;
+  font-size: var(--vfy-base);
+  line-height: 1.0;
+  font-family: var(--vfy-font);
+  font-style: normal;
+  border: none;
+}
+
+.vfy-print-table tbody tr:nth-child(even) td { background: #f9f9f9; }
+.vfy-print-table tbody tr:nth-child(odd)  td { background: #fff; }
+
+.vfy-cn {
+  width: 20px;
+  text-align: center;
+  font-weight: 700;
+  font-size: var(--vfy-table-num);
+  vertical-align: top;
+  font-family: var(--vfy-font);
+  font-style: normal;
+}
+
+.vfy-cd {
+  width: 45%;
+  font-size: var(--vfy-table-desc);
+  font-family: var(--vfy-font);
+  font-style: normal;
+  padding-right: 8px;
+  vertical-align: top;
+}
+
+.vfy-cv {
+  font-size: var(--vfy-table-val);
+  font-family: var(--vfy-font);
+  font-style: normal;
+  vertical-align: top;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MAIN TABLE — PV / PP / SB  (bppv-print-table / bppp / bpsb)
+══════════════════════════════════════════════════════════════ */
+
+.vfy-pv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--vfy-font);
+  font-style: normal;
+}
+
+.vfy-pv-table td {
+  padding: 2px 4px;
+  vertical-align: top;
+  font-size: var(--vfy-base);
+  font-family: var(--vfy-font);
+  font-style: normal;
+  color: #000;
+  line-height: 1.0;
+  border: 1px solid #ccc;
+}
+
+.vfy-num {
+  width: 26px;
+  text-align: center;
+  white-space: nowrap;
+  font-size: var(--vfy-table-num);
+}
+
+.vfy-desc {
+  width: 45%;
+  font-size: var(--vfy-table-desc);
+}
+
+.vfy-val {
+  font-size: var(--vfy-table-val);
+  font-weight: 500;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   EQUIPMENT META  (mirrors bpl-eq-meta / bppp-eq-meta / bpsb-belt-meta)
+══════════════════════════════════════════════════════════════ */
+
+.vfy-equipment-main {
+  font-weight: 700;
+  font-size: var(--vfy-table-val);
+  font-family: var(--vfy-font);
+  font-style: normal;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.vfy-eq-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  font-size: var(--vfy-eq-meta);
+  font-family: var(--vfy-font);
+  font-style: normal;
+  line-height: 1.4;
+}
+
+.vfy-eq-meta span {
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CERTIFY TEXT  (mirrors bpl-cert-certify / bppp / bppv / bpsb)
+══════════════════════════════════════════════════════════════ */
+
+.vfy-cert-certify {
+  font-size: var(--vfy-footer);
+  font-family: var(--vfy-font);
+  font-style: normal;
+  line-height: 1.45;
+  margin: 8px 0 4px;
+  padding: 3px 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NEXT DUE BANNER  (mirrors bpl-cert-next-due / bppv-next-due / bpsb-next-due)
+══════════════════════════════════════════════════════════════ */
+
+.vfy-cert-next-due {
+  font-size: var(--vfy-next-due);
+  font-weight: 700;
+  font-family: var(--vfy-font);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  padding: 5px 12px;
+  background: #e3e3e3;
+  color: #000;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 6px 0 8px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FOOTER STRUCTURE  (mirrors bpl-cert-footer / bppp / bppv / bpsb)
+══════════════════════════════════════════════════════════════ */
+
+.vfy-cert-footer {
+  margin-top: 10px;
+  font-family: var(--vfy-font);
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+}
+
+.vfy-cert-signature-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 4px;
+  font-family: var(--vfy-font);
+  font-style: normal;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LEFT SIGNATURE BLOCK + STAMP OVERLAY
+   EXACTLY mirrors: bpl-sign-left / bpl-sign-text-wrap / bpl-stamp-overlay
+══════════════════════════════════════════════════════════════ */
+
+.vfy-sign-left {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+}
+
+/* Relative container so stamp can overlay text below */
+.vfy-sign-text-wrap {
+  position: relative;
+  display: inline-block;
+  padding-top: 2px;
+  min-height: 70px;
+}
+
+.vfy-signature-name {
+  font-size: var(--vfy-sig-name);
+  font-weight: 700;
+  font-family: var(--vfy-font);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 2px;
+}
+
+.vfy-signature-title {
+  font-size: var(--vfy-sig-title);
+  font-family: var(--vfy-font);
+  font-style: normal;
+  line-height: 1.0;
+  color: #111;
+  margin: 0;
+}
+
+/* ── Stamp overlay — mirrors bpl-stamp-overlay EXACTLY ── */
+.vfy-stamp-overlay {
+  position: absolute;
+  top: -60px;
+  left: 5px;
+  width: 95mm;
+  height: 55mm;
+  opacity: 0.88;
+  z-index: 999;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* PV variant: stamp sits higher (mirrors bppv: top:-120px) */
+.vfy-stamp-pv {
+  top: -120px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RIGHT COUNTER-SIGN BLOCK
+   EXACTLY mirrors: bpl-sign-right / bpl-counter-sig-wrap / bpl-counter-sig-img
+══════════════════════════════════════════════════════════════ */
+
+.vfy-sign-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Pull counter-sign UP over the title row — exact bulk pattern */
+.vfy-counter-sig-wrap {
+  height: 65px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: -60px;   /* ← pulls image UP, mirrors bpl / bppp / bpsb */
+  margin-bottom: 0;
+}
+
+/* PV variant: deeper pull (mirrors bppv: margin-top:-100px) */
+.vfy-counter-pv {
+  margin-top: -100px;
+}
+
+.vfy-counter-sig-img {
+  height: 55px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* PV counter image is taller (mirrors bppv: height:120px) */
+.vfy-counter-img-pv {
+  height: 120px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BOTTOM ROW + DISCLAIMER  (mirrors bpl / bppp / bppv / bpsb)
+══════════════════════════════════════════════════════════════ */
+
+.vfy-cert-bottom-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+  font-family: var(--vfy-font);
+  font-style: normal;
+}
+
+.vfy-cert-disclaimer {
+  flex: 1;
+  margin-top: 1px;
+  padding: 4px 10px;
+  background: #fffdf0;
+  font-size: var(--vfy-disclaimer);
+  font-family: var(--vfy-font);
+  font-style: normal;
+  text-align: center;
+  color: #111;
+  line-height: 1.0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   @media print
+   Mirrors bulk-print @media print blocks exactly
+══════════════════════════════════════════════════════════════ */
 
 @media print {
-  .no-print { display: none !important; }
-  body * { display: revert !important; }
-  .print-wrap { padding: 0 !important; max-width: 100% !important; }
-}
+
+  html, body {
+    font-family: var(--vfy-font) !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 20mm 8mm 15mm 8mm;
+  }
+
+  /* ── Hide banner, verified badge ── */
+  .no-print,
+  .vfy-banner        { display: none !important; }
+  .vfy-verified-badge { display: none !important; }
+
+  /* ── Reveal print wrap ── */
+  .vfy-print-wrap {
+    padding: 0 !important;
+    max-width: 100% !important;
+    font-family: var(--vfy-font) !important;
+    font-style: normal !important;
+    color: #111 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .vfy-print-wrap * {
+    font-family: var(--vfy-font) !important;
+    font-style: normal !important;
+  }
+
+  /* ── Header title row ── */
+  .vfy-header-title-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    min-height: 85px !important;
+  }
+
+  .vfy-header-title-block {
+    flex: 1 !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+
+  .vfy-header-qr-spacer {
+    display: block !important;
+    width: 80px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .vfy-header-qr-block {
+    display: block !important;
+    width: 80px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* ── Cert top row (grey bar) ── */
+  .vfy-cert-top-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    background: #e3e3e3 !important;
+    color: #000 !important;
+    padding: 5px 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    font-weight: 600 !important;
+    font-size: 10px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* ── Typography overrides ── */
+  .vfy-print-title  { font-size: 13px !important; font-weight: 700 !important; text-transform: uppercase !important; }
+  .vfy-print-sub    { font-size: var(--vfy-subtitle) !important; font-style: normal !important; }
+  .vfy-title-main   { font-size: 16px !important; font-weight: 700 !important; font-style: normal !important; text-transform: uppercase !important; }
+  .vfy-title-sub    { font-size: var(--vfy-subtitle) !important; font-style: normal !important; }
+
+  /* ── Table cells ── */
+  .vfy-print-table  { display: table !important; border-collapse: collapse !important; width: 100% !important; }
+  .vfy-pv-table     { display: table !important; border-collapse: collapse !important; width: 100% !important; }
+
+  .vfy-print-table tbody { display: table-row-group !important; }
+  .vfy-pv-table    tbody { display: table-row-group !important; }
+  .vfy-print-table tr    { display: table-row !important; page-break-inside: avoid !important; }
+  .vfy-pv-table    tr    { display: table-row !important; page-break-inside: avoid !important; }
+  .vfy-print-table td    { display: table-cell !important; padding: 3px 5px !important; font-size: var(--vfy-base) !important; line-height: 1.25 !important; border: none !important; }
+  .vfy-pv-table    td    { display: table-cell !important; padding: 3px 5px !important; font-size: var(--vfy-base) !important; line-height: 1.25 !important; border: 1px solid #999 !important; }
+
+  .vfy-cn { font-size: var(--vfy-table-num) !important; }
+  .vfy-cd { font-size: var(--vfy-table-desc) !important; }
+  .vfy-cv { font-size: var(--vfy-table-val) !important; }
+  .vfy-num { font-size: var(--vfy-table-num) !important; }
+  .vfy-desc { font-size: var(--vfy-table-desc) !important; }
+  .vfy-val { font-size: var(--vfy-table-val) !important; }
+
+  .vfy-equipment-main { font-size: var(--vfy-table-val) !important; font-weight: 700 !important; }
+  .vfy-eq-meta        { font-size: var(--vfy-eq-meta) !important; }
+
+  /* ── Certify text ── */
+  .vfy-cert-certify {
+    font-size: var(--vfy-footer) !important;
+    line-height: 1.35 !important;
+    flex-shrink: 0 !important;
+    margin-bottom: 4px !important;
+    padding: 2px 0 !important;
+  }
+
+  /* ── Next due banner ── */
+  .vfy-cert-next-due {
+    background: #e3e3e3 !important;
+    color: #000 !important;
+    padding: 5px 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    font-weight: 700 !important;
+    font-size: 10px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    margin: 6px 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* ── Footer ── */
+  .vfy-cert-footer {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: 10mm !important;
+  }
+
+  /* ── Signature row ── */
+  .vfy-cert-signature-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    flex-wrap: nowrap !important;
+    margin-top: 4px !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* ══════════════════════════════════════════════
+     STAMP OVERLAY — print rules
+     EXACTLY mirrors bpl- @media print block
+  ══════════════════════════════════════════════ */
+
+  .vfy-sign-left {
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 220px !important;
+  }
+
+  .vfy-sign-text-wrap {
+    position: relative !important;
+    display: inline-block !important;
+    min-height: 70px !important;
+  }
+
+  .vfy-signature-name  { font-size: var(--vfy-sig-name) !important;  font-weight: 700 !important; }
+  .vfy-signature-title { font-size: var(--vfy-sig-title) !important; line-height: 1.0 !important; }
+
+  /* Default stamp (lifting / PP / SB): top -78px, mirrors bpl */
+  .vfy-stamp-overlay {
+    display: block !important;
+    position: absolute !important;
+    top: -78px !important;
+    left: 5px !important;
+    width: 95mm !important;
+    height: 55mm !important;
+    opacity: 0.92 !important;
+    z-index: 999 !important;
+    object-fit: contain !important;
+    max-width: unset !important;
+    max-height: unset !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* PV stamp: top -120px, mirrors bppv */
+  .vfy-stamp-pv {
+    top: -120px !important;
+    width: 95mm !important;
+    height: 55mm !important;
+  }
+
+  /* ══════════════════════════════════════════════
+     COUNTER SIGN — print rules
+     EXACTLY mirrors bpl- @media print block
+  ══════════════════════════════════════════════ */
+
+  .vfy-sign-right {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+  }
+
+  /* Default counter-wrap (lifting / PP / SB): margin-top -60px, mirrors bpl */
+  .vfy-counter-sig-wrap {
+    height: 65px !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    margin-top: -60px !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* PV counter-wrap: margin-top -100px, mirrors bppv */
+  .vfy-counter-pv {
+    margin-top: -100px !important;
+  }
+
+  /* Default counter image (lifting / PP / SB): height 120px, mirrors bpl print */
+  .vfy-counter-sig-img {
+    display: block !important;
+    height: 120px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* PV counter image: also 120px (already same) */
+  .vfy-counter-img-pv {
+    height: 120px !important;
+  }
+
+  /* ── Bottom row / Disclaimer ── */
+  .vfy-cert-bottom-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-top: 8px !important;
+  }
+
+  .vfy-cert-disclaimer {
+    position: static !important;
+    width: 100% !important;
+    font-size: 7px !important;
+    line-height: 1.2 !important;
+    padding: 4px 10px !important;
+    background: #fffdf0 !important;
+    text-align: center !important;
+    margin-top: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* ── Flex display enforcement ── */
+  .vfy-cert-top-row,
+  .vfy-eq-meta,
+  .vfy-cert-signature-row,
+  .vfy-cert-bottom-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+  }
+
+  .vfy-cert-top-row       { flex-wrap: nowrap !important; justify-content: space-between !important; }
+  .vfy-cert-signature-row { justify-content: space-between !important; align-items: flex-end !important; flex-wrap: nowrap !important; }
+  .vfy-cert-bottom-row    { align-items: flex-end !important; justify-content: space-between !important; }
+
+} /* end @media print */

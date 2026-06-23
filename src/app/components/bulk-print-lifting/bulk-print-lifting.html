@@ -9,18 +9,18 @@
   <div class="bpl-index-page">
     <div class="bpl-index-header">
       <div class="bpl-index-title">Lifting Equipment Inspection Records — Index</div>
-      <div class="bpl-index-subtitle">Summary of Lifting Equipment Inspection Reports</div>
+      <div class="bpl-index-subtitle">Summary of Lifting Equipment Inspection Report</div>
     </div>
 
     <table class="bpl-index-table">
       <thead>
         <tr>
           <th>Sl No.</th>
-          <th>Type</th>
+          <!-- <th>Type</th> -->
           <th>Certificate No</th>
           <th>ID No.</th>
           <th>Equipment</th>
-          <th>Sr.No</th>
+          <!-- <th>Sr.No</th> -->
           <th>Manufacturer</th>
           <th>Year</th>
           <th>Capacity / SWL</th>
@@ -33,11 +33,11 @@
       <tbody>
         <tr *ngFor="let item of liftingItems; let i = index">
           <td>{{ i + 1 }}</td>
-          <td class="bpl-badge">Lifting</td>
+          <!-- <td class="bpl-badge">Lifting</td> -->
           <td class="bpl-cert-no">{{ item.data.certificateNo || '—' }}</td>
           <td>{{ item.data.idNumber || '—' }}</td>
           <td>{{ item.data.equipmentName || '—' }}</td>
-          <td>{{ item.data.srNo || '—' }}</td>
+          <!-- <td>{{ item.data.srNo || '—' }}</td>   -->
           <td>{{ item.data.manufacturerName || '—' }}</td>
           <td>{{ item.data.manufacturerYear || '—' }}</td>
           <td>{{ item.data.capacity || item.data.safeWorkingLoad || '—' }}</td>
@@ -54,19 +54,20 @@
         </tr>
       </tbody>
     </table>
-
     <div class="bpl-index-footer">
       Total Lifting Records: {{ liftingItems.length }}
     </div>
   </div><!-- /bpl-index-page -->
-
   <!-- Page break after index -->
-  <div class="bpl-page-break"></div>
-
+  <!-- <div class="bpl-page-break"></div> -->
   <!-- ── ONE PAGE PER LIFTING RECORD ── -->
   <ng-container *ngFor="let item of liftingItems; let last = last">
     <div class="bpl-print-page">
 
+    <div class="bpl-watermark-wrap" *ngIf="watermarkImageUrl">
+  <img [src]="watermarkImageUrl"
+       class="bpl-watermark-img">
+</div>
       <!-- Header
       <div class="bpl-print-header-row">
         <div class="bpl-print-title-group">
@@ -81,10 +82,8 @@
 
       <div class="bpl-print-header-row">
         <div class="bpl-header-title-row">
-
           <!-- Left spacer (mirrors QR width for centering) ] -->
           <div class="bpl-header-qr-spacer"></div>
-
           <!-- Centered title block -->
           <div class="bpl-header-title-block">
             <p class="bpl-print-title">{{ item.data.testName?.split('(')[0]?.trim() }}</p>
@@ -104,7 +103,7 @@
       </div>
 
       <div class="bpl-cert-top-row">
-        <span class="bpl-print-label">Report No: {{ item.data.certificateNo }}</span>
+        <span class="bpl-print-label">Certificate No: {{ item.data.certificateNo }}</span>
         <span class="bpl-print-label">Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</span>
       </div>
 
@@ -128,14 +127,15 @@
             <td class="bpl-cv">
               <div class="bpl-equipment-main">{{ item.data.equipmentName || '—' }}</div>
               <div class="bpl-eq-meta">
-                <span>Model No.: {{ item.data.modelNumber || '—' }}</span>
+                <span>Capacity: {{ item.data.capacity || '—' }}</span>
+                <span>{{ item.data.modelNumber || '—' }}</span>
                 <span>Sr.No.: {{ item.data.srNo || '—' }}</span>
                 <span>ID No: {{ item.data.idNumber || '—' }}</span>
                 <span>Mfg Name: {{ item.data.manufacturerName || '—' }}</span>
                 <span>Year: {{ item.data.manufacturerYear || '—' }}</span>
-                <span>Capacity: {{ item.data.capacity || '—' }}</span>
-                <span>SWL: {{ item.data.safeWorkingLoad || '—' }}</span>
-                <span>Equipment Location: {{ item.data.equipmentLocation || '—' }}</span>
+                <!-- <span>Capacity: {{ item.data.capacity || '—' }}</span> -->
+                <!-- <span>SWL: {{ item.data.safeWorkingLoad || '—' }}</span> -->
+                <span>Location: {{ item.data.equipmentLocation || '—' }}</span>
               </div>
             </td>
           </tr>
@@ -179,12 +179,12 @@
       </table>
 
       <div class="bpl-cert-certify">
-        I certify that on <strong>{{ item.data.certifiedDate | date:'dd-MM-yyyy' }}</strong>,
+        I certify that on <strong> {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong>,
         I thoroughly examined the above Lifting Machine/Lifting Tackles and that the above is a true report of the
         result of the examination.
       </div>
       <div class="bpl-cert-next-due">
-        <strong>NEXT EXAMINATION DUE:</strong> {{ item.data.nextDueDate | date:'dd-MM-yyyy' }}
+        NEXT EXAMINATION DUE: {{ item.data.nextDueDate | date:'dd-MM-yyyy' }}
       </div>
       <!-- Footer -->
       <!-- Footer -->

@@ -6,26 +6,24 @@
 <div id="bulk-print-pv-section"
      *ngIf="pvItems.length > 0"
      class="bppv-root">
-
   <!-- ── INDEX PAGE ── -->
   <div class="bppv-index-page">
     <div class="bppv-index-header">
       <div class="bppv-index-title">Pressure Vessel Inspection Records — Index</div>
       <div class="bppv-index-subtitle">Summary of Pressure Vessel Inspection Reports</div>
     </div>
-
     <table class="bppv-index-table">
       <thead>
         <tr>
           <th>Sl No.</th>
-          <th>Type</th>
+          <!-- <th>Type</th> -->
           <th>Certificate No</th>
           <th>ID No.</th>
           <th>Vessel</th>
-          <th>Sr.No</th>
+          <!-- <th>Sr.No</th> -->
           <th>Manufacturer</th>
           <th>Year</th>
-          <th>Capacity / SWP</th>
+          <th>Capacity / S</th>
           <th>Location</th>
           <th>Testing Date</th>
           <th>Due Date</th>
@@ -35,11 +33,11 @@
       <tbody>
         <tr *ngFor="let item of pvItems; let i = index">
           <td>{{ i + 1 }}</td>
-          <td class="bppv-badge">PV</td>
+          <!-- <td class="bppv-badge">PV</td> -->
           <td class="bppv-cert-no">{{ item.data.certificateNo || '—' }}</td>
           <td>{{ item.data.vesselIdNo || '—' }}</td>
           <td>{{ item.data.vesselDescription || '—' }}</td>
-          <td>{{ item.data.vesselSrNo || item.data.vesselIdNo || '—' }}</td>
+          <!-- <td>{{ item.data.serialNo || '—' }}</td> -->
           <td>{{ item.data.manufacturerName || '—' }}</td>
           <td>{{ item.data.dateOfConstruction || '—' }}</td>
           <td>{{ item.data.vesselCapacity || '—' }}</td>
@@ -63,11 +61,16 @@
   </div><!-- /bppv-index-page -->
 
   <!-- Page break after index -->
-  <div class="bppv-page-break"></div>
+  <!-- <div class="bppv-page-break"></div> -->
 
   <!-- ── ONE PAGE PER PV RECORD ── -->
   <ng-container *ngFor="let item of pvItems; let last = last">
     <div class="bppv-print-page">
+
+   
+  <div class="bppv-watermark-wrap" *ngIf="watermarkImageUrl">
+    <img [src]="watermarkImageUrl" class="bppv-watermark-img">
+  </div>
 
       <!-- Header -->
       <div class="bppv-bulk-header">
@@ -79,24 +82,24 @@
     {{ item.data.testName || 'REPORT OF EXAMINATION OR TEST OF PRESSURE VESSEL OR PLANT' }}
   </div>
   <ng-container *ngIf="item.data.testName?.includes('HYDRO-STATIC'); else normalSub">
-    <div class="bppv-title-sub">Form No. 9 (Prescribed Under Rule 58) </div>
+    <div class="bppv-title-sub">Form no. 9 (Prescribed Under Rule 56 Framed U/S 31(Factory Rules 1950)</div>
   </ng-container>
   <ng-template #normalSub>
     <div class="bppv-title-sub">
-      {{ item.data.formNo || 'Form No. 8' }} Section 31 {{ item.data.ruleNumber ? '(See ' + item.data.ruleNumber + ')' : '(See Rule 61)' }}
+    Form no. 9 (Prescribed Under Rule 56 Framed U/S 31(Factory Rules 1950)
+      <!-- {{ item.data.formNo || 'Form No. 9' }} Section 31 {{ item.data.ruleNumber ? '(See ' + item.data.ruleNumber + ')' : '(See Rule 61)' }} -->
     </div>
   </ng-template>
 </div>  
-  
-  <div class="bppv-header-qr-block">
+    <div class="bppv-header-qr-block">
     <img [src]="generateQrSvg(item.data.certificateNo + '|' + companyId + '|pv')"
          class="bppv-header-qr-img" alt="QR Code">
     <div class="bppv-header-qr-label">Scan to Download</div>
   </div>
   </div>
         <div class="bppv-cert-date-row">
-          <span><strong>Certificate No: {{ item.data.certificateNo }}</strong></span>
-          <span><strong>Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong></span>
+          <span>Certificate No: {{ item.data.certificateNo }}</span>
+          <span>Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</span>
         </div>
       </div>
 
@@ -118,8 +121,13 @@
             <td class="bppv-desc">Name, description and distinctive number of pressure vessel/Plant</td>
             <td class="bppv-value">
               <div class="bppv-vessel-main">{{ item.data.vesselDescription || '—' }}</div>
-              <div class="bppv-vessel-meta">Cap.: {{ item.data.vesselCapacity || '—' }} | Sr. No. {{ item.data.vesselSrNo || '—' }} | ID. No. {{ item.data.vesselIdNo || '—' }} | Location: {{ item.data.vesselLocation || '—' }}</div>
-            </td>
+            <div class="bppv-vessel-meta">
+  Cap.: {{ item.data.vesselCapacity || '—' }} |
+  Model No. {{ item.data.modelNo || '—' }} |
+  Sr. No. {{ item.data.serialNo || '—' }} |
+  ID. No. {{ item.data.vesselIdNo || '—' }} |
+  Location: {{ item.data.vesselLocation || '—' }}
+</div>            </td>
           </tr>
           <tr>
             <td class="bppv-num">4)</td>
@@ -161,17 +169,29 @@
             <td class="bppv-value">{{ item.data.previousHistoryAndLastReportSeen || '—' }}</td>
           </tr> -->
          
-          <tr>
+          <!-- <tr>
             <td class="bppv-num">7)</td>
             <td class="bppv-desc">Date of last hydrostatic test (if any) and pressure applied</td>
             <td class="bppv-value">{{ item.data.exposedToWeather || '—' }}</td>
+          </tr> -->
+
+            <tr>
+            <td class="bppv-num">7)</td>
+            <td class="bppv-desc">Is the vessel in open or otherwise exposed to weather or to damp?</td>
+            <td class="bppv-value">{{ item.data.exposedToWeather || '—' }}</td>
           </tr>
 
-           <tr>
+            <tr>
+            <td class="bppv-num">8)</td>
+            <td class="bppv-desc">Date of last hydrostatic test (if any) and pressure applied</td>
+            <td class="bppv-value">{{ item.data.pressureAppliedLastHydrostatic }} {{ safeDateFormat(item.data.dateOfLastHydrostaticTest) }}</td>
+          </tr>
+
+           <!-- <tr>
             <td class="bppv-num">8)</td>
             <td class="bppv-desc">Is the vessel in open or otherwise exposed to weather or to damp?</td>
-            <td class="bppv-value">{{ item.data.pressureAppliedLastHydrostatic }} on Dated {{ safeDateFormat(item.data.dateOfLastHydrostaticTest) }}</td>
-          </tr>
+            <td class="bppv-value">{{ item.data.pressureAppliedLastHydrostatic }} {{ safeDateFormat(item.data.dateOfLastHydrostaticTest) }}</td>
+          </tr> -->
           
           <tr>
             <td class="bppv-num">9)</td>
@@ -256,7 +276,7 @@
           and that the above is a true report of my examination.
         </div>
         <div class="bppv-next-due">
-          <strong>Next Due Date for Examination: {{ item.data.nextDueDateForExamination | date:'dd.MM.yyyy' }}</strong>
+          Next Due Date for Examination: {{ item.data.nextDueDateForExamination | date:'dd.MM.yyyy' }}
         </div>
       <div class="bppv-signature-section">
 
