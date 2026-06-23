@@ -292,7 +292,6 @@
   border-radius: 12px; padding: 6px;
 }
 
-
 .tab-btn {
   flex: 1;
   display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -785,11 +784,6 @@ textarea.field-disabled {
    CLEAN PRINT ONLY BULK REPORT
 ═══════════════════════════════════════════════════════ */
 
-/* ═══════════════════════════════════════════════════════════════
-   FIXED @media print — REPORT.COMPONENT.CSS
-   Replace the existing @media print block with this
-═══════════════════════════════════════════════════════════════ */
-
 @media print {
 
   @page {
@@ -797,113 +791,75 @@ textarea.field-disabled {
     margin: 8mm;
   }
 
-  /* ── Reset page ── */
-  html, body {
-    margin: 0 !important;
-    padding: 0 !important;
-    height: auto !important;
-    overflow: visible !important;
-    background: #fff !important;
+  html,
+  body {
+    margin:0 !important;
+    padding:0 !important;
+    height:auto !important;
+    overflow:visible !important;
   }
 
-/* Hide print sections on screen */
-app-bulk-print-lifting,
-app-bulk-print-pv,
-app-bulk-print-pp,
-app-bulk-print-sb,
-app-bulk-print-sv {
-  display: none !important;
-}
-  /* Hide layout */
-  .shell,
+
+  /* Hide Angular app layout */
+  app-dashboard,
+  app-header,
+  app-sidebar,
   .sidebar,
-  .topbar,
-  .content,
+  .header,
+  .navbar,
   .page-header,
   .tab-nav-wrapper,
   .tab-panels-wrapper,
   .bulk-print-bar,
   .modal-overlay,
-  .toast-container {
-    display: none !important;
+  .toast-container,
+  .report-page {
+      display:none !important;
   }
 
-  /* Show print components */
-  app-bulk-print-lifting,
-  app-bulk-print-pv,
-  app-bulk-print-pp,
-  app-bulk-print-sb,
-  app-bulk-print-sv {
-    display: block !important;
-    visibility: visible !important;
+
+  /* Hide everything */
+  body > * {
+      display:none !important;
   }
 
-  /* Show print sections inside */
-  #lifting-bulk-print-section,
-  #pv-bulk-print-section,
-  #pp-bulk-print-section,
-  #sb-bulk-print-section,
-  #sv-bulk-print-section {
-    display: flex !important;
-    visibility: visible !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    background: #fff !important;
+
+  /* Show ONLY report */
+  #bulk-print-section {
+
+      display:block !important;
+
+      position:absolute !important;
+
+      top:0 !important;
+      left:0 !important;
+
+      width:100% !important;
+
+      height:auto !important;
+
+      background:white !important;
+
+      visibility:visible !important;
+
   }
 
-  /* All children visible */
-  app-bulk-print-lifting *,
-  app-bulk-print-pv *,
-  app-bulk-print-pp *,
-  app-bulk-print-sb *,
-  app-bulk-print-sv * {
-    visibility: visible !important;
+
+  #bulk-print-section * {
+
+      visibility:visible !important;
+
   }
 
-  /* Page breaks */
-  .bpl-print-page,
-  .bppv-print-page,
-  .bppp-print-page,
-  .bpsb-print-page,
-  .bpsv-print-page {
-    page-break-after: always !important;
-    break-after: page !important;
+
+  .bulk-print-page {
+
+      page-break-after:always !important;
+      break-after:page !important;
+      min-height:270mm !important;
+
   }
 
-  .bpl-page-break,
-  .bppv-page-break,
-  .bppp-page-break,
-  .bpsb-page-break,
-  .bpsv-page-break {
-    page-break-after: always !important;
-    break-after: page !important;
-    display: block !important;
-    visibility: visible !important;
-  }
-
-  /* ── Tables display ── */
-  table {
-    display: table !important;
-    width: 100% !important;
-    border-collapse: collapse !important;
-  }
-
-  thead {
-    display: table-header-group !important;
-  }
-
-  tbody {
-    display: table-row-group !important;
-  }
-
-  tr {
-    display: table-row !important;
-    page-break-inside: avoid !important;
-  }
-
-  td, th {
-    display: table-cell !important;
-  }
 
 }
 
