@@ -879,45 +879,41 @@
     min-height: 70px !important;
   }
 
-  #sv-bulk-print-section .bpsv-stamp-overlay {
-    display: block !important;
-    position: absolute !important;
-    top: -88px !important;
-    left: 5px !important;
-    width: 160px;
-    height: 160px;
-    opacity: 1 !important;
-    z-index: 999 !important;
-    object-fit: contain !important;
-    max-width: unset !important;
-    max-height: unset !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
+#sv-bulk-print-section .bpsv-stamp-overlay {
+  display: block !important;
+  position: absolute !important;
+  top: -78px !important;
+  left: 5px !important;
+  width: 160px !important;
+  height: 160px !important;
+  opacity: 1 !important;
+  z-index: 999 !important;
+  object-fit: contain !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
 
   /* ── Counter sign ── */
-  #sv-bulk-print-section .bpsv-sign-right {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
-  }
+#sv-bulk-print-section .bpsv-sign-right {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+}
 
-  #sv-bulk-print-section .bpsv-counter-sig-wrap {
-    height: 65px !important;
-    display: flex !important;
-    justify-content: flex-end !important;
-    align-items: center !important;
-    margin-top: -88px !important;
-    margin-bottom: 0 !important;
-  }
+#sv-bulk-print-section .bpsv-counter-sig-wrap {
+  height: 65px !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  margin-top: -60px !important;
+  margin-bottom: 0 !important;
+}
 
 #sv-bulk-print-section .bpsv-counter-sig-img {
   height: 160px !important;
   width: auto !important;
   object-fit: contain !important;
-  transform: translateY(-10px) !important;
 }
-
   /* ── Disclaimer ── */
   #sv-bulk-print-section .bpsv-cert-bottom-row {
     display: flex !important;
