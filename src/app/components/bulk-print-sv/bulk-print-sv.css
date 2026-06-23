@@ -926,7 +926,6 @@
     align-items: flex-end !important;
     justify-content: flex-end !important;
     flex-shrink: 0 !important;
-    top: 0px !important;
     gap: 4px !important;  /* Space between image and label */
   }
 
