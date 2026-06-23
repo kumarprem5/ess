@@ -944,10 +944,7 @@
     margin: 0 !important;
     padding: 0 !important;
   }
- 
-
-
- #sv-bulk-print-section .bpsv-sign-right .bpsv-signature-title {
+  #sv-bulk-print-section .bpsv-sign-right .bpsv-signature-title {
     margin: 0 !important;
     text-align: right !important;
     position: relative !important;
@@ -957,7 +954,7 @@
   }
 
   #sv-bulk-print-section .bpsv-counter-sig-img {
-    height: 75px !important;
+    height: 160px !important;
     width: auto !important;
     object-fit: contain !important;
     margin-bottom: 1px !important;  /* Fine-tune alignment */
