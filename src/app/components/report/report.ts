@@ -651,64 +651,61 @@
     this.selectedSvIds = new Set();   // ← add this line
   }
 
-      printSelected(): void {
-        // ── Lifting ──
-        this.liftingItemsForPrint = this.liftingReports
-          .filter(r => r.id != null && this.selectedLiftingIds.has(r.id!))
-          .map(r => ({
-            type: 'lifting' as const,
-            data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNo + '|' + this.companyId + '|lifting') }
-          }));
-    
-          this.svItemsForPrint = this.safetyValveReports
-      .filter(r => r.id != null && this.selectedSvIds.has(r.id!))
-      .map(r => ({
-        type: 'sv' as const,
-        data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNo + '|' + this.companyId + '|sv') }
-      }));
-
-        // ── PV ──
-        this.pvItemsForPrint = this.pressureReports
-          .filter(r => r.id != null && this.selectedPvIds.has(r.id!))
-          .map(r => ({
-            type: 'pv' as const,
-            data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNo + '|' + this.companyId + '|pv') }
-          }));
-    
-        // ── PP ──
-        this.ppItemsForPrint = this.powerPressReports
-          .filter(r => r.id != null && this.selectedPpIds.has(r.id!))
-          .map(r => ({
-            type: 'pp' as const,
-            data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNo + '|' + this.companyId + '|pp') }
-          }));
-
-
-          /* ── SB ── NEW ── */
-        this.sbItemsForPrint = this.safetyBeltReports
-          .filter(r => r.id != null && this.selectedSbIds.has(r.id!))
-          .map(r => ({
-            type: 'sb' as const,
-            data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNumber + '|' + this.companyId + '|sb') }
-          }));
-    
-        // Clear single-record targets
-        this.selectedItem   = null;
-        this.selectedPvItem = null;
-        this.selectedPpItem = null;
-        this.selectedSbItem = null;
-        this.selectedSvItem = null;
-    
-        setTimeout(() => window.print(), 300);
-      }
-    
-    /* ── STEP 3 ── Update getLiftingCount / getPvCount / getPpCount ── */
-    
-      getLiftingCount(): number { return this.liftingItemsForPrint.length; }
-      getPvCount():      number { return this.pvItemsForPrint.length; }
-      getPpCount():      number { return this.ppItemsForPrint.length; }
-      getSbCount():      number { return this.sbItemsForPrint.length; }
-      getSvCount():      number { return this.svItemsForPrint.length; }
+printSelected(): void {
+  // Lifting
+  this.liftingItemsForPrint = this.liftingReports
+    .filter(r => r.id != null && this.selectedLiftingIds.has(r.id!))
+    .sort((a, b) => this.compareCertificateNumbers(a.certificateNo, b.certificateNo))
+    .map(r => ({
+      type: 'lifting' as const,
+      data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNo + '|' + this.companyId + '|lifting') }
+    }));
+ 
+  // PV
+  this.pvItemsForPrint = this.pressureReports
+    .filter(r => r.id != null && this.selectedPvIds.has(r.id!))
+    .sort((a, b) => this.compareCertificateNumbers(a.certificateNo, b.certificateNo))
+    .map(r => ({
+      type: 'pv' as const,
+      data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNo + '|' + this.companyId + '|pv') }
+    }));
+ 
+  // PP
+  this.ppItemsForPrint = this.powerPressReports
+    .filter(r => r.id != null && this.selectedPpIds.has(r.id!))
+    .sort((a, b) => this.compareCertificateNumbers(a.certificateNo, b.certificateNo))
+    .map(r => ({
+      type: 'pp' as const,
+      data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNo + '|' + this.companyId + '|pp') }
+    }));
+ 
+  // SB
+  this.sbItemsForPrint = this.safetyBeltReports
+    .filter(r => r.id != null && this.selectedSbIds.has(r.id!))
+    .sort((a, b) => this.compareCertificateNumbers(a.certificateNumber, b.certificateNumber))
+    .map(r => ({
+      type: 'sb' as const,
+      data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNumber + '|' + this.companyId + '|sb') }
+    }));
+ 
+  // SV
+  this.svItemsForPrint = this.safetyValveReports
+    .filter(r => r.id != null && this.selectedSvIds.has(r.id!))
+    .sort((a, b) => this.compareCertificateNumbers(a.certificateNo, b.certificateNo))
+    .map(r => ({
+      type: 'sv' as const,
+      data: { ...r, qrCodeUrl: this.generateQrSvg(r.certificateNo + '|' + this.companyId + '|sv') }
+    }));
+ 
+  // Clear single-record targets
+  this.selectedItem   = null;
+  this.selectedPvItem = null;
+  this.selectedPpItem = null;
+  this.selectedSbItem = null;
+  this.selectedSvItem = null;
+ 
+  setTimeout(() => window.print(), 300);
+}
       /* =========================================================
         CONSTRUCTOR / INIT
       ========================================================= */
@@ -1858,6 +1855,9 @@ onSvExaminationDateChange(): void {
       this.pvForm.nextDueDateForExamination = this.toDateStr(due);
     }
 
+
+
+
       /* =========================================================
         CERTIFICATE NUMBER GENERATOR — PV
       ========================================================= */
@@ -2227,26 +2227,24 @@ onSvExaminationDateChange(): void {
     }
 
 
-
-    get sortedLiftingReports(): LiftingRecord[] {
-      const reports = [...this.liftingReports];
-      switch (this.liftingSortBy) {
-        case 'serial':
-          return reports.sort((a, b) => {
-            const aNum = parseInt((a.certificateNo || '').split('/').pop() || '0', 10);
-            const bNum = parseInt((b.certificateNo || '').split('/').pop() || '0', 10);
-            return aNum - bNum;
-          });
-        case 'equipment':
-          return reports.sort((a, b) =>
-            (a.equipmentName || '').localeCompare(b.equipmentName || ''));
-        case 'date':
-          return reports.sort((a, b) =>
-            (a.dateOfExamination || '').localeCompare(b.dateOfExamination || ''));
-        default:
-          return reports;
-      }
-    }
+get sortedLiftingReports(): LiftingRecord[] {
+  const reports = [...this.liftingReports];
+  switch (this.liftingSortBy) {
+    case 'serial':
+      // NOW uses full cert number comparison instead of just last segment
+      return reports.sort((a, b) =>
+        this.compareCertificateNumbers(a.certificateNo, b.certificateNo)
+      );
+    case 'equipment':
+      return reports.sort((a, b) =>
+        (a.equipmentName || '').localeCompare(b.equipmentName || ''));
+    case 'date':
+      return reports.sort((a, b) =>
+        (a.dateOfExamination || '').localeCompare(b.dateOfExamination || ''));
+    default:
+      return reports;
+  }
+}
 
     get equipmentGroups(): { name: string; count: number; records: LiftingRecord[] }[] {
       const grouped = new Map<string, LiftingRecord[]>();
@@ -2282,43 +2280,42 @@ onSvExaminationDateChange(): void {
     }
 
 
-    get sortedPressureReports(): PressureVesselCertificate[] {
-      const reports = [...this.pressureReports];
-      switch (this.pvSortBy) {
-        case 'vessel':
-          return reports.sort((a, b) =>
-            (a.vesselDescription || '').localeCompare(b.vesselDescription || ''));
-        case 'date':
-          return reports.sort((a, b) =>
-            (a.dateOfExamination || '').localeCompare(b.dateOfExamination || ''));
-        default: // serial
-          return reports.sort((a, b) => {
-            const aNum = parseInt((a.certificateNo || '').split('/').pop() || '0', 10);
-            const bNum = parseInt((b.certificateNo || '').split('/').pop() || '0', 10);
-            return aNum - bNum;
-          });
-      }
-    }
+   get sortedPressureReports(): PressureVesselCertificate[] {
+  const reports = [...this.pressureReports];
+  switch (this.pvSortBy) {
+    case 'serial':
+      return reports.sort((a, b) =>
+        this.compareCertificateNumbers(a.certificateNo, b.certificateNo)
+      );
+    case 'vessel':
+      return reports.sort((a, b) =>
+        (a.vesselDescription || '').localeCompare(b.vesselDescription || ''));
+    case 'date':
+      return reports.sort((a, b) =>
+        (a.dateOfExamination || '').localeCompare(b.dateOfExamination || ''));
+    default:
+      return reports;
+  }
+}
 
-
-    get sortedPowerPressReports(): PowerPress[] {
-      const reports = [...this.powerPressReports];
-      switch (this.ppSortBy) {
-        case 'machine':
-          return reports.sort((a, b) =>
-            (a.machineType || '').localeCompare(b.machineType || ''));
-        case 'date':
-          return reports.sort((a, b) =>
-            (a.dateOfExamination || '').localeCompare(b.dateOfExamination || ''));
-        default:
-          return reports.sort((a, b) => {
-            const aNum = parseInt((a.certificateNo || '').split('/').pop() || '0', 10);
-            const bNum = parseInt((b.certificateNo || '').split('/').pop() || '0', 10);
-            return aNum - bNum;
-          });
-      }
-    }
-
+ get sortedPowerPressReports(): PowerPress[] {
+  const reports = [...this.powerPressReports];
+  switch (this.ppSortBy) {
+    case 'serial':
+      return reports.sort((a, b) =>
+        this.compareCertificateNumbers(a.certificateNo, b.certificateNo)
+      );
+    case 'machine':
+      return reports.sort((a, b) =>
+        (a.machineType || '').localeCompare(b.machineType || ''));
+    case 'date':
+      return reports.sort((a, b) =>
+        (a.dateOfExamination || '').localeCompare(b.dateOfExamination || ''));
+    default:
+      return reports;
+  }
+}
+ 
     get machineGroups(): { name: string; count: number }[] {
       const map = new Map<string, number>();
       this.powerPressReports.forEach(r => {
@@ -2330,24 +2327,24 @@ onSvExaminationDateChange(): void {
         .sort((a, b) => a.name.localeCompare(b.name));
     }
 
-    get sortedSafetyBeltReports(): SafetyBeltInspection[] {
-      const reports = [...this.safetyBeltReports];
-      switch (this.sbSortBy) {
-        case 'belt':
-          return reports.sort((a, b) =>
-            (a.beltType || '').localeCompare(b.beltType || ''));
-        case 'date':
-          return reports.sort((a, b) =>
-            (a.dateOfExamination || '').localeCompare(b.dateOfExamination || ''));
-        default:
-          return reports.sort((a, b) => {
-            const aNum = parseInt((a.certificateNumber || '').split('/').pop() || '0', 10);
-            const bNum = parseInt((b.certificateNumber || '').split('/').pop() || '0', 10);
-            return aNum - bNum;
-          });
-      }
-    }
-
+ get sortedSafetyBeltReports(): SafetyBeltInspection[] {
+  const reports = [...this.safetyBeltReports];
+  switch (this.sbSortBy) {
+    case 'serial':
+      // NOTE: Safety Belt uses 'certificateNumber' not 'certificateNo'
+      return reports.sort((a, b) =>
+        this.compareCertificateNumbers(a.certificateNumber, b.certificateNumber)
+      );
+    case 'belt':
+      return reports.sort((a, b) =>
+        (a.beltType || '').localeCompare(b.beltType || ''));
+    case 'date':
+      return reports.sort((a, b) =>
+        (a.dateOfExamination || '').localeCompare(b.dateOfExamination || ''));
+    default:
+      return reports;
+  }
+}
     get beltGroups(): { name: string; count: number }[] {
       const map = new Map<string, number>();
       this.safetyBeltReports.forEach(r => {
@@ -2788,23 +2785,25 @@ onPvExaminationDateChange(): void {
         error: err => console.error('SV Reload Error:', err)
       });
     }
-
-    get sortedSafetyValveReports(): SafetyValve[] {
-      const reports = [...this.safetyValveReports];
-      switch (this.svSortBy) {
-        case 'valve':
-          return reports.sort((a, b) => (a.valveType || '').localeCompare(b.valveType || ''));
-        case 'date':
-          return reports.sort((a, b) => (a.dateOfExamination || '').localeCompare(b.dateOfExamination || ''));
-        default:
-          return reports.sort((a, b) => {
-            const aNum = parseInt((a.certificateNo || '').split('/').pop() || '0', 10);
-            const bNum = parseInt((b.certificateNo || '').split('/').pop() || '0', 10);
-            return aNum - bNum;
-          });
-      }
-    }
-
+    
+get sortedSafetyValveReports(): SafetyValve[] {
+  const reports = [...this.safetyValveReports];
+  switch (this.svSortBy) {
+    case 'serial':
+      return reports.sort((a, b) =>
+        this.compareCertificateNumbers(a.certificateNo, b.certificateNo)
+      );
+    case 'valve':
+      return reports.sort((a, b) =>
+        (a.valveType || '').localeCompare(b.valveType || ''));
+    case 'date':
+      return reports.sort((a, b) =>
+        (a.dateOfExamination || '').localeCompare(b.dateOfExamination || ''));
+    default:
+      return reports;
+  }
+}
+ 
     get valveGroups(): { name: string; count: number }[] {
       const map = new Map<string, number>();
       this.safetyValveReports.forEach(r => {
@@ -2879,5 +2878,40 @@ onPvExaminationDateChange(): void {
     parts[2] = dateCode; // only the date segment changes
     return parts.join('/');
   }
+
+
+
+private compareCertificateNumbers(certA: string | undefined, certB: string | undefined): number {
+  if (!certA && !certB) return 0;
+  if (!certA) return 1;   // undefined goes to end
+  if (!certB) return -1;
+ 
+  const partsA = certA.split('/');
+  const partsB = certB.split('/');
+ 
+  // Compare each segment in order
+  const maxLen = Math.max(partsA.length, partsB.length);
+ 
+  for (let i = 0; i < maxLen; i++) {
+    const pA = partsA[i] ?? '';
+    const pB = partsB[i] ?? '';
+ 
+    // If both segments are fully numeric, compare as numbers
+    if (/^\d+$/.test(pA) && /^\d+$/.test(pB)) {
+      const numA = parseInt(pA, 10);
+      const numB = parseInt(pB, 10);
+      if (numA !== numB) return numA - numB;
+    }
+    // Otherwise compare as strings (case-sensitive, alphabetic)
+    else {
+      const cmp = pA.localeCompare(pB);
+      if (cmp !== 0) return cmp;
+    }
+  }
+  return 0;
+}
+ 
+
+
 
     }
