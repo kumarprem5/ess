@@ -496,7 +496,7 @@
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 0;
-  margin-top: -60px;
+  margin-top: -70px;
 }
 
 .bpsv-counter-sig-img {
@@ -882,7 +882,7 @@
   #sv-bulk-print-section .bpsv-stamp-overlay {
     display: block !important;
     position: absolute !important;
-    top: -80px !important;
+    top: -88px !important;
     left: 5px !important;
     width: 160px;
     height: 160px;
@@ -911,11 +911,12 @@
     margin-bottom: 0 !important;
   }
 
-  #sv-bulk-print-section .bpsv-counter-sig-img {
-    height: 160px !important;
-    width: auto !important;
-    object-fit: contain !important;
-  }
+#sv-bulk-print-section .bpsv-counter-sig-img {
+  height: 160px !important;
+  width: auto !important;
+  object-fit: contain !important;
+  transform: translateY(-10px) !important;
+}
 
   /* ── Disclaimer ── */
   #sv-bulk-print-section .bpsv-cert-bottom-row {
