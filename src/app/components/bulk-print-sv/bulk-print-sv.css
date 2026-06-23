@@ -461,7 +461,7 @@
 }
 
 .bpsv-signature-title {
-  font-size: var(--bpsv-sig-title);
+  font-size: 8px;
   font-family: var(--bpsv-font);
   font-style: normal;
   line-height: 1.0;
