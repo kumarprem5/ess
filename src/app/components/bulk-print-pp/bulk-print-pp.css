@@ -114,7 +114,8 @@
 }
 
 .bppp-index-table tbody tr:nth-child(even) td{
-  background:#f8fafc;
+  background: transparent !important;
+
 }
 
 /* COLUMN WIDTHS */
