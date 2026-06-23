@@ -4,6 +4,10 @@
 ══════════════════════════════════════════════════════════ -->
 
 <div id="sv-bulk-print-section" *ngIf="svItems.length > 0" class="bpsv-root" data-print-type="sv">
+  
+  <div class="bpsv-watermark-wrap" *ngIf="watermarkImageUrl">
+        <img [src]="watermarkImageUrl" class="bpsv-watermark-img">
+      </div>
   <!-- ── INDEX PAGE ── -->
   <div class="bpsv-index-page">
     <div class="bpsv-index-header">
@@ -49,9 +53,7 @@
   <!-- ── ONE PAGE PER SAFETY VALVE RECORD ── -->
   <ng-container *ngFor="let entry of svItems; let last = last">
     <div class="bpsv-print-page">
-      <div class="bpsv-watermark-wrap" *ngIf="watermarkImageUrl">
-        <img [src]="watermarkImageUrl" class="bpsv-watermark-img">
-      </div>
+      
       <div class="bpsv-print-header-row">
         <div class="bpsv-header-title-row">
           <!-- Left spacer (mirrors QR width for centering) -->

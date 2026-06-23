@@ -6,6 +6,10 @@
 <div id="bulk-print-pv-section"
      *ngIf="pvItems.length > 0"
      class="bppv-root">
+
+     <div class="bppv-watermark-wrap" *ngIf="watermarkImageUrl">
+    <img [src]="watermarkImageUrl" class="bppv-watermark-img">
+  </div>
   <!-- ── INDEX PAGE ── -->
   <div class="bppv-index-page">
     <div class="bppv-index-header">
@@ -68,9 +72,7 @@
     <div class="bppv-print-page">
 
    
-  <div class="bppv-watermark-wrap" *ngIf="watermarkImageUrl">
-    <img [src]="watermarkImageUrl" class="bppv-watermark-img">
-  </div>
+  
 
       <!-- Header -->
       <div class="bppv-bulk-header">

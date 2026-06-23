@@ -7,6 +7,12 @@
      *ngIf="ppItems.length > 0"
      class="bppp-root">
 
+  <div class="bppp-watermark-wrap" *ngIf="watermarkImageUrl">
+        <img [src]="watermarkImageUrl" class="bppp-watermark-img">
+      </div>
+
+
+
   <!-- ── INDEX PAGE ── -->
   <div class="bppp-index-page">
     <div class="bppp-index-header">
@@ -69,10 +75,7 @@
   <ng-container *ngFor="let item of ppItems; let last = last">
     <div class="bppp-print-page">
 
-      <div class="bppp-watermark-wrap" *ngIf="watermarkImageUrl">
-        <img [src]="watermarkImageUrl" class="bppp-watermark-img">
-      </div>
-
+    
       <!-- Header -->
       <div class="bppp-bulk-header">
         <div class="bppp-header-title-row">

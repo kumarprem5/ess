@@ -1,6 +1,11 @@
   <div id="bulk-print-sb-section"
       *ngIf="sbItems.length > 0"
       class="bpsb-root">
+
+          <div class="bpsb-watermark-wrap" *ngIf="watermarkImageUrl">
+          <img [src]="watermarkImageUrl" class="bpsb-watermark-img">
+        </div>
+        
     <!-- ── INDEX PAGE ── -->
     <div class="bpsb-index-page">
       <div class="bpsb-index-header">
@@ -80,11 +85,6 @@
     <!-- ── ONE PAGE PER SB RECORD ── -->
     <ng-container *ngFor="let item of sbItems; let last = last">
       <div class="bpsb-print-page">
-      
-
-        <div class="bpsb-watermark-wrap" *ngIf="watermarkImageUrl">
-          <img [src]="watermarkImageUrl" class="bpsb-watermark-img">
-        </div>
         <!-- Header -->
         <div class="bpsb-bulk-header">
           <div class="bpsb-header-title-row">
