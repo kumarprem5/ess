@@ -1036,7 +1036,7 @@
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) rotate(-35deg) !important;
-  opacity: 0.02 !important;
+  opacity: 0.04 !important;
   object-fit: contain !important;
 }
 
@@ -1076,6 +1076,7 @@
   display: none;
 }
 
+
 .bpl-watermark-img {
   position: absolute;
   top: 50%;
@@ -1083,7 +1084,7 @@
   transform: translate(-50%, -50%) rotate(-30deg);
   width: 160mm;
   height: auto;
-  opacity: 0.02;
+  opacity: 0.04;
   z-index: 0;
   pointer-events: none;
   object-fit: contain;
