@@ -1039,6 +1039,7 @@
 }
 
 #bulk-print-lifting-section .bpl-watermark-img {
+  display: block !important;   /* ← ADD THIS LINE */
   width: 110mm !important;
   height: auto !important;
   position: absolute !important;
@@ -1048,7 +1049,6 @@
   opacity: 0.04 !important;
   object-fit: contain !important;
 }
-
 /* Keep certificate content above watermark */
 #bulk-print-lifting-section .bpl-print-header-row,
 #bulk-print-lifting-section .bpl-cert-top-row,
