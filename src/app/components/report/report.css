@@ -292,6 +292,7 @@
   border-radius: 12px; padding: 6px;
 }
 
+
 .tab-btn {
   flex: 1;
   display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -805,10 +806,17 @@ textarea.field-disabled {
     background: #fff !important;
   }
 
-  /* ── HIDE ALL LAYOUT ELEMENTS ── */
+/* Hide print sections on screen */
+app-bulk-print-lifting,
+app-bulk-print-pv,
+app-bulk-print-pp,
+app-bulk-print-sb,
+app-bulk-print-sv {
+  display: none !important;
+}
+  /* Hide layout */
   .shell,
   .sidebar,
-  .main,
   .topbar,
   .content,
   .page-header,
@@ -816,15 +824,21 @@ textarea.field-disabled {
   .tab-panels-wrapper,
   .bulk-print-bar,
   .modal-overlay,
-  .toast-container,
-  .due-alert-section,
-  .report-page > * {
+  .toast-container {
     display: none !important;
-    visibility: hidden !important;
   }
 
-  /* ── SHOW ONLY BULK PRINT SECTIONS ── */
-  #bulk-print-section,
+  /* Show print components */
+  app-bulk-print-lifting,
+  app-bulk-print-pv,
+  app-bulk-print-pp,
+  app-bulk-print-sb,
+  app-bulk-print-sv {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* Show print sections inside */
   #lifting-bulk-print-section,
   #pv-bulk-print-section,
   #pp-bulk-print-section,
@@ -833,29 +847,20 @@ textarea.field-disabled {
     display: flex !important;
     visibility: visible !important;
     flex-direction: column !important;
-    position: static !important;
     width: 100% !important;
-    height: auto !important;
     background: #fff !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    box-shadow: none !important;
   }
 
-  /* ── ALL CHILDREN OF PRINT SECTIONS VISIBLE ── */
-  #bulk-print-section *,
-  #lifting-bulk-print-section *,
-  #pv-bulk-print-section *,
-  #pp-bulk-print-section *,
-  #sb-bulk-print-section *,
-  #sv-bulk-print-section * {
+  /* All children visible */
+  app-bulk-print-lifting *,
+  app-bulk-print-pv *,
+  app-bulk-print-pp *,
+  app-bulk-print-sb *,
+  app-bulk-print-sv * {
     visibility: visible !important;
-    display: inherit !important;
   }
 
-  /* ── PAGE BREAKS ── */
-  .bulk-print-page,
+  /* Page breaks */
   .bpl-print-page,
   .bppv-print-page,
   .bppp-print-page,
@@ -863,9 +868,6 @@ textarea.field-disabled {
   .bpsv-print-page {
     page-break-after: always !important;
     break-after: page !important;
-    min-height: 270mm !important;
-    height: auto !important;
-    overflow: visible !important;
   }
 
   .bpl-page-break,
