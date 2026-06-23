@@ -1,867 +1,17 @@
 /* ═══════════════════════════════════════════════════════════════
-   BULK-PRINT-SV.COMPONENT.CSS
-   Scope prefix : bpsv-   (Bulk Print Safety Valve)
-   Font         : Calibri, no italic anywhere
-   Mirrors bulk-print-lifting.component.css conventions
+   @media print — SIGNATURE SECTION FIX
+   Aligns left (stamp + text) and right (counter-sign + text) 
+   at same baseline with consistent vertical spacing
 ═══════════════════════════════════════════════════════════════ */
-
-/* ── CSS Variables ── */
-:root {
-  --bpsv-font: "Calibri", "Calibri Body", "Trebuchet MS", Arial, sans-serif;
-  --bpsv-base: 10px;
-  --bpsv-title: 10px;
-  --bpsv-subtitle: 10px;
-  --bpsv-cert-row: 10px;
-  --bpsv-table-desc: 10px;
-  --bpsv-table-val: 10px;
-  --bpsv-table-num: 10px;
-  --bpsv-eq-meta: 10px;
-  --bpsv-footer: 10px;
-  --bpsv-sig-name: 10px;
-  --bpsv-sig-title: 10px;
-  --bpsv-next-due: 10px;
-  --bpsv-disclaimer: 8px;
-  --bpsv-qr-label: 7px;
-  --bpsv-index-th: 7pt;
-  --bpsv-index-td: 7.5pt;
-}
-
-/* ── Hide on screen ── */
-#sv-bulk-print-section {
-  display: none !important;
-  visibility: hidden !important;
-}
-
 /* ═══════════════════════════════════════════════════════════════
-   SHARED LAYOUT
+   @media print — SIGNATURE SECTION FIX
+   Aligns left (stamp + text) and right (counter-sign + text) 
+   at same baseline with consistent vertical spacing
 ═══════════════════════════════════════════════════════════════ */
 
-.bpsv-root {
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  color: #111;
-}
-
-/* ── Index page ── */
-.bpsv-index-page {
-  width: 100%;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  color: #111;
-  padding: 0;
-}
-
-.bpsv-index-header {
-  text-align: center;
-  margin-bottom: 8px;
-  padding-bottom: 6px;
-  border-bottom: 2px solid #1e293b;
-}
-
-.bpsv-index-title {
-  font-size: 13pt;
-  font-weight: 700;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #0f172a;
-  margin-bottom: 2px;
-}
-
-.bpsv-index-subtitle {
-  font-size: 9pt;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  color: #475569;
-  margin-top: 2px;
-}
-
-/* ── Index table ── */
-.bpsv-index-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  font-size: var(--bpsv-index-td);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  margin-top: 6px;
-}
-
-.bpsv-index-table thead tr {
-  background: #1e293b;
-  color: #fff;
-}
-
-.bpsv-index-table th {
-  background: #1e293b;
-  color: #fff;
-  font-weight: 600;
-  padding: 5px 4px;
-  text-align: center;
-  font-size: var(--bpsv-index-th);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  line-height: 1.3;
-  border: 0.5pt solid #aaa;
-  white-space: normal;
-  word-break: break-word;
-}
-
-.bpsv-index-table td {
-  padding: 4px;
-  border: 0.5pt solid #ccc;
-  font-size: var(--bpsv-index-td);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  vertical-align: middle;
-  color: #1e293b;
-  line-height: 1.3;
-  white-space: normal;
-  word-break: break-word;
-}
-
-.bpsv-index-table tbody tr:nth-child(even) td {
-  background: #f8fafc;
-}
-
-/* ── INDEX TABLE COLUMN WIDTHS ── */
-
-/* Sl No. */
-.bpsv-index-table th:nth-child(1),
-.bpsv-index-table td:nth-child(1) {
-  width: 4%;
-  text-align: center;
-}
-
-/* Certificate No */
-.bpsv-index-table th:nth-child(2),
-.bpsv-index-table td:nth-child(2) {
-  width: 16%;
-}
-
-/* Valve Type */
-.bpsv-index-table th:nth-child(3),
-.bpsv-index-table td:nth-child(3) {
-  width: 12%;
-}
-
-/* Serial No */
-.bpsv-index-table th:nth-child(4),
-.bpsv-index-table td:nth-child(4) {
-  width: 12%;
-  text-align: center;
-}
-
-/* Location */
-.bpsv-index-table th:nth-child(5),
-.bpsv-index-table td:nth-child(5) {
-  width: 18%;
-}
-
-/* Testing Date */
-.bpsv-index-table th:nth-child(6),
-.bpsv-index-table td:nth-child(6) {
-  width: 10%;
-  text-align: center;
-}
-
-/* Due Date */
-.bpsv-index-table th:nth-child(7),
-.bpsv-index-table td:nth-child(7) {
-  width: 10%;
-  text-align: center;
-}
-
-/* QR / Remark */
-.bpsv-index-table th:nth-child(8),
-.bpsv-index-table td:nth-child(8) {
-  width: 8%;
-  text-align: center;
-}
-
-.bpsv-cert-no {
-  font-family: monospace;
-  font-size: 6.8pt;
-  font-weight: 600;
-  color: #0f172a;
-  white-space: normal;
-  word-break: break-word;
-}
-
-.bpsv-badge {
-  font-weight: 600;
-  font-size: 6.5pt;
-  text-align: center;
-  padding: 2px 3px;
-  border-radius: 2px;
-  white-space: normal;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  background: #eff6ff;
-  color: #1d4ed8;
-}
-
-.bpsv-remark-qr-cell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  text-align: center;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-}
-
-.bpsv-index-qr-block {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.bpsv-index-qr-img {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
-  border: 0.5pt solid #ccc;
-  padding: 2px;
-  background: #fff;
-}
-
-.bpsv-index-footer {
-  margin-top: 8px;
-  font-size: 8pt;
-  font-weight: 600;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  color: #334155;
-  text-align: right;
-  border-top: 1px solid #ccc;
-  padding-top: 4px;
-}
-
-/* ── Page break ── */
-.bpsv-page-break {
-  height: 0;
-}
-
-/* ── Print page wrapper ── */
-.bpsv-print-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* ── Print header ── */
-.bpsv-print-header-row {
-  margin-bottom: 4px;
-}
-
-.bpsv-print-title {
-  display: block;
-  font-size: var(--bpsv-title);
-  font-weight: 700;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin: 0 0 2px;
-}
-
-.bpsv-print-sub {
-  display: block;
-  font-size: var(--bpsv-subtitle);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  margin: 0;
-}
-
-.bpsv-cert-top-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  font-weight: 600;
-  margin: 3px 0 5px;
-  background: transparent;
-  color: #000;
-  padding: 5px 12px;
-  box-sizing: border-box;
-  width: 100%;
-  letter-spacing: 0.02em;
-}
-
-.bpsv-print-label {
-  font-weight: normal;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  font-size: 14px;
-}
-
-/* ── Main table ── */
-.bpsv-print-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 2px;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  flex-shrink: 0;
-}
-
-.bpsv-print-table td {
-  padding: 3px 7px;
-  vertical-align: top;
-  font-size: var(--bpsv-base);
-  line-height: 1.0;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  border: none;
-}
-
-.bpsv-print-table tbody tr:nth-child(even) td { background: transparent; }
-.bpsv-print-table tbody tr:nth-child(odd)  td { background: transparent; }
-
-.bpsv-cn {
-  width: 20px;
-  text-align: center;
-  font-weight: normal;
-  font-size: var(--bpsv-table-num);
-  vertical-align: top;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-}
-
-.bpsv-cd {
-  width: 45%;
-  font-size: var(--bpsv-table-desc);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  padding-right: 8px;
-  vertical-align: top;
-}
-
-.bpsv-cv {
-  font-size: var(--bpsv-table-val);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  vertical-align: top;
-}
-
-/* ── Equipment meta ── */
-.bpsv-equipment-main {
-  font-weight: 700;
-  font-size: var(--bpsv-table-val);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  text-transform: uppercase;
-  margin-bottom: 2px;
-}
-
-.bpsv-eq-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 12px;
-  font-size: var(--bpsv-eq-meta);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  line-height: 1.4;
-}
-
-.bpsv-eq-meta span { white-space: nowrap; }
-
-/* ── Row block (examination / recommendation) ── */
-.bpsv-row-block {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.bpsv-row-status,
-.bpsv-row-item {
-  font-size: var(--bpsv-base);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  line-height: 1.0;
-}
-
-.bpsv-row-label {
-  font-weight: 700;
-  margin-right: 4px;
-}
-
-/* ── Certify / Next Due ── */
-.bpsv-cert-certify {
-  font-size: var(--bpsv-footer);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  line-height: 1.45;
-  margin: 0 0 4px;
-  padding: 3px 0;
-  flex-shrink: 0;
-}
-
-.bpsv-cert-next-due {
-  font-size: 14px;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  text-align: center;
-  padding: 5px 12px;
-  background: transparent;
-  color: #000;
-  box-sizing: border-box;
-  width: 100%;
-  margin: auto 0 8px;
-  flex-shrink: 0;
-}
-
-/* ── Footer / Signature ── */
-.bpsv-cert-footer {
-  margin-top: 10px;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  display: flex;
-  flex-direction: column;
-}
-
-.bpsv-cert-signature-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding-top: 4px;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  flex-shrink: 0;
-}
-
-/* ── Left signature block ── */
-.bpsv-sign-left {
-  display: flex;
-  flex-direction: column;
-  min-width: 220px;
-}
-
-.bpsv-sign-text-wrap {
-  position: relative;
-  display: inline-block;
-  padding-top: 2px;
-  min-height: 70px;
-}
-
-.bpsv-signature-name {
-  font-size: var(--bpsv-sig-name);
-  font-weight: 700;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  margin-bottom: 2px;
-}
-
-.bpsv-signature-title {
-  font-size: var(--bpsv-sig-title);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  line-height: 1.0;
-  color: #111;
-  margin: 0;
-}
-
-/* Stamp overlay — sits over the left signature text */
-.bpsv-stamp-overlay {
-  position: absolute;
-  top: -60px;
-  left: 5px;
-  width: 95mm;
-  height: 55mm;
-  opacity: 1;
-  z-index: 999;
-  object-fit: contain;
-  pointer-events: none;
-}
-
-/* ── Right counter-sign block ── */
-.bpsv-sign-right {
-  text-align: right;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.bpsv-counter-sig-wrap {
-  height: 65px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 0;
-  margin-top: -70px;
-}
-
-.bpsv-counter-sig-img {
-  height: 55px;
-  width: auto;
-  object-fit: contain;
-}
-
-/* ── Bottom disclaimer ── */
-.bpsv-cert-bottom-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 6px;
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  flex-shrink: 0;
-}
-
-.bpsv-cert-disclaimer {
-  flex: 1;
-  margin-top: 1px;
-  padding: 4px 10px;
-  background: #fffdf0;
-  font-size: var(--bpsv-disclaimer);
-  font-family: var(--bpsv-font);
-  font-style: normal;
-  text-align: center;
-  color: #111;
-  line-height: 1.0;
-}
-
-/* ── Header title row ── */
-.bpsv-header-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 4px;
-  min-height: 60px;
-}
-
-.bpsv-header-title-block {
-  flex: 1;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.bpsv-header-qr-spacer {
-  width: 52px;
-  flex-shrink: 0;
-}
-
-.bpsv-header-qr-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
-.bpsv-header-qr-img {
-  width: 52px;
-  height: 52px;
-  display: block;
-  border: 1px solid #ccc;
-  padding: 2px;
-  background: #fff;
-}
-
-.bpsv-header-qr-label {
-  font-size: 7px;
-  color: #555;
-  text-align: center;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   @media print  —  SINGLE BLOCK
-═══════════════════════════════════════════════════════════════ */
 @media print {
 
-  html, body {
-    font-family: "Calibri", Arial, Helvetica, sans-serif !important;
-  }
-
-  @page {
-    size: A4 portrait;
-    margin: 20mm 4mm 15mm 4mm;
-  }
-
-  /* ── Hide everything, reveal only section ── */
-  body > * { display: none !important; }
-
-  #sv-bulk-print-section,
-  #sv-bulk-print-section * {
-    visibility: visible !important;
-  }
-
-  #sv-bulk-print-section {
-    display: flex !important;
-    flex-direction: column !important;
-    visibility: visible !important;
-    position: static !important;
-    width: 100% !important;
-    height: auto !important;
-    overflow: visible !important;
-    background: #fff !important;
-    font-family: var(--bpsv-font) !important;
-    font-style: normal !important;
-    color: #111 !important;
-    line-height: 1.2 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  #sv-bulk-print-section * {
-    font-family: var(--bpsv-font) !important;
-    font-style: normal !important;
-  }
-
-  /* ── Index page ── */
-  #sv-bulk-print-section .bpsv-index-page {
-    padding: 4mm 0mm !important;
-    page-break-after: always !important;
-    break-after: page !important;
-    position: relative !important;
-    background: transparent !important;
-  }
-
-  #sv-bulk-print-section .bpsv-index-header {
-    margin-bottom: 6px !important;
-    padding-bottom: 4px !important;
-    border-bottom: 2px solid #1e293b !important;
-  }
-
-  #sv-bulk-print-section .bpsv-index-title {
-    font-size: 13pt !important;
-    font-weight: 700 !important;
-  }
-
-  #sv-bulk-print-section .bpsv-index-subtitle {
-    font-size: 9pt !important;
-  }
-
-  /* Index table */
-  #sv-bulk-print-section .bpsv-index-table {
-    font-size: 7pt !important;
-    table-layout: fixed !important;
-    width: 100% !important;
-    border-collapse: collapse !important;
-  }
-
-  #sv-bulk-print-section .bpsv-index-table th {
-    font-size: 6.5pt !important;
-    padding: 4px 3px !important;
-    background: #1e293b !important;
-    color: #fff !important;
-    border: 0.5pt solid #aaa !important;
-    text-align: center !important;
-    line-height: 1.3 !important;
-    white-space: normal !important;
-    word-break: break-word !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  #sv-bulk-print-section .bpsv-index-table td {
-    font-size: 7pt !important;
-    padding: 3px 3px !important;
-    border: 0.5pt solid #ccc !important;
-    vertical-align: middle !important;
-    line-height: 1.3 !important;
-    word-break: break-word !important;
-  }
-
-  #sv-bulk-print-section .bpsv-index-table tbody tr:nth-child(even) td {
-    background: transparent !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  #sv-bulk-print-section .bpsv-badge {
-    font-size: 6.5pt !important;
-    background: #eff6ff !important;
-    color: #1d4ed8 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  #sv-bulk-print-section .bpsv-cert-no {
-    font-size: 6.8pt !important;
-    font-weight: normal !important;
-  }
-
-  #sv-bulk-print-section .bpsv-index-qr-img {
-    display: block !important;
-    width: 32px !important;
-    height: 32px !important;
-    border: 0.5pt solid #999 !important;
-  }
-
-  #sv-bulk-print-section .bpsv-index-footer {
-    font-size: 8pt !important;
-    font-weight: 600 !important;
-    text-align: right !important;
-    margin-top: 6px !important;
-    border-top: 1px solid #ccc !important;
-    padding-top: 3px !important;
-  }
-
-  /* ── Page breaks ── */
-  .bpsv-page-break {
-    display: block !important;
-    page-break-after: always !important;
-    break-after: page !important;
-    height: 0 !important;
-  }
-
-  /* ── Header ── */
-  #sv-bulk-print-section .bpsv-print-header-row {
-    margin-bottom: 4px !important;
-  }
-
-  #sv-bulk-print-section .bpsv-header-title-row {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    flex-wrap: nowrap !important;
-    min-height: 85px !important;
-  }
-
-  #sv-bulk-print-section .bpsv-header-title-block {
-    flex: 1 !important;
-    text-align: center !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  #sv-bulk-print-section .bpsv-header-qr-spacer {
-    display: block !important;
-    width: 75px !important;
-    flex-shrink: 0 !important;
-  }
-
-  #sv-bulk-print-section .bpsv-header-qr-block {
-    flex-direction: column !important;
-    align-items: center !important;
-    flex-shrink: 0 !important;
-  }
-
-  #sv-bulk-print-section .bpsv-header-qr-img {
-    display: block !important;
-    width: 75px !important;
-    height: 75px !important;
-  }
-
-  #sv-bulk-print-section .bpsv-header-qr-label {
-    font-size: 7px !important;
-  }
-
-  /* ── Typography ── */
-  #sv-bulk-print-section .bpsv-print-title {
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-  }
-
-  #sv-bulk-print-section .bpsv-print-sub        { font-size: var(--bpsv-subtitle) !important; }
-  #sv-bulk-print-section .bpsv-cn               { font-size: var(--bpsv-table-num) !important; }
-  #sv-bulk-print-section .bpsv-cd               { font-size: var(--bpsv-table-desc) !important; }
-  #sv-bulk-print-section .bpsv-cv               { font-size: var(--bpsv-table-val) !important; }
-  #sv-bulk-print-section .bpsv-equipment-main   { font-size: var(--bpsv-table-val) !important; font-weight: 700 !important; }
-  #sv-bulk-print-section .bpsv-eq-meta          { font-size: var(--bpsv-eq-meta) !important; }
-  #sv-bulk-print-section .bpsv-signature-name   { font-size: var(--bpsv-sig-name) !important; font-weight: 700 !important; }
-  #sv-bulk-print-section .bpsv-signature-title  { font-size: var(--bpsv-sig-title) !important; line-height: 1.0 !important; }
-  #sv-bulk-print-section .bpsv-row-status,
-  #sv-bulk-print-section .bpsv-row-item         { font-size: var(--bpsv-base) !important; }
-
-  /* ── Cert top row ── */
-  #sv-bulk-print-section .bpsv-cert-top-row {
-    background: transparent !important;
-    color: #000 !important;
-    padding: 5px 12px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    font-weight: normal !important;
-    font-family: var(--bpsv-font) !important;
-    font-size: 14px !important;
-  }
-
-  #sv-bulk-print-section .bpsv-print-label {
-    font-family: var(--bpsv-font) !important;
-    font-style: normal !important;
-    font-weight: normal !important;
-    font-size: 14px !important;
-  }
-
-  /* ── Main table ── */
-  #sv-bulk-print-section .bpsv-print-table {
-    flex-shrink: 0 !important;
-  }
-
-  #sv-bulk-print-section .bpsv-print-table td {
-    line-height: 1.25 !important;
-    padding: 3px 5px !important;
-  }
-
-  #sv-bulk-print-section table {
-    display: table !important;
-    border-collapse: collapse !important;
-    width: 100% !important;
-  }
-
-  #sv-bulk-print-section tbody  { display: table-row-group !important; }
-  #sv-bulk-print-section thead  { display: table-header-group !important; }
-  #sv-bulk-print-section tr     { display: table-row !important; page-break-inside: avoid !important; }
-  #sv-bulk-print-section td,
-  #sv-bulk-print-section .bpsv-index-table th { display: table-cell !important; }
-
-  /* ── Certify text ── */
-  #sv-bulk-print-section .bpsv-cert-certify {
-    font-size: var(--bpsv-footer) !important;
-    line-height: 1.35 !important;
-    flex-shrink: 0 !important;
-    margin-bottom: 0 !important;
-    padding: 2px 0 !important;
-  }
-
-  /* ── Next due banner ── */
-  #sv-bulk-print-section .bpsv-cert-next-due {
-    background: transparent !important;
-    color: #000 !important;
-    padding: 5px 12px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    text-align: center !important;
-    font-style: normal !important;
-    font-family: var(--bpsv-font) !important;
-    font-size: 14px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-    margin: 6px 0 !important;
-    flex-shrink: 0 !important;
-  }
-
-  /* ── Footer ── */
-  #sv-bulk-print-section .bpsv-cert-footer {
-    display: flex !important;
-    flex-direction: column !important;
-    margin-top: 10mm !important;
-    flex-shrink: 0 !important;
-  }
-
-  /* ── Signature row ── */
+  /* ── Main signature row — baseline alignment ── */
   #sv-bulk-print-section .bpsv-cert-signature-row {
     display: flex !important;
     justify-content: space-between !important;
@@ -870,149 +20,99 @@
     margin-top: 4px !important;
     padding-bottom: 0 !important;
     flex-shrink: 0 !important;
+    gap: 20px !important;  /* Space between left and right */
   }
 
-  /* ── Stamp overlay ── */
-  #sv-bulk-print-section .bpsv-sign-text-wrap {
-    position: relative !important;
-    display: inline-block !important;
-    min-height: 70px !important;
-  }
-
-#sv-bulk-print-section .bpsv-stamp-overlay {
-  display: block !important;
-  position: absolute !important;
-  top: -78px !important;
-  left: 5px !important;
-  width: 160px !important;
-  height: 160px !important;
-  opacity: 1 !important;
-  z-index: 999 !important;
-  object-fit: contain !important;
-  max-width: unset !important;
-  max-height: unset !important;
-}
-
-  /* ── Counter sign ── */
-#sv-bulk-print-section .bpsv-sign-right {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-end !important;
-}
-
-#sv-bulk-print-section .bpsv-counter-sig-wrap {
-  height: 65px !important;
-  display: flex !important;
-  justify-content: flex-end !important;
-  align-items: center !important;
-  margin-top: -60px !important;
-  margin-bottom: 0 !important;
-}
-
-#sv-bulk-print-section .bpsv-counter-sig-img {
-  height: 160px !important;
-  width: auto !important;
-  object-fit: contain !important;
-}
-  /* ── Disclaimer ── */
-  #sv-bulk-print-section .bpsv-cert-bottom-row {
+  /* ── LEFT: Inspector + Stamp ── */
+  #sv-bulk-print-section .bpsv-sign-left {
     display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin-top: 8px !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    align-items: flex-start !important;
+    min-width: 220px !important;
     flex-shrink: 0 !important;
   }
 
-  #sv-bulk-print-section .bpsv-cert-disclaimer {
-    position: static !important;
-    bottom: unset !important;
-    left: unset !important;
-    width: 100% !important;
-    font-size: 7px !important;
-    line-height: 1.2 !important;
-    padding: 4px 10px !important;
-    background: #fffdf0 !important;
-    text-align: center !important;
+  #sv-bulk-print-section .bpsv-sign-text-wrap {
+    position: relative !important;
+    display: inline-block !important;
+    min-height: 75px !important;
+    padding-top: 2px !important;
+    margin-bottom: 0 !important;
+  }
+
+  #sv-bulk-print-section .bpsv-signature-name {
+    font-size: var(--bpsv-sig-name) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
+    margin-bottom: 2px !important;
     margin-top: 0 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
   }
 
-  /* ── Flex enforcement ── */
-  #sv-bulk-print-section .bpsv-cert-top-row,
-  #sv-bulk-print-section .bpsv-eq-meta,
-  #sv-bulk-print-section .bpsv-remark-qr-cell,
-  #sv-bulk-print-section .bpsv-index-qr-block {
-    display: flex !important;
-    flex-wrap: wrap !important;
+  #sv-bulk-print-section .bpsv-signature-title {
+    font-size: var(--bpsv-sig-title) !important;
+    line-height: 1.0 !important;
+    color: #111 !important;
+    margin: 1px 0 !important;
   }
 
-  #sv-bulk-print-section .bpsv-remark-qr-cell { flex-direction: column !important; align-items: center !important; }
-  #sv-bulk-print-section .bpsv-row-block      { flex-direction: column !important; }
-
-  /* ── Print page wrapper ── */
-  #sv-bulk-print-section .bpsv-print-page {
-    position: relative !important;
-    min-height: unset !important;
-    height: auto !important;
-    overflow: visible !important;
+  #sv-bulk-print-section .bpsv-cert-certify {
+    font-size: var(--bpsv-footer) !important;
+    line-height: 1.35 !important;
+    margin: 2px 0 0 !important;
+    padding: 0 !important;
   }
 
-  /* Watermark — matches BPL / PV implementation */
-  #sv-bulk-print-section .bpsv-watermark-wrap {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
+  /* ── Stamp overlay (positioned absolutely over text) ── */
+  #sv-bulk-print-section .bpsv-stamp-overlay {
     display: block !important;
-    pointer-events: none !important;
-    z-index: 1 !important;
-  }
-
-  #sv-bulk-print-section .bpsv-watermark-img {
-    width: 110mm !important;
-    height: auto !important;
     position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) rotate(-35deg) !important;
-    opacity: 0.3 !important;
+    top: -70px !important;
+    left: 5px !important;
+    width: 160px !important;
+    height: 160px !important;
+    opacity: 1 !important;
+    z-index: 999 !important;
     object-fit: contain !important;
+    max-width: unset !important;
+    max-height: unset !important;
   }
 
-  /* Keep certificate content above watermark */
-  #sv-bulk-print-section .bpsv-print-header-row,
-  #sv-bulk-print-section .bpsv-cert-top-row,
-  #sv-bulk-print-section .bpsv-print-table,
-  #sv-bulk-print-section .bpsv-cert-certify,
-  #sv-bulk-print-section .bpsv-cert-next-due,
-  #sv-bulk-print-section .bpsv-cert-footer,
-  #sv-bulk-print-section .bpsv-cert-signature-row,
-  #sv-bulk-print-section .bpsv-index-header,
-  #sv-bulk-print-section .bpsv-index-table,
-  #sv-bulk-print-section .bpsv-index-footer {
+  /* ── RIGHT: Counter Sign Image ── */
+  #sv-bulk-print-section .bpsv-sign-right {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    justify-content: flex-end !important;
+    flex-shrink: 0 !important;
+    gap: 4px !important;  /* Space between image and label */
+  }
+
+  #sv-bulk-print-section .bpsv-counter-sig-wrap {
+    height: auto !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: flex-end !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #sv-bulk-print-section .bpsv-counter-sig-img {
+    height: 75px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    margin-bottom: 1px !important;  /* Fine-tune alignment */
+  }
+
+  /* ── Counter Signed label ── */
+  #sv-bulk-print-section .bpsv-sign-right .bpsv-signature-title {
+    margin: 0 !important;
+    text-align: right !important;
     position: relative !important;
-    z-index: 2 !important;
+    z-index: 5 !important;
+    font-size: var(--bpsv-sig-title) !important;
+    line-height: 1.0 !important;
   }
 
 } /* end @media print */
-
-
-/* ── Watermark (screen hidden, print shown) ──
-.bpsv-watermark-wrap {
-  display: none;
-}
-
-.bpsv-watermark-img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-30deg);
-  width: 160mm;
-  height: auto;
-  opacity: 0.04;
-  z-index: 0;
-  pointer-events: none;
-  object-fit: contain;
-} */
