@@ -20,7 +20,7 @@
   --bpsv-sig-name: 10px;
   --bpsv-sig-title: 10px;
   --bpsv-next-due: 10px;
-  --bpsv-disclaimer: 7px;
+  --bpsv-disclaimer: 8px;
   --bpsv-qr-label: 7px;
   --bpsv-index-th: 7pt;
   --bpsv-index-td: 7.5pt;
@@ -882,7 +882,7 @@
   #sv-bulk-print-section .bpsv-stamp-overlay {
     display: block !important;
     position: absolute !important;
-    top: -78px !important;
+    top: -80px !important;
     left: 5px !important;
     width: 160px;
     height: 160px;
@@ -907,7 +907,7 @@
     display: flex !important;
     justify-content: flex-end !important;
     align-items: center !important;
-    margin-top: -60px !important;
+    margin-top: -70px !important;
     margin-bottom: 0 !important;
   }
 
