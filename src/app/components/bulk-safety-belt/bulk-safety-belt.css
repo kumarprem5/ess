@@ -306,8 +306,8 @@
 .bpsb-print-table tbody tr:nth-child(even) td { background: transparent; }
 .bpsb-print-table tbody tr:nth-child(odd)  td { background: transparent; }
 .bpsb-num   { width: 26px; text-align: center; white-space: nowrap; font-size: var(--bpsb-table-num); }
-.bpsb-desc  { width: 45%; font-size: var(--bpsb-table-desc); white-space: pre-line; }
-.bpsb-value { font-size: var(--bpsb-table-val); font-weight: 500; }
+.bpsb-desc  { width: 45%; font-size: var(--bpsb-table-desc); white-space: pre-line; font-weight: 400; }
+.bpsb-value { font-size: var(--bpsb-table-val); font-weight: 400; }
 
 /* ── Belt meta ── */
 .bpsb-belt-main { font-weight: 700; font-size: var(--bpsb-table-val); font-family: var(--bpsb-font); font-style: normal; text-transform: uppercase; margin-bottom: 2px; }
