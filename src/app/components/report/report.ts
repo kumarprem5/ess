@@ -1390,7 +1390,7 @@ onSvExaminationDateChange(): void {
           case 'delhi':          return 'U/S 21(2), 28, 29, 31 & 87'; 
           case 'madhya pradesh': return 'U/s 21(2), 28, 29, 31';
           case 'uttar pradesh':  return 'U/S 21(2), 28, 29, 31';
-          case 'uttarakhand':    return 'U/s 21(2), 28, 29, 31';   // ← ADD
+          case 'uttarakhand':    return 'U/s 21(2), 28, 29, 31'; 
           default:               return 'U/s 21(2), 28, 29, 31 & 87';
         }
       }
@@ -1404,7 +1404,7 @@ onSvExaminationDateChange(): void {
           case 'madhya pradesh': return 'Approved by CIF Madhya Pradesh Vide Lic. No. CMI2110221 dated 16.09.2023';
           case 'uttar pradesh':  return 'Approved by the Dir. Fac. Kanpur Vide Lic. No.155/F/C.P.U.P./Org.2025 DT. 22.01.2025';
           case 'uttarakhand':    return 'Approved by the Dir. Fac. Haldwani Vide <br> Lic. No.114/F/C.P.U.K./Org.2025 DT.11.02.2025';  // ← ADD (fill in real details)
-          default:               return 'Approved by CIF&B, Jaipur Lic No: CMP-883/2025 Dt: 22.12.2025';
+          default:               return '';
         }
       }
 
