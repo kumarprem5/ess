@@ -864,7 +864,7 @@ printSelected(): void {
       ========================================================= */
       openPrintPressure(item: PressureVesselCertificate): void {
         this.liftingItemsForPrint = [];
-    this.pvItemsForPrint = [];
+     this.pvItemsForPrint = [];
     this.ppItemsForPrint = [];
         this.selectedItem          = null;
         this.selectedPpItem        = null;
@@ -1878,7 +1878,14 @@ onSvExaminationDateChange(): void {
         .map(w => w.replace(/[^A-Za-z]/g, '').charAt(0).toUpperCase())
         .join('');                             // → "IOCL"
     }
-
+// private getCompanyCode(): string {
+//   return (this.company?.companyName || '')
+//     .replace(/^[Mm]\/[Ss]\s*/, '')
+//     .split(/\s+/)
+//     .filter(w => /[A-Za-z]/.test(w))
+//     .map(w => w.replace(/[^A-Za-z]/g, '').charAt(0).toUpperCase())
+//     .join('');
+// }
     // generatePvCertificateNo(): void {
     //   if (!this.company) return;
     //   const companyCode = (this.company.companyName || '')
@@ -2881,35 +2888,34 @@ get sortedSafetyValveReports(): SafetyValve[] {
 
 private compareCertificateNumbers(certA: string | undefined, certB: string | undefined): number {
   if (!certA && !certB) return 0;
-  if (!certA) return 1;   // undefined goes to end
+  if (!certA) return 1;
   if (!certB) return -1;
- 
+
   const partsA = certA.split('/');
   const partsB = certB.split('/');
- 
-  // Compare each segment in order
-  const maxLen = Math.max(partsA.length, partsB.length);
- 
-  for (let i = 0; i < maxLen; i++) {
-    const pA = partsA[i] ?? '';
-    const pB = partsB[i] ?? '';
- 
-    // If both segments are fully numeric, compare as numbers
-    if (/^\d+$/.test(pA) && /^\d+$/.test(pB)) {
-      const numA = parseInt(pA, 10);
-      const numB = parseInt(pB, 10);
-      if (numA !== numB) return numA - numB;
-    }
-    // Otherwise compare as strings (case-sensitive, alphabetic)
-    else {
-      const cmp = pA.localeCompare(pB);
-      if (cmp !== 0) return cmp;
-    }
-  }
-  return 0;
-}
- 
 
+  // ── Primary: serial number (last segment) ──
+  const serialA = parseInt(partsA[partsA.length - 1] ?? '', 10);
+  const serialB = parseInt(partsB[partsB.length - 1] ?? '', 10);
+
+  if (!isNaN(serialA) && !isNaN(serialB) && serialA !== serialB) {
+    return serialA - serialB;
+  }
+
+  // ── Secondary tiebreaker: date segment (index 2, format DDMMYY) ──
+  // Avoids falling back to companyCode string comparison, which is
+  // unreliable since companyCode is derived live from company.companyName.
+  const dateA = partsA[2] ?? '';
+  const dateB = partsB[2] ?? '';
+  if (/^\d{6}$/.test(dateA) && /^\d{6}$/.test(dateB) && dateA !== dateB) {
+    // Reorder DDMMYY → YYMMDD for correct chronological string comparison
+    const reorder = (d: string) => d.slice(4, 6) + d.slice(2, 4) + d.slice(0, 2);
+    return reorder(dateA).localeCompare(reorder(dateB));
+  }
+
+  // ── Final fallback ──
+  return certA.localeCompare(certB);
+}
 
 
     }
