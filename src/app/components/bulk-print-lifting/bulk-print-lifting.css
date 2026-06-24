@@ -85,14 +85,17 @@
   font-family: var(--bpl-font);
   font-style: normal;
   margin-top: 6px;
+  text-align: center;
 }
 
 .bpl-index-table thead tr {
+  text-align: center;
   background: #1e293b;
   color: #fff;
 }
 
 .bpl-index-table th {
+  text-align: center;
   background: #1e293b;
   color: #fff;
   font-weight: 600;
