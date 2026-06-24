@@ -167,46 +167,73 @@
 .bppv-index-table tbody tr:nth-child(even) td {
   background: transparent;
 }
+/* ── INDEX TABLE COLUMN WIDTHS (10 columns: Year already removed) ── */
+
 /* Sl No. */
 .bppv-index-table th:nth-child(1),
-.bppv-index-table td:nth-child(1) { width: 4%; text-align: center; }
+.bppv-index-table td:nth-child(1) {
+  width: 4%;
+  text-align: center;
+}
 
 /* Certificate No */
 .bppv-index-table th:nth-child(2),
-.bppv-index-table td:nth-child(2) { width: 14%; }
+.bppv-index-table td:nth-child(2) {
+  width: 17%;
+}
 
 /* ID No. */
 .bppv-index-table th:nth-child(3),
-.bppv-index-table td:nth-child(3) { width: 8%; text-align: center; }
+.bppv-index-table td:nth-child(3) {
+  width: 8%;
+  text-align: center;
+}
 
 /* Vessel */
 .bppv-index-table th:nth-child(4),
-.bppv-index-table td:nth-child(4) { width: 13%; }
+.bppv-index-table td:nth-child(4) {
+  width: 17%;
+}
 
 /* Manufacturer */
 .bppv-index-table th:nth-child(5),
-.bppv-index-table td:nth-child(5) { width: 12%; }
+.bppv-index-table td:nth-child(5) {
+  width: 13%;
+}
 
 /* Capacity / S */
 .bppv-index-table th:nth-child(6),
-.bppv-index-table td:nth-child(6) { width: 11%; text-align: center; }
+.bppv-index-table td:nth-child(6) {
+  width: 14%;
+  text-align: center;
+}
 
 /* Location */
 .bppv-index-table th:nth-child(7),
-.bppv-index-table td:nth-child(7) { width: 8%; }
+.bppv-index-table td:nth-child(7) {
+  width: 14%;
+}
 
 /* Testing Date */
 .bppv-index-table th:nth-child(8),
-.bppv-index-table td:nth-child(8) { width: 6%; text-align: center; }
+.bppv-index-table td:nth-child(8) {
+  width: 8%;
+  text-align: center;
+}
 
 /* Due Date */
 .bppv-index-table th:nth-child(9),
-.bppv-index-table td:nth-child(9) { width: 6%; text-align: center; }
+.bppv-index-table td:nth-child(9) {
+  width: 8%;
+  text-align: center;
+}
 
-/* Remark / QR — now nth-child(10), widened to comfortably fit the QR image */
+/* Remark / QR */
 .bppv-index-table th:nth-child(10),
-.bppv-index-table td:nth-child(10) { width: 15%; text-align: center; }.bppv-index-table th:nth-child(10), .bppv-index-table td:nth-child(10) { width: 5%;  text-align: center; } /* Remark / QR */
-/* ── Certificate no / badge ── */
+.bppv-index-table td:nth-child(10) {
+  width: 9%;
+  text-align: center;
+}
 .bppv-cert-no {
   font-family: monospace;
   font-size: 14px;

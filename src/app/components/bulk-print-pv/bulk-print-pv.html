@@ -49,13 +49,12 @@
           <td>{{ safeDateFormat(item.data.dateOfExamination) }}</td>
           <td>{{ safeDateFormat(item.data.nextDueDateForExamination) }}</td>
           <td>
-            <div class="bppv-remark-qr-cell">
-              <div class="bppv-index-qr-block" *ngIf="item.data.qrCodeUrl">
-                <img [src]="item.data.qrCodeUrl" alt="QR Code" class="bppv-index-qr-img" />
-              </div>
-            </div>
-          </td>
-        </tr>
+     <div class="bppv-remark-qr-cell">
+    <div class="bppv-index-qr-block" *ngIf="item.data.qrCodeUrl">
+      <img [src]="item.data.qrCodeUrl" alt="QR Code" class="bppv-index-qr-img" />
+    </div>
+  </div> 
+   </td> </tr>
       </tbody>
     </table>
 
