@@ -158,6 +158,7 @@
   font-family: var(--bppv-font);
   font-style: normal;
   vertical-align: middle;
+  text-align: center;
   color: #1e293b;
   line-height: 1.3;
   white-space: normal;
@@ -181,6 +182,7 @@
 .bppv-index-table th:nth-child(2),
 .bppv-index-table td:nth-child(2) {
   width: 17%;
+  text-align: center;
 }
 
 /* ID No. */
@@ -194,12 +196,14 @@
 .bppv-index-table th:nth-child(4),
 .bppv-index-table td:nth-child(4) {
   width: 17%;
+  text-align: center;
 }
 
 /* Manufacturer */
 .bppv-index-table th:nth-child(5),
 .bppv-index-table td:nth-child(5) {
   width: 13%;
+  text-align: center;
 }
 
 /* Capacity / S */
@@ -213,6 +217,7 @@
 .bppv-index-table th:nth-child(7),
 .bppv-index-table td:nth-child(7) {
   width: 14%;
+  text-align: center;
 }
 
 /* Testing Date */
@@ -578,6 +583,7 @@
     padding: 3px 3px !important;
     border: 0.5pt solid #ccc !important;
     vertical-align: middle !important;
+    text-align: center !important;
     line-height: 1.3 !important;
     word-break: break-word !important;
   }
