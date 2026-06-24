@@ -113,6 +113,11 @@
   word-break:break-word;
 }
 
+.bppp-index-table td {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
 .bppp-index-table tbody tr:nth-child(even) td{
   background: transparent !important;
 
@@ -137,6 +142,7 @@
   font-weight:600;
   color:#0f172a;
 }
+
 
 .bppp-index-qr-img{
   width:36px;
@@ -195,7 +201,7 @@
 .bppp-print-table tbody tr:nth-child(odd)  td { background: transparent; }
 .bppp-num   { width: 26px; text-align: center; white-space: nowrap; font-size: var(--bppp-table-num); font-weight: normal;  /* ← add this */}
 .bppp-desc  { width: 45%; font-size: var(--bppp-table-desc); }
-.bppp-value { font-size: var(--bppp-table-val); font-weight: 500; }
+.bppp-value { font-size: var(--bppp-table-val); font-weight: 400; }
 
 /* ── Equipment meta ── */
 .bppp-equipment-main { font-weight: 700; font-size: var(--bppp-table-val); font-family: var(--bppp-font); font-style: normal; text-transform: uppercase; margin-bottom: 2px; }
@@ -459,7 +465,11 @@
   #bulk-print-pp-section .bppp-cert-date-row { font-size: 14px !important; font-style: normal !important; font-weight: normal; background: transparent !important; /* ← was 600 */}
   #bulk-print-pp-section .bppp-num         { font-size: var(--bppp-table-num)  !important; font-weight: normal;  /* ← add this */ font-style: normal !important; }
   #bulk-print-pp-section .bppp-desc        { font-size: var(--bppp-table-desc) !important; font-style: normal !important; }
-  #bulk-print-pp-section .bppp-value       { font-size: var(--bppp-table-val)  !important; font-style: normal !important; }
+ #bulk-print-pp-section .bppp-value {
+  font-size: var(--bppp-table-val) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+}
   #bulk-print-pp-section .bppp-equipment-main { font-size: var(--bppp-table-val) !important; font-weight: 700 !important; font-style: normal !important; }
   #bulk-print-pp-section .bppp-eq-meta     { font-size: var(--bppp-eq-meta)    !important; font-style: normal !important; }
   #bulk-print-pp-section .bppp-cert-certify{ font-size: var(--bppp-footer)     !important; font-style: normal !important; line-height: 1.0 !important; }
@@ -476,7 +486,12 @@
   #bulk-print-pp-section .bppp-index-table td  { font-size: 14px !important; padding: 3px !important; font-style: normal !important; border: 1px solid #999 !important; }
   #bulk-print-pp-section .bppp-badge,
   #bulk-print-pp-section .bppp-cert-no         { font-size: 14px !important; font-style: normal !important; font-weight: normal;  /* ← was 600 */}
-
+/* Center index table content in print */
+#bulk-print-pp-section .bppp-index-table th,
+#bulk-print-pp-section .bppp-index-table td {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
   #bulk-print-pp-section .bppp-print-table td  { border: none !important; padding: 3px 5px !important; font-size: var(--bppp-base) !important; font-style: normal !important; vertical-align: top !important; line-height: 1.0 !important; }
 #bulk-print-pp-section .bppp-index-page{
   padding:4mm 0 !important;

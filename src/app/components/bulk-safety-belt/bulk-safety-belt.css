@@ -427,7 +427,7 @@
 ═══════════════════════════════════════════════════════════════ */
 @media print {
 
-  @page { size: A4 portrait; margin: 30mm 8mm 20mm 8mm; }
+  @page { size: A4 portrait; margin: 16mm 8mm 21mm 8mm; }
 
   .bpsb-index-page { page: bpsbIndexPage; }
   @page bpsbIndexPage { size: A4 landscape; margin: 8mm; }
@@ -465,7 +465,7 @@
   #bulk-print-sb-section .bpsb-print-page {
     display: flex !important;
     flex-direction: column !important;
-    min-height: 249mm !important;
+     height: 277mm !important;
     page-break-before: always !important;
     break-before: page !important;
     page-break-inside: avoid !important;
