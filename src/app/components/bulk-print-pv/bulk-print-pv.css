@@ -193,19 +193,19 @@
 
 /* Location */
 .bppv-index-table th:nth-child(7),
-.bppv-index-table td:nth-child(7) { width: 11%; }
+.bppv-index-table td:nth-child(7) { width: 8%; }
 
 /* Testing Date */
 .bppv-index-table th:nth-child(8),
-.bppv-index-table td:nth-child(8) { width: 7%; text-align: center; }
+.bppv-index-table td:nth-child(8) { width: 6%; text-align: center; }
 
 /* Due Date */
 .bppv-index-table th:nth-child(9),
-.bppv-index-table td:nth-child(9) { width: 7%; text-align: center; }
+.bppv-index-table td:nth-child(9) { width: 6%; text-align: center; }
 
 /* Remark / QR — now nth-child(10), widened to comfortably fit the QR image */
 .bppv-index-table th:nth-child(10),
-.bppv-index-table td:nth-child(10) { width: 7%; text-align: center; }.bppv-index-table th:nth-child(10), .bppv-index-table td:nth-child(10) { width: 5%;  text-align: center; } /* Remark / QR */
+.bppv-index-table td:nth-child(10) { width: 11%; text-align: center; }.bppv-index-table th:nth-child(10), .bppv-index-table td:nth-child(10) { width: 5%;  text-align: center; } /* Remark / QR */
 /* ── Certificate no / badge ── */
 .bppv-cert-no {
   font-family: monospace;
