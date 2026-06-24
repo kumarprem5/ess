@@ -56,6 +56,67 @@
 }
 
 
+/* ── INDEX TABLE COLUMN WIDTHS (9 columns: Year removed) — matches Lifting pattern ── */
+
+/* Sl No. */
+.bpsb-index-table th:nth-child(1),
+.bpsb-index-table td:nth-child(1) {
+  width: 4%;
+  text-align: center;
+}
+
+/* Certificate No */
+.bpsb-index-table th:nth-child(2),
+.bpsb-index-table td:nth-child(2) {
+  width: 18%;
+}
+
+/* Belt Type */
+.bpsb-index-table th:nth-child(3),
+.bpsb-index-table td:nth-child(3) {
+  width: 12%;
+}
+
+/* ID No */
+.bpsb-index-table th:nth-child(4),
+.bpsb-index-table td:nth-child(4) {
+  width: 9%;
+  text-align: center;
+}
+
+/* Make */
+.bpsb-index-table th:nth-child(5),
+.bpsb-index-table td:nth-child(5) {
+  width: 12%;
+}
+
+/* Location */
+.bpsb-index-table th:nth-child(6),
+.bpsb-index-table td:nth-child(6) {
+  width: 14%;
+}
+
+/* Testing Date */
+.bpsb-index-table th:nth-child(7),
+.bpsb-index-table td:nth-child(7) {
+  width: 8%;
+  text-align: center;
+}
+
+/* Due Date */
+.bpsb-index-table th:nth-child(8),
+.bpsb-index-table td:nth-child(8) {
+  width: 8%;
+  text-align: center;
+}
+
+/* Remark / QR */
+.bpsb-index-table th:nth-child(9),
+.bpsb-index-table td:nth-child(9) {
+  width: 15%;
+  text-align: center;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    SHARED LAYOUT
 ═══════════════════════════════════════════════════════════════ */
