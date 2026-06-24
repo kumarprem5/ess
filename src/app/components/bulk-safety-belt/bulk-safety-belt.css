@@ -72,6 +72,7 @@
 .bpsb-index-table th:nth-child(2),
 .bpsb-index-table td:nth-child(2) {
   width: 17%;
+  text-align: center;
 }
 
 /* ID No. */
@@ -85,44 +86,47 @@
 .bpsb-index-table th:nth-child(4),
 .bpsb-index-table td:nth-child(4) {
   width: 14%;
+   text-align: center;
 }
 
 /* Manufacturer */
 .bpsb-index-table th:nth-child(5),
 .bpsb-index-table td:nth-child(5) {
   width: 12%;
+   text-align: center;
 }
 
-/* Belt Class */
+/* Belt Class
 .bpsb-index-table th:nth-child(6),
 .bpsb-index-table td:nth-child(6) {
   width: 6%;
   text-align: center;
-}
+} */
 
 /* Location */
-.bpsb-index-table th:nth-child(7),
-.bpsb-index-table td:nth-child(7) {
+.bpsb-index-table th:nth-child(6),
+.bpsb-index-table td:nth-child(6) {
   width: 13%;
+   text-align: center;
 }
 
 /* Testing Date */
-.bpsb-index-table th:nth-child(8),
-.bpsb-index-table td:nth-child(8) {
-  width: 8%;
+.bpsb-index-table th:nth-child(7),
+.bpsb-index-table td:nth-child(7) {
+  width: 11%;
   text-align: center;
 }
 
 /* Due Date */
-.bpsb-index-table th:nth-child(9),
-.bpsb-index-table td:nth-child(9) {
-  width: 8%;
+.bpsb-index-table th:nth-child(8),
+.bpsb-index-table td:nth-child(8) {
+  width: 11%;
   text-align: center;
 }
 
 /* Remark */
-.bpsb-index-table th:nth-child(10),
-.bpsb-index-table td:nth-child(10) {
+.bpsb-index-table th:nth-child(9),
+.bpsb-index-table td:nth-child(9) {
   width: 10%;
   text-align: center;
 }
