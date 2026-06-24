@@ -43,6 +43,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
   loading      = false;
   currentTime  = new Date();
 
+  adminName: string = '';
+
   // ── Data ───────────────────────────────────────────────
   admin: any;
   companies: any[]    = [];
@@ -58,20 +60,21 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   newCompany: Partial<CompanyProfile> = this.blankCompany();
 
- private blankCompany(): Partial<CompanyProfile> {
-  return {
-    companyName:        '',
-    factoryAddress:     '',
-    contactPerson:      '',
-    mobileNumber:       '',
-    email:              '',
-    gstNumber:          '',
-    factoryLicenseNo:   '',
-    state:              '',
-    city:               '',
-    pincode:            ''
-  };
-}
+  private blankCompany(): Partial<CompanyProfile> {
+    return {
+      companyName:        '',
+      factoryAddress:     '',
+      contactPerson:      '',
+      mobileNumber:       '',
+      email:              '',
+      gstNumber:          '',
+      factoryLicenseNo:   '',
+      state:              '',
+      city:               '',
+      pincode:            ''
+    };
+  }
+
   private timerSub!: ReturnType<typeof setInterval>;
   private routerSub!: Subscription;
 
@@ -83,6 +86,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+
     this.admin        = this.auth.getAdmin();
     this.currentRoute = this.router.url;
 
@@ -102,6 +106,14 @@ export class LayoutComponent implements OnInit, OnDestroy {
       });
 
     if (window.innerWidth < 1024) this.sidebarOpen = false;
+
+    // ── Restore admin name from localStorage ──────────────
+    const adminData = localStorage.getItem('ess_admin');
+
+    if (adminData) {
+      const admin = JSON.parse(adminData);
+      this.adminName = admin.adminName;
+    }
   }
 
   ngOnDestroy(): void {
@@ -128,20 +140,21 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   // ── Search ─────────────────────────────────────────────
-onSearch(): void {
-  const term = this.searchTerm.toLowerCase().trim();
-  this.filteredCompanies = term
-    ? this.companies.filter(c =>
-        c.companyName?.toLowerCase().includes(term)     ||
-        c.email?.toLowerCase().includes(term)           ||
-        c.contactPerson?.toLowerCase().includes(term)   ||
-        c.mobileNumber?.toLowerCase().includes(term)    ||
-        c.city?.toLowerCase().includes(term)            ||
-        c.state?.toLowerCase().includes(term)           ||
-        c.gstNumber?.toLowerCase().includes(term)
-      )
-    : [...this.companies];
-}
+  onSearch(): void {
+    const term = this.searchTerm.toLowerCase().trim();
+    this.filteredCompanies = term
+      ? this.companies.filter(c =>
+          c.companyName?.toLowerCase().includes(term)     ||
+          c.email?.toLowerCase().includes(term)           ||
+          c.contactPerson?.toLowerCase().includes(term)   ||
+          c.mobileNumber?.toLowerCase().includes(term)    ||
+          c.city?.toLowerCase().includes(term)            ||
+          c.state?.toLowerCase().includes(term)           ||
+          c.gstNumber?.toLowerCase().includes(term)
+        )
+      : [...this.companies];
+  }
+
   // ── Add / Edit Company ─────────────────────────────────
   openAddForm(): void {
     this.editingId   = null;
@@ -151,24 +164,24 @@ onSearch(): void {
     this.showAddForm = true;
   }
 
- openEditForm(company: any): void {
-  this.editingId  = company.id;
-  this.newCompany = {
-    companyName:       company.companyName       ?? '',
-    factoryAddress:    company.factoryAddress     ?? '',
-    contactPerson:     company.contactPerson      ?? '',
-    mobileNumber:      company.mobileNumber       ?? '',
-    email:             company.email              ?? '',
-    gstNumber:         company.gstNumber          ?? '',
-    factoryLicenseNo:  company.factoryLicenseNo   ?? '',
-    state:             company.state              ?? '',
-    city:              company.city               ?? '',
-    pincode:           company.pincode            ?? ''
-  };
-  this.formError   = '';
-  this.formSuccess = false;
-  this.showAddForm = true;
-}
+  openEditForm(company: any): void {
+    this.editingId  = company.id;
+    this.newCompany = {
+      companyName:       company.companyName       ?? '',
+      factoryAddress:    company.factoryAddress     ?? '',
+      contactPerson:     company.contactPerson      ?? '',
+      mobileNumber:      company.mobileNumber       ?? '',
+      email:             company.email              ?? '',
+      gstNumber:         company.gstNumber          ?? '',
+      factoryLicenseNo:  company.factoryLicenseNo   ?? '',
+      state:             company.state              ?? '',
+      city:              company.city               ?? '',
+      pincode:           company.pincode            ?? ''
+    };
+    this.formError   = '';
+    this.formSuccess = false;
+    this.showAddForm = true;
+  }
 
   cancelForm(): void {
     this.showAddForm = false;
@@ -180,9 +193,9 @@ onSearch(): void {
 
   submitCompany(): void {
     if (!this.newCompany.companyName?.trim()) {
-  this.formError = 'Company name is required.';
-  return;
-}
+      this.formError = 'Company name is required.';
+      return;
+    }
     this.formLoading = true;
     this.formError   = '';
 

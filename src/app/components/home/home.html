@@ -95,7 +95,7 @@
 
         <p class="sb-profile__name">
 
-          {{admin?.name || 'Admin'}}
+          {{adminName || 'Admin'}}
 
         </p>
         <p class="sb-profile__role">
@@ -324,7 +324,7 @@
       <div class="topbar__avatar">
 
 
-        {{admin?.name?.charAt(0)?.toUpperCase() || 'A'}}
+        {{adminName.charAt(0)?.toUpperCase() || 'A'}}
 
 
       </div>
