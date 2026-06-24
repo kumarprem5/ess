@@ -9,22 +9,22 @@
 /* ── CSS Variables (local copy — change freely without side-effects) ── */
 :root {
   --bppp-font      : "Calibri", "Calibri Body", "Trebuchet MS", Arial, sans-serif;
-  --bppp-base      : 10px;
-  --bppp-title     : 10px;
-  --bppp-subtitle  : 10px;
-  --bppp-cert-row  : 10px;
-  --bppp-table-desc: 10px;
-  --bppp-table-val : 10px;
-  --bppp-table-num : 10px;
-  --bppp-eq-meta   : 10px;
-  --bppp-footer    : 10px;
-  --bppp-sig-name  : 10px;
-  --bppp-sig-title : 10px;
-  --bppp-next-due  : 10px;
+  --bppp-base      : 9px;
+  --bppp-title     : 9px;
+  --bppp-subtitle  : 9px;
+  --bppp-cert-row  : 9px;
+  --bppp-table-desc: 9px;
+  --bppp-table-val : 9px;
+  --bppp-table-num : 9px;
+  --bppp-eq-meta   : 9px;
+  --bppp-footer    : 9px;
+  --bppp-sig-name  : 9px;
+  --bppp-sig-title : 9px;
+  --bppp-next-due  : 9px;
   --bppp-disclaimer: 7px;
   --bppp-qr-label  : 7px;
-  --bppp-index-th  : 10px;
-  --bppp-index-td  : 10px;
+  --bppp-index-th  : 9px;
+  --bppp-index-td  : 9px;
 }
 
 /* ── Hide on screen ── */

@@ -9,22 +9,22 @@
 /* ── CSS Variables (local copy) ── */
 :root {
   --bpsb-font      : "Calibri", "Calibri Body", "Trebuchet MS", Arial, sans-serif;
-  --bpsb-base: 12px;
-  --bpsb-title     : 10px;
-  --bpsb-subtitle  : 10px;
-  --bpsb-cert-row  : 10px;
-  --bpsb-table-desc: 10px;
-  --bpsb-table-val : 10px;
-  --bpsb-table-num : 10px;
-  --bpsb-eq-meta   : 10px;
-  --bpsb-footer    : 10px;
-  --bpsb-sig-name  : 10px;
-  --bpsb-sig-title : 10px;
-  --bpsb-next-due  : 10px;
+  --bpsb-base      : 9px;
+  --bpsb-title     : 9px;
+  --bpsb-subtitle  : 9px;
+  --bpsb-cert-row  : 9px;
+  --bpsb-table-desc: 9px;
+  --bpsb-table-val : 9px;
+  --bpsb-table-num : 9px;
+  --bpsb-eq-meta   : 9px;
+  --bpsb-footer    : 9px;
+  --bpsb-sig-name  : 9px;
+  --bpsb-sig-title : 9px;
+  --bpsb-next-due  : 9px;
   --bpsb-disclaimer: 7px;
   --bpsb-qr-label  : 7px;
-  --bpsb-index-th  : 10px;
-  --bpsb-index-td  : 10px;
+  --bpsb-index-th  : 9px;
+  --bpsb-index-td  : 9px;
 }
 
 /* ── Hide on screen ── */

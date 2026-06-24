@@ -9,18 +9,18 @@
 /* ── CSS Variables (local copy — change freely without side-effects) ── */
 :root {
   --bppv-font      : "Calibri", "Calibri Body", "Trebuchet MS", Arial, sans-serif;
-  --bppv-base      : 11px;
-  --bppv-title     : 10px;
-  --bppv-subtitle  : 10px;
-  --bppv-cert-row  : 10px;
-  --bppv-table-desc: 10px;
-  --bppv-table-val : 10px;
-  --bppv-table-num : 10px;
-  --bppv-eq-meta   : 10px;
-  --bppv-footer    : 10px;
-  --bppv-sig-name  : 10px;
-  --bppv-sig-title : 10px;
-  --bppv-next-due  : 10px;
+  --bppv-base      : 9px;
+  --bppv-title     : 9px;
+  --bppv-subtitle  : 9px;
+  --bppv-cert-row  : 9px;
+  --bppv-table-desc: 9px;
+  --bppv-table-val : 9px;
+  --bppv-table-num : 9px;
+  --bppv-eq-meta   : 9px;
+  --bppv-footer    : 9px;
+  --bppv-sig-name  : 9px;
+  --bppv-sig-title : 9px;
+  --bppv-next-due  : 9px;
   --bppv-disclaimer: 7px;
   --bppv-qr-label  : 7px;
   --bppv-index-th  : 7pt;
