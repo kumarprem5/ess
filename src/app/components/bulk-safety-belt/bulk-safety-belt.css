@@ -57,8 +57,9 @@
 
 
 /* ═══════════════════════════════════════════════════════════════
-   INDEX TABLE COLUMN WIDTHS (10 columns — matches Lifting pattern)
-   Sl No. | Certificate No | ID No. | Belt Type | Manufacturer | Belt Class | Location | Testing Date | Due Date | Remark
+   INDEX TABLE COLUMN WIDTHS (9 columns — Belt Class removed)
+   Sl No. | Certificate No | ID No. | Belt Type | Manufacturer | Location | Testing Date | Due Date | Remark
+   All columns center-aligned; widths redistributed to fill 100%.
 ═══════════════════════════════════════════════════════════════ */
 
 /* Sl No. */
@@ -71,63 +72,56 @@
 /* Certificate No */
 .bpsb-index-table th:nth-child(2),
 .bpsb-index-table td:nth-child(2) {
-  width: 17%;
+  width: 19%;
   text-align: center;
 }
 
 /* ID No. */
 .bpsb-index-table th:nth-child(3),
 .bpsb-index-table td:nth-child(3) {
-  width: 8%;
+  width: 9%;
   text-align: center;
 }
 
 /* Belt Type */
 .bpsb-index-table th:nth-child(4),
 .bpsb-index-table td:nth-child(4) {
-  width: 14%;
-   text-align: center;
+  width: 16%;
+  text-align: center;
 }
 
 /* Manufacturer */
 .bpsb-index-table th:nth-child(5),
 .bpsb-index-table td:nth-child(5) {
-  width: 12%;
-   text-align: center;
-}
-
-/* Belt Class
-.bpsb-index-table th:nth-child(6),
-.bpsb-index-table td:nth-child(6) {
-  width: 6%;
+  width: 14%;
   text-align: center;
-} */
+}
 
 /* Location */
 .bpsb-index-table th:nth-child(6),
 .bpsb-index-table td:nth-child(6) {
-  width: 13%;
-   text-align: center;
+  width: 16%;
+  text-align: center;
 }
 
 /* Testing Date */
 .bpsb-index-table th:nth-child(7),
 .bpsb-index-table td:nth-child(7) {
-  width: 11%;
+  width: 9%;
   text-align: center;
 }
 
 /* Due Date */
 .bpsb-index-table th:nth-child(8),
 .bpsb-index-table td:nth-child(8) {
-  width: 11%;
+  width: 9%;
   text-align: center;
 }
 
 /* Remark */
 .bpsb-index-table th:nth-child(9),
 .bpsb-index-table td:nth-child(9) {
-  width: 10%;
+  width: 4%;
   text-align: center;
 }
 
@@ -145,7 +139,7 @@
 
 .bpsb-index-table    { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: var(--bpsb-index-td); font-family: var(--bpsb-font); font-style: normal; margin-top: 6px; }
 .bpsb-index-table th { background: transparent; color: #000; font-weight: 600; padding: 4px 3px; text-align: center; font-size: var(--bpsb-index-th); font-family: var(--bpsb-font); font-style: normal; line-height: 1.4; border: 1px solid #999; white-space: normal; word-break: break-word; }
-.bpsb-index-table td { padding: 4px 3px; border: 1px solid #d1d5db; font-size: var(--bpsb-index-td); font-family: var(--bpsb-font); font-style: normal; vertical-align: middle; color: #111; line-height: 1.2; white-space: normal; background: transparent; }
+.bpsb-index-table td { padding: 4px 3px; border: 1px solid #d1d5db; font-size: var(--bpsb-index-td); font-family: var(--bpsb-font); font-style: normal; vertical-align: middle; text-align: center; color: #111; line-height: 1.2; white-space: normal; background: transparent; }
 .bpsb-index-table tbody tr:nth-child(even) td { background: transparent; }
 
 .bpsb-cert-no  { font-family: monospace; font-size: 10px; white-space: normal; word-break: break-word; font-weight: normal; }
@@ -433,8 +427,8 @@
 
   @page { size: A4 portrait; margin: 16mm 8mm 21mm 8mm; }
 
-  /* .bpsb-index-page { page: bpsbIndexPage; } */
-  /* @page bpsbIndexPage { size: A4 landscape; margin: 8mm; } */
+  .bpsb-index-page { page: bpsbIndexPage; }
+  @page bpsbIndexPage { size: A4 landscape; margin: 8mm; }
 
   /* ── Reveal section ── */
   #bulk-print-sb-section {
@@ -567,7 +561,7 @@
   #bulk-print-sb-section .bpsb-signature-title  { font-size: var(--bpsb-sig-title)  !important; font-style: normal !important; line-height: 1.0 !important; }
   #bulk-print-sb-section .bpsb-cert-disclaimer  { font-size: 7px !important; font-style: normal !important; margin-top: 1px !important; }
   #bulk-print-sb-section .bpsb-index-table th,
-  #bulk-print-sb-section .bpsb-index-table td   { font-size: 12px !important; padding: 3px !important; font-style: normal !important; border: 1px solid #999 !important; background: transparent !important; }
+  #bulk-print-sb-section .bpsb-index-table td   { font-size: 12px !important; padding: 3px !important; font-style: normal !important; text-align: center !important; border: 1px solid #999 !important; background: transparent !important; }
   #bulk-print-sb-section .bpsb-badge,
   #bulk-print-sb-section .bpsb-cert-no          { font-size: 12px !important; font-style: normal !important; }
 
