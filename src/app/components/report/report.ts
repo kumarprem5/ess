@@ -2879,8 +2879,6 @@ get sortedSafetyValveReports(): SafetyValve[] {
     return parts.join('/');
   }
 
-
-
 private compareCertificateNumbers(certA: string | undefined, certB: string | undefined): number {
   if (!certA && !certB) return 0;
   if (!certA) return 1;   // undefined goes to end
