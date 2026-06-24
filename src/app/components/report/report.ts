@@ -1941,11 +1941,8 @@ onSvExaminationDateChange(): void {
       const [yr, mo, dy] = normalized.split('-').map(Number);
       return new Date(yr, mo - 1, dy);
     }
-
-
-
-
-      formatDateForAngular(dateStr: string): string {
+    
+formatDateForAngular(dateStr: string): string {
         if (!dateStr) return '';
         if (dateStr.includes('-') && dateStr.split('-')[0].length === 4) return dateStr;
         const parts = dateStr.split('-');
@@ -1953,19 +1950,23 @@ onSvExaminationDateChange(): void {
         return dateStr;
       }
 
-    safeDateFormat(dateStr: string | null | undefined): string {
-      if (!dateStr) return '—';
-      try {
-        const date = this.parseLocalDate(dateStr);
-        if (!isNaN(date.getTime())) {
-          return date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        }
-      } catch (e) {
-        console.warn('Invalid date:', dateStr);
-      }
-      return dateStr || '—';
-    }
+safeDateFormat(dateStr: string | null | undefined): string {
+  if (!dateStr) return '—';
+  try {
+    const date = this.parseLocalDate(dateStr);
+    if (!isNaN(date.getTime())) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
 
+      return `${day}-${month}-${year}`;
+    }
+  } catch (e) {
+    console.warn('Invalid date:', dateStr);
+  }
+
+  return dateStr || '—';
+}
       // generateQrSvg(rawText: string): string {
       //   const parts   = rawText.split('|');
       //   const certNo  = parts[0] || '';
