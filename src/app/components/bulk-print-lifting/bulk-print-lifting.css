@@ -7,18 +7,18 @@
 /* ── CSS Variables ── */
 :root {
   --bpl-font: "Calibri", "Calibri Body", "Trebuchet MS", Arial, sans-serif;
-  --bpl-base: 8px;
-  --bpl-title: 8px;
-  --bpl-subtitle: 8px;
-  --bpl-cert-row: 8px;
-  --bpl-table-desc: 8px;
-  --bpl-table-val: 8px;
-  --bpl-table-num: 8px;
-  --bpl-eq-meta: 8px;
-  --bpl-footer: 8px;
-  --bpl-sig-name: 8px;
-  --bpl-sig-title: 8px;
-  --bpl-next-due: 8px;
+  --bpl-base: 9px;
+  --bpl-title: 9px;
+  --bpl-subtitle: 9px;
+  --bpl-cert-row: 9px;
+  --bpl-table-desc: 9px;
+  --bpl-table-val: 9px;
+  --bpl-table-num: 9px;
+  --bpl-eq-meta: 9px;
+  --bpl-footer: 9px;
+  --bpl-sig-name: 9px;
+  --bpl-sig-title: 9px;
+  --bpl-next-due: 9px;
   --bpl-disclaimer: 7px;
   --bpl-qr-label: 7px;
   --bpl-index-th: 7pt;
