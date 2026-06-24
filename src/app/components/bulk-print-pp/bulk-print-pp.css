@@ -121,49 +121,16 @@
 /* COLUMN WIDTHS */
 /* Sl */
 /* COLUMN WIDTHS (Sr.No removed) */
-.bppp-index-table th:nth-child(1),
-.bppp-index-table td:nth-child(1) { width: 4%; text-align: center; }
-
-/* Certificate No — wider */
-.bppp-index-table th:nth-child(2),
-.bppp-index-table td:nth-child(2) { width: 17%; }
-
-/* Serial No */
-.bppp-index-table th:nth-child(3),
-.bppp-index-table td:nth-child(3) { width: 8%; text-align: center; }
-
-/* Machine Type */
-.bppp-index-table th:nth-child(4),
-.bppp-index-table td:nth-child(4) { width: 17%; }
-
-/* Manufacturer */
-.bppp-index-table th:nth-child(5),
-.bppp-index-table td:nth-child(5) { width: 13%; }
-
-/* Year */
-.bppp-index-table th:nth-child(6),
-.bppp-index-table td:nth-child(6) { width: 6%; text-align: center; }
-
-/* Capacity */
-.bppp-index-table th:nth-child(7),
-.bppp-index-table td:nth-child(7) { width: 10%; text-align: center; }
-
-/* Location */
-.bppp-index-table th:nth-child(8),
-.bppp-index-table td:nth-child(8) { width: 12%; }
-
-/* Testing Date */
-.bppp-index-table th:nth-child(9),
-.bppp-index-table td:nth-child(9) { width: 7%; text-align: center; }
-
-/* Due Date */
-.bppp-index-table th:nth-child(10),
-.bppp-index-table td:nth-child(10) { width: 7%; text-align: center; }
-
-/* Remark */
-.bppp-index-table th:nth-child(11),
-.bppp-index-table td:nth-child(11) { width: 8%; text-align: center; }
-
+.bppp-index-table th:nth-child(1),  .bppp-index-table td:nth-child(1)  { width: 4%;  text-align: center; } /* Sl No. */
+.bppp-index-table th:nth-child(2),  .bppp-index-table td:nth-child(2)  { width: 16%; }                      /* Certificate No */
+.bppp-index-table th:nth-child(3),  .bppp-index-table td:nth-child(3)  { width: 8%;  text-align: center; } /* Serial No */
+.bppp-index-table th:nth-child(4),  .bppp-index-table td:nth-child(4)  { width: 16%; }                      /* Machine Type */
+.bppp-index-table th:nth-child(5),  .bppp-index-table td:nth-child(5)  { width: 12%; }                      /* Manufacturer */
+.bppp-index-table th:nth-child(6),  .bppp-index-table td:nth-child(6)  { width: 12%; text-align: center; } /* Capacity */
+.bppp-index-table th:nth-child(7),  .bppp-index-table td:nth-child(7)  { width: 12%; }                      /* Location */
+.bppp-index-table th:nth-child(8),  .bppp-index-table td:nth-child(8)  { width: 7%;  text-align: center; } /* Testing Date */
+.bppp-index-table th:nth-child(9),  .bppp-index-table td:nth-child(9)  { width: 7%;  text-align: center; } /* Due Date */
+.bppp-index-table th:nth-child(10), .bppp-index-table td:nth-child(10) { width: 6%;  text-align: center; } /* Remark */
 .bppp-cert-no{
   font-family:monospace;
   font-size:6.8pt;

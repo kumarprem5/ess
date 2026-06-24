@@ -169,86 +169,16 @@
 }
 
 /* ── INDEX TABLE COLUMN WIDTHS ── */
-
-/* Sl No. */
-.bppv-index-table th:nth-child(1),
-.bppv-index-table td:nth-child(1) {
-  width: 4%;
-  text-align: center;
-}
-
-/* Certificate No */
-.bppv-index-table th:nth-child(2),
-.bppv-index-table td:nth-child(2) {
-  width: 20%;
-}
-
-/* ID No. */
-.bppv-index-table th:nth-child(3),
-.bppv-index-table td:nth-child(3) {
-  width: 8%;
-  text-align: center;
-}
-
-/* Vessel */
-.bppv-index-table th:nth-child(4),
-.bppv-index-table td:nth-child(4) {
-  width: 17%;
-}
-
-/* Sr.No
-.bppv-index-table th:nth-child(5),
-.bppv-index-table td:nth-child(5) {
-  width: 13%;
-} */
-
-/* Manufacturer */
-.bppv-index-table th:nth-child(5),
-.bppv-index-table td:nth-child(5) {
-  width: 13%;
-}
-
-/* Year */
-.bppv-index-table th:nth-child(6),
-.bppv-index-table td:nth-child(6) {
-  width: 6%;
-  text-align: center;
-}
-
-/* Capacity / S */
-.bppv-index-table th:nth-child(7),
-.bppv-index-table td:nth-child(7) {
-  width: 10%;
-  text-align: center;
-}
-
-/* Location */
-.bppv-index-table th:nth-child(8),
-.bppv-index-table td:nth-child(8) {
-  width: 12%;
-}
-
-/* Testing Date */
-.bppv-index-table th:nth-child(9),
-.bppv-index-table td:nth-child(9) {
-  width: 7%;
-  text-align: center;
-}
-
-/* Due Date */
-.bppv-index-table th:nth-child(10),
-.bppv-index-table td:nth-child(10) {
-  width: 7%;
-  text-align: center;
-}
-
-/* Remark / QR */
-.bppv-index-table th:nth-child(11),
-.bppv-index-table td:nth-child(11) {
-  width: 8%;
-  text-align: center;
-}
-
+.bppv-index-table th:nth-child(1),  .bppv-index-table td:nth-child(1)  { width: 4%;  text-align: center; } /* Sl No. */
+.bppv-index-table th:nth-child(2),  .bppv-index-table td:nth-child(2)  { width: 18%; }                      /* Certificate No */
+.bppv-index-table th:nth-child(3),  .bppv-index-table td:nth-child(3)  { width: 8%;  text-align: center; } /* ID No. */
+.bppv-index-table th:nth-child(4),  .bppv-index-table td:nth-child(4)  { width: 15%; }                      /* Vessel */
+.bppv-index-table th:nth-child(5),  .bppv-index-table td:nth-child(5)  { width: 12%; }                      /* Manufacturer */
+.bppv-index-table th:nth-child(6),  .bppv-index-table td:nth-child(6)  { width: 12%; text-align: center; } /* Capacity / S */
+.bppv-index-table th:nth-child(7),  .bppv-index-table td:nth-child(7)  { width: 12%; }                      /* Location */
+.bppv-index-table th:nth-child(8),  .bppv-index-table td:nth-child(8)  { width: 7%;  text-align: center; } /* Testing Date */
+.bppv-index-table th:nth-child(9),  .bppv-index-table td:nth-child(9)  { width: 7%;  text-align: center; } /* Due Date */
+.bppv-index-table th:nth-child(10), .bppv-index-table td:nth-child(10) { width: 5%;  text-align: center; } /* Remark / QR */
 /* ── Certificate no / badge ── */
 .bppv-cert-no {
   font-family: monospace;

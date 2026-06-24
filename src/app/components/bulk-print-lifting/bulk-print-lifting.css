@@ -125,75 +125,71 @@
 }
 /* ── INDEX TABLE COLUMN WIDTHS (after removing Type column) ── */
 
+/* BEFORE → AFTER */
+
+/* Sl No. — unchanged */
 .bpl-index-table th:nth-child(1),
 .bpl-index-table td:nth-child(1) {
   width: 4%;
   text-align: center;
 }
 
-/* Certificate No — wider now that Sr.No is removed */
+/* Certificate No — unchanged */
 .bpl-index-table th:nth-child(2),
 .bpl-index-table td:nth-child(2) {
   width: 17%;
 }
 
-/* ID No */
+/* ID No — unchanged */
 .bpl-index-table th:nth-child(3),
 .bpl-index-table td:nth-child(3) {
   width: 8%;
   text-align: center;
 }
 
-/* Equipment */
+/* Equipment — unchanged */
 .bpl-index-table th:nth-child(4),
 .bpl-index-table td:nth-child(4) {
   width: 17%;
 }
 
-/* Manufacturer — was nth-child(6), now nth-child(5) */
+/* Manufacturer — unchanged (was already nth-child(5)) */
 .bpl-index-table th:nth-child(5),
 .bpl-index-table td:nth-child(5) {
   width: 13%;
 }
 
-/* Year */
+/* Capacity — WAS nth-child(7), NOW nth-child(6). Optionally widen since Year's space is freed up */
 .bpl-index-table th:nth-child(6),
 .bpl-index-table td:nth-child(6) {
-  width: 6%;
+  width: 14%;  /* was 10% — bumped up to absorb freed space, adjust as you like */
   text-align: center;
 }
 
-/* Capacity */
+/* Location — WAS nth-child(8), NOW nth-child(7) */
 .bpl-index-table th:nth-child(7),
 .bpl-index-table td:nth-child(7) {
-  width: 10%;
-  text-align: center;
+  width: 14%;  /* was 12% */
 }
 
-/* Location */
+/* Testing Date — WAS nth-child(9), NOW nth-child(8) */
 .bpl-index-table th:nth-child(8),
 .bpl-index-table td:nth-child(8) {
-  width: 12%;
+  width: 8%;  /* was 7% */
+  text-align: center;
 }
 
-/* Testing Date */
+/* Due Date — WAS nth-child(10), NOW nth-child(9) */
 .bpl-index-table th:nth-child(9),
 .bpl-index-table td:nth-child(9) {
-  width: 7%;
+  width: 8%;  /* was 7% */
   text-align: center;
 }
 
-/* Due Date */
+/* Remark — WAS nth-child(11), NOW nth-child(10) */
 .bpl-index-table th:nth-child(10),
 .bpl-index-table td:nth-child(10) {
-  width: 7%;
-  text-align: center;
-}
-
-/* Remark */
-.bpl-index-table th:nth-child(11),
-.bpl-index-table td:nth-child(11) {
-  width: 8%;
+  width: 9%;  /* was 8% */
   text-align: center;
 }
 .bpl-cert-no {

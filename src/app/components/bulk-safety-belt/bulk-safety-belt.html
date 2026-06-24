@@ -16,19 +16,18 @@
 <colgroup>
     <col style="width:4%">    <!-- Sl No -->
     <col style="width:19%">   <!-- Certificate No -->
-    <col style="width:11%">   <!-- Belt Type -->
-    <col style="width:11%">   <!-- Serial No -->
-    <col style="width:9%">    <!-- Make -->
-    <col style="width:7%">    <!-- Year -->
-    <col style="width:13%">   <!-- Location -->
+    <col style="width:12%">   <!-- Belt Type -->
+    <col style="width:9%">    <!-- ID No -->
+    <col style="width:11%">   <!-- Make -->
+    <col style="width:14%">   <!-- Location -->
     <col style="width:8%">    <!-- Testing Date -->
     <col style="width:8%">    <!-- Due Date -->
-    <col style="width:10%">   <!-- Remark / QR ← ADDED -->
+    <col style="width:15%">   <!-- Remark / QR -->
 </colgroup>
   <thead>
     <tr>
       <th>Sl No.</th><th>Certificate No</th><th>Belt Type</th>
-      <th>Serial No</th><th>Make</th><th>Year</th>
+      <th>ID No</th><th>Make</th>
       <th>Location</th><th>Testing Date</th><th>Due Date</th><th>Remark / QR</th>
     </tr>
   </thead>
@@ -46,7 +45,7 @@
 </td>
 
 <td>
-  {{ item.data.serialNo || '—' }}
+  {{ item.data.idNumber || '—' }}
 </td>
 
 <td>
