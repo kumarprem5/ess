@@ -56,7 +56,10 @@
 }
 
 
-/* ── INDEX TABLE COLUMN WIDTHS (9 columns: Year removed) — matches Lifting pattern ── */
+/* ═══════════════════════════════════════════════════════════════
+   INDEX TABLE COLUMN WIDTHS (9 columns — matches Lifting pattern)
+   Sl No. | Certificate No | ID No. | Belt Type | Manufacturer | Location | Testing Date | Due Date | Remark
+═══════════════════════════════════════════════════════════════ */
 
 /* Sl No. */
 .bpsb-index-table th:nth-child(1),
@@ -71,23 +74,23 @@
   width: 18%;
 }
 
-/* Belt Type */
+/* ID No. */
 .bpsb-index-table th:nth-child(3),
 .bpsb-index-table td:nth-child(3) {
-  width: 12%;
-}
-
-/* ID No */
-.bpsb-index-table th:nth-child(4),
-.bpsb-index-table td:nth-child(4) {
-  width: 9%;
+  width: 8%;
   text-align: center;
 }
 
-/* Make */
+/* Belt Type */
+.bpsb-index-table th:nth-child(4),
+.bpsb-index-table td:nth-child(4) {
+  width: 15%;
+}
+
+/* Manufacturer */
 .bpsb-index-table th:nth-child(5),
 .bpsb-index-table td:nth-child(5) {
-  width: 12%;
+  width: 13%;
 }
 
 /* Location */
@@ -110,10 +113,10 @@
   text-align: center;
 }
 
-/* Remark / QR */
+/* Remark */
 .bpsb-index-table th:nth-child(9),
 .bpsb-index-table td:nth-child(9) {
-  width: 15%;
+  width: 12%;
   text-align: center;
 }
 
@@ -134,8 +137,8 @@
 .bpsb-index-table td { padding: 4px 3px; border: 1px solid #d1d5db; font-size: var(--bpsb-index-td); font-family: var(--bpsb-font); font-style: normal; vertical-align: middle; color: #111; line-height: 1.2; white-space: normal; }
 .bpsb-index-table tbody tr:nth-child(even) td { background: #f8fafc; }
 
-.bpsb-cert-no  { font-family: monospace; font-size: 10px; white-space: normal; word-break: break-word; font-weight: normal;  /* ← add this */}
-.bpsb-badge    {  font-weight: normal;  /* ← was 700 */ font-size: 10px; text-align: center; padding: 2px 3px; border-radius: 2px; 
+.bpsb-cert-no  { font-family: monospace; font-size: 10px; white-space: normal; word-break: break-word; font-weight: normal; }
+.bpsb-badge    { font-weight: normal; font-size: 10px; text-align: center; padding: 2px 3px; border-radius: 2px; 
   white-space: normal; font-family: var(--bpsb-font); font-style: normal; background: #ecfdf5; color: #065f46; }
 
 .bpsb-remark-qr-cell  { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
@@ -342,7 +345,7 @@
   flex-shrink: 0;
 }
 .bpsb-next-due {
-  font-weight: normal;  /* ← was 700 */
+  font-weight: normal;
   font-size: var(--bpsb-next-due);
   font-family: var(--bpsb-font);
   font-style: normal;
@@ -445,9 +448,6 @@
     visibility: visible !important;
     font-family: var(--bpsb-font) !important;
     font-style: normal !important;
-    
-
-
   }
 
   /* Global font-size reset */
@@ -474,7 +474,7 @@
 
   /* Next-due banner: margin-top:auto = key spacer */
   #bulk-print-sb-section .bpsb-next-due {
-    font-weight: normal !important;  /* ← was 700 */
+    font-weight: normal !important;
     font-size: var(--bpsb-next-due) !important;
     font-family: var(--bpsb-font) !important;
     font-style: normal !important;
@@ -537,7 +537,7 @@
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    font-weight: normal;  /* ← was 600 */
+    font-weight: normal;
     font-size: 10px !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
@@ -545,8 +545,8 @@
 
   /* ── Font-size semantic overrides ── */
   #bulk-print-sb-section .bpsb-title-main       { font-size: 16px !important; font-weight: 700 !important; font-style: normal !important; text-transform: uppercase !important; }
-  #bulk-print-sb-section .bpsb-title-sub        { font-size: var(--bpsb-subtitle)   !important; font-style: normal !important; font-weight: normal;  /* ← add this */ }
-  #bulk-print-sb-section .bpsb-num              { font-size: var(--bpsb-table-num)  !important; font-style: normal !important;  font-weight: normal;  /* ← add this */}
+  #bulk-print-sb-section .bpsb-title-sub        { font-size: var(--bpsb-subtitle)   !important; font-style: normal !important; font-weight: normal; }
+  #bulk-print-sb-section .bpsb-num              { font-size: var(--bpsb-table-num)  !important; font-style: normal !important; font-weight: normal; }
   #bulk-print-sb-section .bpsb-desc             { font-size: var(--bpsb-table-desc) !important; font-style: normal !important; }
   #bulk-print-sb-section .bpsb-value            { font-size: var(--bpsb-table-val)  !important; font-style: normal !important; }
   #bulk-print-sb-section .bpsb-belt-main        { font-size: var(--bpsb-table-val)  !important; font-weight: 700 !important; font-style: normal !important; }
