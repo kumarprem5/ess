@@ -433,8 +433,8 @@
 
   @page { size: A4 portrait; margin: 16mm 8mm 21mm 8mm; }
 
-  .bpsb-index-page { page: bpsbIndexPage; }
-  @page bpsbIndexPage { size: A4 landscape; margin: 8mm; }
+  /* .bpsb-index-page { page: bpsbIndexPage; } */
+  /* @page bpsbIndexPage { size: A4 landscape; margin: 8mm; } */
 
   /* ── Reveal section ── */
   #bulk-print-sb-section {
