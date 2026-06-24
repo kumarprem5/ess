@@ -173,7 +173,8 @@
 .bppv-index-table th:nth-child(1),
 .bppv-index-table td:nth-child(1) {
   width: 4%;
-  text-align: center;
+  text-align: center !important;
+  vertical-align: middle !important;
 }
 
 /* Certificate No */
@@ -362,8 +363,8 @@
 .bppv-print-table tbody tr:nth-child(even) td { background: transparent; }
 .bppv-print-table tbody tr:nth-child(odd)  td { background: transparent; }
 .bppv-num   { width: 26px; text-align: center; white-space: nowrap; font-size: var(--bppv-table-num);  font-weight: normal;  /* ← add this */ }
-.bppv-desc  { width: 45%; font-size: var(--bppv-table-desc); white-space: pre-line; }
-.bppv-value { font-size: var(--bppv-table-val); font-weight: 500; }
+.bppv-desc  { width: 45%; font-size: var(--bppv-table-desc); white-space: pre-line; font-weight: 400;}
+.bppv-value { font-size: var(--bppv-table-val); font-weight: 400; }
 
 /* ── Row 16 aligned values ── */
 .bppv-16-desc,
@@ -702,8 +703,11 @@
   #bulk-print-pv-section .bppv-title-main       { font-size: 16px !important; font-weight: 700 !important; font-style: normal !important; text-transform: uppercase !important; }
   #bulk-print-pv-section .bppv-title-sub        { font-size: var(--bppv-subtitle)   !important; font-style: normal !important; }
   #bulk-print-pv-section .bppv-cert-date-row    { font-size: var(--bppv-cert-row)   !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-num              { font-size: var(--bppv-table-num)  !important; font-style: normal !important; }
-  #bulk-print-pv-section .bppv-desc             { font-size: var(--bppv-table-desc) !important; font-style: normal !important; }
+ #bulk-print-pv-section .bppv-num {
+  text-align: center !important;
+  font-weight: 400 !important;
+}
+  #bulk-print-pv-section .bppv-desc             { font-size: var(--bppv-table-desc)  !important; font-weight: 400 !important; font-weight: 400 !important; font-style: normal !important; }
   #bulk-print-pv-section .bppv-value            { font-size: var(--bppv-table-val)  !important; font-style: normal !important; }
   #bulk-print-pv-section .bppv-vessel-main      { font-size: var(--bppv-table-val)  !important; font-weight: 700 !important; font-style: normal !important; }
   #bulk-print-pv-section .bppv-vessel-meta      { font-size: var(--bppv-eq-meta)    !important; font-style: normal !important; }
