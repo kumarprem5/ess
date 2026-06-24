@@ -1,4 +1,4 @@
-  <div id="bulk-print-sb-section"
+<div id="bulk-print-sb-section"
       *ngIf="sbItems.length > 0"
       class="bpsb-root">
 
@@ -12,62 +12,44 @@
         <div class="bpsb-index-title">Safety Belt / Full Body Harness Inspection Records — Index</div>
         <div class="bpsb-index-subtitle">Summary of Safety Belt Inspection Reports (Under Section 67 of Factories Act 1948)</div>
       </div>
-<table class="bpsb-index-table">
 
-  <thead>
-    <tr>
-      <th>Sl No.</th><th>Certificate No</th><th>Belt Type</th>
-      <th>ID No</th><th>Make</th>
-      <th>Location</th><th>Testing Date</th><th>Due Date</th><th>Remark / QR</th>
-    </tr>
-  </thead>
-  <tbody>
-   <tr *ngFor="let item of sbItems; let i = index">
-
-<td>{{ i + 1 }}</td>
-
-<td class="bpsb-cert-no">
-  {{ item.data.certificateNumber || '—' }}
-</td>
-
-<td>
-  {{ item.data.beltType || '—' }}
-</td>
-
-<td>
-  {{ item.data.idNumber || '—' }}
-</td>
-
-<td>
-  {{ item.data.make || '—' }}
-</td>
-
-<!-- <td>
-  {{ item.data.yearOfManufacture || '—' }}
-</td> -->
-
-<td>
-  {{ item.data.location || '—' }}
-</td>
-
-<td>
-  {{ safeDateFormat(item.data.dateOfExamination) }}
-</td>
-
-<td>
-  {{ safeDateFormat(item.data.nextDueDate) }}
-</td>
-
-<td class="bpsb-remark-qr-cell">
-  <div class="bpsb-index-qr-block">
-    <img [src]="generateQrSvg(item.data.certificateNumber + '|' + companyId + '|sb')"
-         class="bpsb-index-qr-img" alt="QR">
-  </div>
-</td>
-
-</tr>
-  </tbody>
-</table>
+      <table class="bpsb-index-table">
+        <thead>
+          <tr>
+            <th>Sl No.</th>
+            <th>Certificate No</th>
+            <th>ID No.</th>
+            <th>Belt Type</th>
+            <th>Manufacturer</th>
+            <th>Belt Class</th>
+            <th>Location</th>
+            <th>Testing Date</th>
+            <th>Due Date</th>
+            <th>Remark</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of sbItems; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td class="bpsb-cert-no">{{ item.data.certificateNumber || '—' }}</td>
+            <td>{{ item.data.idNumber || '—' }}</td>
+            <td>{{ item.data.beltType || '—' }}</td>
+            <td>{{ item.data.make || '—' }}</td>
+            <td>{{ item.data.classOfBelt || '—' }}</td>
+            <td>{{ item.data.location || '—' }}</td>
+            <td>{{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</td>
+            <td>{{ item.data.nextDueDate | date:'dd-MM-yyyy' }}</td>
+            <td>
+              <div class="bpsb-remark-qr-cell">
+                <div class="bpsb-index-qr-block">
+                  <img [src]="generateQrSvg(item.data.certificateNumber + '|' + companyId + '|sb')" 
+                       alt="QR Code" class="bpsb-index-qr-img" />
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <div class="bpsb-index-footer">Total Safety Belt Records: {{ sbItems.length }}</div>
     </div>
     <!-- <div class="bpsb-page-break"></div> -->
