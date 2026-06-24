@@ -7,18 +7,18 @@
 /* ── CSS Variables ── */
 :root {
   --bpl-font: "Calibri", "Calibri Body", "Trebuchet MS", Arial, sans-serif;
-  --bpl-base: 9px;
-  --bpl-title: 9px;
-  --bpl-subtitle: 9px;
-  --bpl-cert-row: 9px;
-  --bpl-table-desc: 9px;
-  --bpl-table-val: 9px;
-  --bpl-table-num: 9px;
-  --bpl-eq-meta: 9px;
-  --bpl-footer: 9px;
-  --bpl-sig-name: 9px;
-  --bpl-sig-title: 9px;
-  --bpl-next-due: 9px;
+  --bpl-base: 8px;
+  --bpl-title: 8px;
+  --bpl-subtitle: 8px;
+  --bpl-cert-row: 8px;
+  --bpl-table-desc: 8px;
+  --bpl-table-val: 8px;
+  --bpl-table-num: 8px;
+  --bpl-eq-meta: 8px;
+  --bpl-footer: 8px;
+  --bpl-sig-name: 8px;
+  --bpl-sig-title: 8px;
+  --bpl-next-due: 8px;
   --bpl-disclaimer: 7px;
   --bpl-qr-label: 7px;
   --bpl-index-th: 7pt;
@@ -622,6 +622,14 @@
     font-family: "Calibri", Arial, Helvetica, sans-serif !important;
   }
 
+    html,
+  body {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+  }
+
   @page {
     size: A4 portrait;
     margin: 20mm 4mm 15mm 4mm;
@@ -635,14 +643,25 @@
     visibility: visible !important;
   }
 
+  /* #bulk-print-lifting-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  } */
+
   #bulk-print-lifting-section {
     display: flex !important;
     flex-direction: column !important;
     visibility: visible !important;
     position: static !important;
     width: 100% !important;
+    max-width: 100% !important;
     height: auto !important;
-    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+     overflow: hidden !important;
     background: #fff !important;
     font-family: var(--bpl-font) !important;
     font-style: normal !important;
@@ -652,9 +671,9 @@
     print-color-adjust: exact !important;
   }
 
-  #bulk-print-lifting-section * {
-    font-family: var(--bpl-font) !important;
-    font-style: normal !important;
+#bulk-print-lifting-section * {
+    font-size: 8px !important;
+    box-sizing: border-box !important;
   }
 
 #bulk-print-lifting-section .bpl-print-label {
@@ -811,8 +830,7 @@
 
   #bulk-print-lifting-section .bpl-header-qr-img {
     display: block !important;
-    width: 75px !important;
-    height: 75px !important;
+    width: 52px; height: 52px
   }
 
   #bulk-print-lifting-section .bpl-header-qr-label {
