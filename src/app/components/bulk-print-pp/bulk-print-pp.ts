@@ -16,6 +16,7 @@ export class BulkPrintPp {
   @Input() generateQrSvg!: (raw: string) => string;
   @Input() getSectionText!:  () => string;
   @Input() getApprovalText!: () => string;
+   @Input()  getPowerPressRule!: () => string;
 
    // ── Stamp / Signature inputs ──
   @Input() showStamp: boolean = true;

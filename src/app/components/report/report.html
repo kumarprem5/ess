@@ -1881,10 +1881,20 @@
   [counterSignImageUrl]="counterSignBase64">
 </app-bulk-print-pv>
 
-<app-bulk-print-pp [ppItems]="ppItemsForPrint" [companyId]="companyId" [safeDateFormat]="safeDateFormat.bind(this)"
-  [generateQrSvg]="generateQrSvg.bind(this)" [getSectionText]="getSectionText.bind(this)"
-  [getApprovalText]="getApprovalText.bind(this)" [showStamp]="showStampOnPrint" [signatureImageUrl]="signatureBase64"
-  [stampImageUrl]="stampBase64" [counterSignImageUrl]="counterSignBase64"  [watermarkImageUrl]="watermarkBase64"></app-bulk-print-pp>
+<app-bulk-print-pp
+  [ppItems]="ppItemsForPrint"
+  [companyId]="companyId"
+  [safeDateFormat]="safeDateFormat.bind(this)"
+  [generateQrSvg]="generateQrSvg.bind(this)"
+  [getSectionText]="getSectionText.bind(this)"
+  [getApprovalText]="getApprovalText.bind(this)"
+  [getPowerPressRule]="getPowerPressRule.bind(this)"
+  [showStamp]="showStampOnPrint"
+  [signatureImageUrl]="signatureBase64"
+  [stampImageUrl]="stampBase64"
+  [counterSignImageUrl]="counterSignBase64"
+  [watermarkImageUrl]="watermarkBase64">
+</app-bulk-print-pp>
 
 
 <app-bulk-safety-belt [sbItems]="sbItemsForPrint" [companyId]="companyId" [safeDateFormat]="safeDateFormat.bind(this)"

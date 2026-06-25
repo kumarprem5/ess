@@ -81,7 +81,7 @@
         <div class="bppp-header-title-row">
           <div class="bppp-header-title-block">
             <div class="bppp-title-main">Report of Examination of Dangerous Machine /Power Presses</div>
-            <div class="bppp-title-sub">Under Section 21(2) of Factories Act 1948</div>
+            <div class="bppp-title-sub">{{getPowerPressRule()}}</div>
           </div>
           <div class="bppp-header-qr-block">
             <img [src]="generateQrSvg(item.data.certificateNo + '|' + companyId + '|pp')"
@@ -93,8 +93,7 @@
           <span>Certificate No: {{ item.data.certificateNo }}</span>
           <span>Date of Examination: {{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</span>
         </div>
-      </div>
-      
+      </div>      
       <!-- Main table -->
       <table class="bppp-print-table">
         <tbody>
@@ -232,7 +231,6 @@
                    alt="Stamp">
             </div>
           </div>
-
           <!-- RIGHT: Counter sign -->
           <div class="bppp-sign-right">
             <div class="bppp-counter-sig-wrap" *ngIf="showStamp && counterSignImageUrl">

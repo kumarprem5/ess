@@ -1410,6 +1410,20 @@ onSvExaminationDateChange(): void {
 
 
 
+
+ getRulesAndSectionText(): string {
+        switch ((this.company?.state || '').toLowerCase().trim()) {
+          case 'rajasthan':      return 'Approved by CIF&B, Jaipur Lic No: CMP-883/2025 Dt: 22.12.2025';
+          case 'punjab':         return 'Approved by DOF/CIF Punjab Vide Lic. No. LC-FG-1024/1/2021-Factory (I770814/2024) dt.29.01.2024';
+          case 'haryana':        return 'Approved by CIF Haryana Vide Lic. No. 2968 dated 27.06.2019';
+          case 'delhi':          return 'Approved by the CIF Haryana Vide Lic. No. 2968 Dated 27.06.2019 Memo No. 957-997 dt. 26.03.2021 & 3449-89 dt. 17.08.21';
+          case 'madhya pradesh': return 'Approved by CIF Madhya Pradesh Vide Lic. No. CMI2110221 dated 16.09.2023';
+          case 'uttar pradesh':  return 'Approved by the Dir. Fac. Kanpur Vide Lic. No.155/F/C.P.U.P./Org.2025 DT. 22.01.2025';
+          case 'uttarakhand':    return 'Approved by the Dir. Fac. Haldwani Vide <br> Lic. No.114/F/C.P.U.K./Org.2025 DT.11.02.2025';  // ← ADD (fill in real details)
+          default:               return '';
+        }
+      }
+
       getPressureVesselRule(): string {
 
   const state = (this.company?.state || '').toLowerCase().trim();
@@ -1429,7 +1443,7 @@ onSvExaminationDateChange(): void {
       return 'Form No. 9 (Prescribed Under Rule 58 Rajasthan Factory Rules, 1951) Framed U/S 31 of Factories Act 1948';
 
     case 'haryana':
-      return 'Form No. 9 (Rule 61 Haryana Factory Rules) Framed U/S 31(2) of Factories Act 1948';
+      return 'Form No. 8 (Rule 61 Haryana Factory Rules) Framed U/S 31(2) of Factories Act 1948';
 
     case 'punjab':
       return 'Form No. 9 (Rule 61 Punjab Factory Rules) Framed U/S 31(2) of Factories Act 1948';
@@ -1439,18 +1453,38 @@ onSvExaminationDateChange(): void {
   }
 }
 
- getRulesAndSectionText(): string {
-        switch ((this.company?.state || '').toLowerCase().trim()) {
-          case 'rajasthan':      return 'Approved by CIF&B, Jaipur Lic No: CMP-883/2025 Dt: 22.12.2025';
-          case 'punjab':         return 'Approved by DOF/CIF Punjab Vide Lic. No. LC-FG-1024/1/2021-Factory (I770814/2024) dt.29.01.2024';
-          case 'haryana':        return 'Approved by CIF Haryana Vide Lic. No. 2968 dated 27.06.2019';
-          case 'delhi':          return 'Approved by the CIF Haryana Vide Lic. No. 2968 Dated 27.06.2019 Memo No. 957-997 dt. 26.03.2021 & 3449-89 dt. 17.08.21';
-          case 'madhya pradesh': return 'Approved by CIF Madhya Pradesh Vide Lic. No. CMI2110221 dated 16.09.2023';
-          case 'uttar pradesh':  return 'Approved by the Dir. Fac. Kanpur Vide Lic. No.155/F/C.P.U.P./Org.2025 DT. 22.01.2025';
-          case 'uttarakhand':    return 'Approved by the Dir. Fac. Haldwani Vide <br> Lic. No.114/F/C.P.U.K./Org.2025 DT.11.02.2025';  // ← ADD (fill in real details)
-          default:               return '';
-        }
-      }
+     getPowerPressRule(): string {
+
+  const state = (this.company?.state || '').toLowerCase().trim();
+
+  switch(state){
+    case 'uttar pradesh':
+      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+
+    case 'delhi':
+      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+
+    case 'uttarakhand':
+      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+
+    case 'rajasthan':
+      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+
+    case 'haryana':
+      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+
+    case 'punjab':
+      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+
+    default:
+      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+  
+    
+  }
+
+}
+
+
 
 
     updatePeriodicalDetails(): void {
