@@ -212,8 +212,8 @@
           I certify that on <strong>{{ item.data.dateOfExamination | date:'dd-MM-yyyy' }}</strong>,
           I thoroughly examined the above machine and that the above is a true report of the result of the examination.
         </div>
-        <div class="bppp-cert-next-due">
-          NEXT EXAMINATION DUE: {{ item.data.nextDueDate | date:'dd-MM-yyyy' }}
+        <div class="bppp-cert-next-due"> <strong>
+          NEXT EXAMINATION DUE: {{ item.data.nextDueDate | date:'dd-MM-yyyy' }} </strong>
         </div>
         <div class="bppp-cert-signature-row">
           <!-- LEFT: Inspector signature + stamp -->

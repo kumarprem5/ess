@@ -78,9 +78,6 @@
           </p>
         </div>
       </div> -->
-
-
-
       <div class="bpl-print-header-row">
         <div class="bpl-header-title-row">
           <!-- Left spacer (mirrors QR width for centering) ] -->
@@ -92,14 +89,12 @@
               ({{ item.data.testName.split('(')[1]?.replace(')', '') }})
             </p>
           </div>
-
           <!-- QR code on the right -->
           <div class="bpl-header-qr-block">
             <img [src]="generateQrSvg(item.data.certificateNo + '|' + companyId + '|lifting')" class="bpl-header-qr-img"
               alt="QR Code">
             <div class="bpl-header-qr-label">Scan to Download</div>
           </div>
-
         </div>
       </div>
 
@@ -123,8 +118,8 @@
           </tr>
           <tr>
             <td class="bpl-cn">3</td>
-            <td class="bpl-cd">Distinguishing number or mark if any and description sufficient to identify the lifting
-              machine, chain, rope or lifting tackle. EOT crane Elect. Hoist/Jib/crane/Chain Pulley Block</td>
+            <td class="bpl-cd">Distinguishing number of mark if any and description sufficient to identify the lifting
+              machine, chain, rope or lifting tackle.</td>
             <td class="bpl-cv">
               <div class="bpl-equipment-main">{{ item.data.equipmentName || '—' }}</div>
               <div class="bpl-eq-meta">
@@ -184,8 +179,8 @@
         I thoroughly examined the above Lifting Machine/Lifting Tackles and that the above is a true report of the
         result of the examination.
       </div>
-      <div class="bpl-cert-next-due">
-        NEXT EXAMINATION DUE: {{ item.data.nextDueDate | date:'dd-MM-yyyy' }}
+      <div class="bpl-cert-next-due" ><strong>
+        NEXT EXAMINATION DUE: {{ item.data.nextDueDate | date:'dd-MM-yyyy' }} </strong>
       </div>
       <!-- Footer -->
       <!-- Footer -->

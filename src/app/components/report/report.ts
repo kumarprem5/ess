@@ -1408,6 +1408,21 @@ onSvExaminationDateChange(): void {
         }
       }
 
+
+ getRulesAndSectionText(): string {
+        switch ((this.company?.state || '').toLowerCase().trim()) {
+          case 'rajasthan':      return 'Approved by CIF&B, Jaipur Lic No: CMP-883/2025 Dt: 22.12.2025';
+          case 'punjab':         return 'Approved by DOF/CIF Punjab Vide Lic. No. LC-FG-1024/1/2021-Factory (I770814/2024) dt.29.01.2024';
+          case 'haryana':        return 'Approved by CIF Haryana Vide Lic. No. 2968 dated 27.06.2019';
+          case 'delhi':          return 'Approved by the CIF Haryana Vide Lic. No. 2968 Dated 27.06.2019 Memo No. 957-997 dt. 26.03.2021 & 3449-89 dt. 17.08.21';
+          case 'madhya pradesh': return 'Approved by CIF Madhya Pradesh Vide Lic. No. CMI2110221 dated 16.09.2023';
+          case 'uttar pradesh':  return 'Approved by the Dir. Fac. Kanpur Vide Lic. No.155/F/C.P.U.P./Org.2025 DT. 22.01.2025';
+          case 'uttarakhand':    return 'Approved by the Dir. Fac. Haldwani Vide <br> Lic. No.114/F/C.P.U.K./Org.2025 DT.11.02.2025';  // ← ADD (fill in real details)
+          default:               return '';
+        }
+      }
+
+
     updatePeriodicalDetails(): void {
       const inspector = this.liftingForm.inspectorName || 'Inspector';
       const dateRaw   = this.liftingForm.dateOfExamination;
