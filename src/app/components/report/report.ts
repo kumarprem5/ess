@@ -1459,25 +1459,25 @@ onSvExaminationDateChange(): void {
 
   switch(state){
     case 'uttar pradesh':
-      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+      return 'Section 21 (2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
 
     case 'delhi':
-      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+      return 'Section 21 (2) Factories Act, 1948 (Rule 57 – Delhi Factory Rules, 1950)';
 
     case 'uttarakhand':
-      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+      return 'Section 21 (2) Factories Act, 1948 (Rule 57 – Uttarakhand Factory Rules)';
 
     case 'rajasthan':
-      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+      return 'Section 21 (2) Factories Act, 1948 (Rule 57 – Rajasthan Factory Rules, 1951)';
 
     case 'haryana':
-      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+      return 'Section 21 (2) Factories Act, 1948 (Rule 57 – Haryana Factory Rules)';
 
     case 'punjab':
-      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+      return 'Section 21 (2) Factories Act, 1948 (Rule 57 – Punjab Factory Rules)';
 
     default:
-      return 'Section 21(2) Factories Act, 1948 (Rule 57 – U.P. Factory Rules, 1950)';
+      return 'Section 21 (2) Factories Act, 1948 (Rule 57 – Factory Rules, 1950)';
   
     
   }
