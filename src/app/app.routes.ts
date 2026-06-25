@@ -13,6 +13,7 @@ export const routes: Routes = [
   // ✅ Public routes — no auth required
   { path: 'login',  component: LoginComponent },
   { path: 'verify', component: VerifyComponent },
+  { path: 'overview', component: OverviewDashboard },
 
   // ✅ Protected routes — auth required
   // LayoutComponent is the SHELL (sidebar + header visible on ALL children)
@@ -31,5 +32,5 @@ export const routes: Routes = [
   { path: '',   redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' },
 
-  { path: 'overview', component: OverviewDashboard }
+  // { path: 'overview', component: OverviewDashboard }
 ];
