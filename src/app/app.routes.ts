@@ -6,6 +6,7 @@ import { Companies } from './components/companies/companies';
 import { CompanyReport } from './components/report/report';
 import { VerifyComponent } from './components/verify-component/verify-component';
 import { authGuard } from './auth-gaurd/gaurd-guard';
+import { OverviewDashboard } from './components/overview-dashboard/overview-dashboard';
 
 export const routes: Routes = [
 
@@ -28,5 +29,7 @@ export const routes: Routes = [
 
   // Default + wildcard
   { path: '',   redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'login' },
+
+  { path: 'overview', component: OverviewDashboard }
 ];

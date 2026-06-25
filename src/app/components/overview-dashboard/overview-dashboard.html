@@ -1,0 +1,279 @@
+<!-- overview-dashboard.component.html -->
+
+<div class="overview-container">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Overview</h1>
+      <p class="page-header__sub">Track inspections and company data by period</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       FILTER SECTION — Year & Month Selection
+       ═══════════════════════════════════════════════════ -->
+  <div class="filter-panel">
+
+    <!-- YEAR SELECTOR -->
+    <div class="filter-group">
+      <label class="filter-label">Year</label>
+      <select 
+        [(ngModel)]="selectedYear" 
+        (change)="onYearChange()"
+        class="filter-select">
+        <option *ngFor="let year of availableYears" [value]="year">
+          {{ year }}
+        </option>
+      </select>
+    </div>
+
+    <!-- MONTH SELECTOR -->
+    <div class="filter-group filter-group--months">
+      <label class="filter-label">Month</label>
+      <div class="months-grid">
+        <button
+          *ngFor="let month of months; let i = index"
+          (click)="selectMonth(i)"
+          [class.month-btn--active]="selectedMonth === i"
+          class="month-btn">
+          {{ month }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- QUICK STATS -->
+  <div class="summary-row">
+    <div class="sum-card sum-card--amber">
+      <div class="sum-card__icon">
+        <i class="ti ti-calendar"></i>
+      </div>
+      <div class="sum-card__body">
+        <span class="sum-card__label">Period</span>
+        <span class="sum-card__value">{{ periodLabel }}</span>
+      </div>
+    </div>
+
+    <div class="sum-card sum-card--cyan">
+      <div class="sum-card__icon">
+        <i class="ti ti-building-2"></i>
+      </div>
+      <div class="sum-card__body">
+        <span class="sum-card__label">Companies</span>
+        <span class="sum-card__value">{{ getCompanyCount() }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       MAIN CONTENT PANELS
+       ═══════════════════════════════════════════════════ -->
+  <div class="content-grid">
+
+    <!-- LEFT PANEL: PERIOD DATA -->
+    <div class="data-panel">
+      <div class="panel__header">
+        <h2 class="panel__title">
+          <span class="panel__title-dot panel__title-dot--amber"></span>
+          Period Data
+        </h2>
+      </div>
+
+      <div class="panel__content">
+        <!-- If specific year/month selected -->
+        <ng-container *ngIf="isCustomPeriod; else currentPeriodBlock">
+          <div class="data-block">
+            <h3 class="data-block__title">
+              {{ selectedYear }} - {{ months[selectedMonth] }}
+            </h3>
+            <div class="stat-grid--inline">
+              <div class="stat-inline">
+                <span class="stat-inline__label">Inspections</span>
+                <span class="stat-inline__value">{{ getInspectionCount() }}</span>
+              </div>
+              <div class="stat-inline">
+                <span class="stat-inline__label">Certificates Issued</span>
+                <span class="stat-inline__value">{{ getCertificateCount() }}</span>
+              </div>
+              <div class="stat-inline">
+                <span class="stat-inline__label">Pending</span>
+                <span class="stat-inline__value">{{ getPendingCount() }}</span>
+              </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Equipment</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let record of getFilteredData()" class="data-row">
+                    <td class="td-company">{{ record.company }}</td>
+                    <td class="td-equipment">{{ record.equipmentType }}</td>
+                    <td class="td-date">{{ record.date | date: 'dd MMM' }}</td>
+                    <td class="td-status">
+                      <span [class]="'status-badge status-badge--' + record.status.toLowerCase()">
+                        {{ record.status }}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr *ngIf="getFilteredData().length === 0" class="data-row--empty">
+                    <td colspan="4" class="empty-message">
+                      No data for selected period
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Else: Current period data -->
+        <ng-template #currentPeriodBlock>
+          <div class="data-block">
+            <h3 class="data-block__title">
+              Current Period — {{ currentYear }} - {{ months[currentMonth] }}
+            </h3>
+            <div class="stat-grid--inline">
+              <div class="stat-inline">
+                <span class="stat-inline__label">Inspections</span>
+                <span class="stat-inline__value">{{ getCurrentInspectionCount() }}</span>
+              </div>
+              <div class="stat-inline">
+                <span class="stat-inline__label">Certificates Issued</span>
+                <span class="stat-inline__value">{{ getCurrentCertificateCount() }}</span>
+              </div>
+              <div class="stat-inline">
+                <span class="stat-inline__label">Pending</span>
+                <span class="stat-inline__value">{{ getCurrentPendingCount() }}</span>
+              </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Equipment</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let record of getCurrentData()" class="data-row">
+                    <td class="td-company">{{ record.company }}</td>
+                    <td class="td-equipment">{{ record.equipmentType }}</td>
+                    <td class="td-date">{{ record.date | date: 'dd MMM' }}</td>
+                    <td class="td-status">
+                      <span [class]="'status-badge status-badge--' + record.status.toLowerCase()">
+                        {{ record.status }}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr *ngIf="getCurrentData().length === 0" class="data-row--empty">
+                    <td colspan="4" class="empty-message">
+                      No data for current period
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: DUE COMPANIES -->
+    <div class="data-panel">
+      <div class="panel__header">
+        <h2 class="panel__title">
+          <span class="panel__title-dot panel__title-dot--cyan"></span>
+          Due Companies
+        </h2>
+      </div>
+
+      <div class="panel__content">
+        <!-- If specific period selected -->
+        <ng-container *ngIf="isCustomPeriod; else currentDueBlock">
+          <div class="due-section">
+            <h3 class="due-title">
+              {{ selectedYear }} - {{ months[selectedMonth] }} Renewals Due
+            </h3>
+
+            <div class="company-list">
+              <div 
+                *ngFor="let company of getCompaniesDueInPeriod()"
+                class="company-card">
+                <div class="company-card__header">
+                  <h4 class="company-card__name">{{ company.name }}</h4>
+                  <span class="company-card__badge">{{ company.count }} due</span>
+                </div>
+                <div class="company-card__details">
+                  <div class="detail-row">
+                    <span class="detail-label">Location:</span>
+                    <span class="detail-value">{{ company.city }}, {{ company.state }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Equipment Types:</span>
+                    <span class="detail-value">{{ company.equipmentTypes.join(', ') }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="getCompaniesDueInPeriod().length === 0" class="empty-state">
+                <i class="ti ti-check-circle"></i>
+                <p>No renewals due in this period</p>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Else: Current period due companies -->
+        <ng-template #currentDueBlock>
+          <div class="due-section">
+            <h3 class="due-title">
+              Current Period Renewals Due — {{ currentYear }} - {{ months[currentMonth] }}
+            </h3>
+
+            <div class="company-list">
+              <div 
+                *ngFor="let company of getCurrentCompaniesDue()"
+                class="company-card">
+                <div class="company-card__header">
+                  <h4 class="company-card__name">{{ company.name }}</h4>
+                  <span class="company-card__badge">{{ company.count }} due</span>
+                </div>
+                <div class="company-card__details">
+                  <div class="detail-row">
+                    <span class="detail-label">Location:</span>
+                    <span class="detail-value">{{ company.city }}, {{ company.state }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Equipment Types:</span>
+                    <span class="detail-value">{{ company.equipmentTypes.join(', ') }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="getCurrentCompaniesDue().length === 0" class="empty-state">
+                <i class="ti ti-check-circle"></i>
+                <p>No renewals due in current period</p>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+  </div>
+
+</div>
