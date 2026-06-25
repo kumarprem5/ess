@@ -1476,6 +1476,10 @@ onSvExaminationDateChange(): void {
     case 'punjab':
       return 'Section 21 (2) Factories Act, 1948 (Rule 57 – Punjab Factory Rules)';
 
+       case 'madhya pradesh':
+      return 'Section 21 (2) Factories Act, 1948 (Rule 57 – M.P Factory Rules)';
+
+
     default:
       return 'Section 21 (2) Factories Act, 1948 (Rule 57 – Factory Rules, 1950)';
   
@@ -1483,6 +1487,76 @@ onSvExaminationDateChange(): void {
   }
 
 }
+
+
+
+     getLiftingRule(): string {
+
+  const state = (this.company?.state || '').toLowerCase().trim();
+
+  switch(state){
+    case 'uttar pradesh':
+      return 'Section 29(2) – Factories Act, 1948 (Rule 60A – U.P. Factory Rules)';
+
+    case 'delhi':
+      return 'Section 29(2) – Factories Act, 1948 (Rule 60A – Delhi Factory Rules)';
+
+    case 'uttarakhand':
+      return 'Section 29(2) – Factories Act, 1948 (Rule 60A – Uttarakhand Factory Rules)';
+
+    case 'rajasthan':
+      return 'Section 29(2) – Factories Act, 1948 (Rule 60A – U.P. Rajasthan Rules)';
+
+    case 'haryana':
+      return 'Section 29(2) – Factories Act, 1948 (Rule 60A – Haryana Factory Rules)';
+
+    case 'punjab':
+      return 'Section 29(2) – Factories Act, 1948 (Rule 60A – Punjab Factory Rules)';
+
+       case 'madhya pradesh':
+      return 'Section 29(2) – Factories Act, 1948 (Rule 60A – M.P Factory Rules)';
+
+
+    default:
+      return 'Section 29(2) – Factories Act, 1948 (Rule 60A – Factory Rules)';
+  
+    
+  }
+
+}
+
+   getHoistRule(): string {
+
+  const state = (this.company?.state || '').toLowerCase().trim();
+
+  switch(state){
+    case 'uttar pradesh':
+      return 'Section 28(1) – Factories Act, 1948 (Rule 60A – U.P. Factory Rules)';
+
+    case 'delhi':
+      return 'Section 28(1) – Factories Act, 1948 (Rule 60A – Delhi Factory Rules)';
+
+    case 'uttarakhand':
+      return 'Section 28(1) – Factories Act, 1948 (Rule 60A – Uttarakhand Factory Rules)';
+
+    case 'rajasthan':
+      return 'Section 28(1) – Factories Act, 1948 (Rule 60A – U.P. Rajasthan Rules)';
+
+    case 'haryana':
+      return 'Section 28(1) – Factories Act, 1948 (Rule 60A – Haryana Factory Rules)';
+
+    case 'punjab':
+      return 'Section 28(1) – Factories Act, 1948 (Rule 60A – Punjab Factory Rules)';
+
+       case 'madhya pradesh':
+      return 'Section 28(1) – Factories Act, 1948 (Rule 60A – M.P Factory Rules)';
+
+
+    default:
+      return 'Section 28(1) – Factories Act, 1948 (Rule 60A – Factory Rules)';
+  }  
+    
+  }
 
 
 

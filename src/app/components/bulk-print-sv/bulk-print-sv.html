@@ -67,7 +67,7 @@
           <div class="bpsv-header-qr-block">
             <img *ngIf="entry.data.qrCodeUrl" [src]="entry.data.qrCodeUrl" class="bpsv-header-qr-img" alt="QR Code">
             <img *ngIf="!entry.data.qrCodeUrl" [src]="generateQrSvg(entry.data.certificateNo + '|' + companyId + '|sv')" class="bpsv-header-qr-img" alt="QR Code">
-            <div class="bpsv-header-qr-label">Scan to Download</div>
+            <div class="bpsv-header-qr-label"></div>
           </div>
         </div>
       </div>
