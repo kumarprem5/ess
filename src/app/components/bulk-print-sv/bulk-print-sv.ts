@@ -16,6 +16,7 @@ export class BulkPrintSv {
   @Input() stampImageUrl: string = '';
   @Input() counterSignImageUrl: string = '';
   @Input() watermarkImageUrl: string = '';
+  @Input() getPressureVesselRule!: () => string;
  
   @Input() safeDateFormat!: (dateStr: string | null | undefined) => string;
   @Input() generateQrSvg!: (raw: string) => string;

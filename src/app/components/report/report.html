@@ -1909,7 +1909,9 @@
   [generateQrSvg]="generateQrSvg.bind(this)" [getSectionText]="getSectionText.bind(this)"
   [getApprovalText]="getApprovalText.bind(this)" [showStamp]="showStampOnPrint"
   [signatureImageUrl]="signatureBase64" [stampImageUrl]="stampBase64"
-  [counterSignImageUrl]="counterSignBase64" [watermarkImageUrl]="watermarkBase64">
+  [counterSignImageUrl]="counterSignBase64" [watermarkImageUrl]="watermarkBase64"
+  [getPressureVesselRule]="getPressureVesselRule.bind(this)">
+  
 </app-bulk-print-sv>
 <!-- ── TOAST ── -->
 <div class="toast-container" *ngIf="toastVisible">
