@@ -430,6 +430,7 @@
   font-style: normal;
   font-family: var(--bpl-font);
   font-style: normal;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   text-align: center;
@@ -918,7 +919,7 @@
     text-align: center !important;
     font-style: normal;
     font-size: 14px !important;
-    font-weight: 300;
+    font-weight: 700;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
     margin: 6px 0 !important;

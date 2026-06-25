@@ -473,7 +473,7 @@
   #bulk-print-pp-section .bppp-equipment-main { font-size: var(--bppp-table-val) !important; font-weight: 700 !important; font-style: normal !important; }
   #bulk-print-pp-section .bppp-eq-meta     { font-size: var(--bppp-eq-meta)    !important; font-style: normal !important; }
   #bulk-print-pp-section .bppp-cert-certify{ font-size: var(--bppp-footer)     !important; font-style: normal !important; line-height: 1.0 !important; }
-  #bulk-print-pp-section .bppp-cert-next-due { font-size: 14px !important; font-weight: normal;  /* ← was 700 */ font-style: normal !important; }
+  #bulk-print-pp-section .bppp-cert-next-due { font-size: 14px !important; font-weight: 700;  /* ← was 700 */ font-style: normal !important; }
   #bulk-print-pp-section .bppp-signature-name  { font-size: var(--bppp-sig-name)  !important; font-weight: 700 !important; font-style: normal !important; }
   #bulk-print-pp-section .bppp-signature-title { font-size: var(--bppp-sig-title) !important; font-style: normal !important; line-height: 1.0 !important; }
   #bulk-print-pp-section .bppp-cert-disclaimer { font-size: 7px !important; font-style: normal !important; margin-top: 1px !important; }
@@ -663,7 +663,7 @@
     width: 100% !important;
     box-sizing: border-box !important;
     text-align: center !important;
-    font-weight: normal !important;
+    font-weight: 700 !important;
     font-size: 14px !important;
     font-style: normal !important;
     text-transform: uppercase !important;
@@ -672,7 +672,7 @@
     flex-shrink: 0 !important;
   }
   #bulk-print-pp-section .bppp-cert-next-due strong {
-    font-weight: normal !important;
+    font-weight: 700 !important;
     color: #000 !important;
   }
 

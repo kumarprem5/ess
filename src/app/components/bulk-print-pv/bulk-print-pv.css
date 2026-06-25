@@ -418,7 +418,7 @@
   text-align: justify; margin-bottom: 0; line-height: 1.0; flex-shrink: 0;
 }
 .bppv-next-due {
-  font-weight: normal;
+  font-weight: 700;
   font-size: 14px;
   font-family: var(--bppv-font);
   font-style: normal;
@@ -652,7 +652,7 @@
     width: 100% !important;
     box-sizing: border-box !important;
     text-align: center !important;
-   font-weight: 300 !important;
+   font-weight: 700 !important;
     font-size: 14px !important;
     letter-spacing: 0.02em !important;
     margin: auto 0 6px !important;
@@ -718,7 +718,7 @@
   #bulk-print-pv-section .bppv-vessel-main      { font-size: var(--bppv-table-val)  !important; font-weight: 700 !important; font-style: normal !important; }
   #bulk-print-pv-section .bppv-vessel-meta      { font-size: var(--bppv-eq-meta)    !important; font-style: normal !important; }
   #bulk-print-pv-section .bppv-cert-statement   { font-size: var(--bppv-footer)     !important; font-style: normal !important; line-height: 1.0 !important; }
-  #bulk-print-pv-section .bppv-next-due         { font-size: 14px   !important; font-weight: 300 !important; font-style: normal !important; }
+  #bulk-print-pv-section .bppv-next-due         { font-size: 14px   !important; font-weight: 700 !important; font-style: normal !important; }
   #bulk-print-pv-section .bppv-signature-name   { font-size: var(--bppv-sig-name)   !important; font-weight: 700 !important; font-style: normal !important; }
   #bulk-print-pv-section .bppv-signature-title  { font-size: var(--bppv-sig-title)  !important; font-style: normal !important; line-height: 1.0 !important; }
   #bulk-print-pv-section .bppv-cert-disclaimer  { font-size: 7px !important; font-style: normal !important; margin-top: 1px !important; }
