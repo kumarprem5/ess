@@ -1409,6 +1409,36 @@ onSvExaminationDateChange(): void {
       }
 
 
+
+      getPressureVesselRule(): string {
+
+  const state = (this.company?.state || '').toLowerCase().trim();
+
+  switch(state){
+
+    case 'uttar pradesh':
+      return 'Form No. 9 (Prescribed Under Rule 56 U.P. Factory Rules, 1950) Framed U/S 31 of Factories Act 1948';
+
+    case 'delhi':
+      return 'Form No. 9 (Prescribed Under Rule 56 Delhi Factory Rules, 1950) Framed U/S 31 of Factories Act 1948';
+
+    case 'uttarakhand':
+      return 'Form No. 9 (Prescribed Under Rule 56 Uttarakhand Factory Rules) Framed U/S 31 of Factories Act 1948';
+
+    case 'rajasthan':
+      return 'Form No. 9 (Prescribed Under Rule 58 Rajasthan Factory Rules, 1951) Framed U/S 31 of Factories Act 1948';
+
+    case 'haryana':
+      return 'Form No. 9 (Rule 61 Haryana Factory Rules) Framed U/S 31(2) of Factories Act 1948';
+
+    case 'punjab':
+      return 'Form No. 9 (Rule 61 Punjab Factory Rules) Framed U/S 31(2) of Factories Act 1948';
+
+    default:
+      return 'Form No. 9 (Prescribed Under State Factory Rules Framed U/S 31 of Factories Act 1948)';
+  }
+}
+
  getRulesAndSectionText(): string {
         switch ((this.company?.state || '').toLowerCase().trim()) {
           case 'rajasthan':      return 'Approved by CIF&B, Jaipur Lic No: CMP-883/2025 Dt: 22.12.2025';

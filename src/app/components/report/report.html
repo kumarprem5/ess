@@ -1864,12 +1864,21 @@
   [generateQrSvg]="generateQrSvg.bind(this)">
 </app-bulk-print-lifting>
 
-<app-bulk-print-pv [pvItems]="pvItemsForPrint" [companyId]="companyId" [safeDateFormat]="safeDateFormat.bind(this)"
-  [generateQrSvg]="generateQrSvg.bind(this)" [getSectionText]="getSectionText.bind(this)"
-  [getApprovalText]="getApprovalText.bind(this)" [getShellValue]="getShellValue.bind(this)"
-  [getDishValue]="getDishValue.bind(this)" [showStamp]="showStampOnPrint" [signatureImageUrl]="signatureBase64"
+<app-bulk-print-pv
+  [pvItems]="pvItemsForPrint"
+  [companyId]="companyId"
+  [safeDateFormat]="safeDateFormat.bind(this)"
+  [generateQrSvg]="generateQrSvg.bind(this)"
+  [getSectionText]="getSectionText.bind(this)"
+  [getApprovalText]="getApprovalText.bind(this)"
+  [getPressureVesselRule]="getPressureVesselRule.bind(this)"
+  [getShellValue]="getShellValue.bind(this)"
+  [getDishValue]="getDishValue.bind(this)"
+  [showStamp]="showStampOnPrint"
+  [signatureImageUrl]="signatureBase64"
   [watermarkImageUrl]="watermarkBase64"
-  [stampImageUrl]="stampBase64" [counterSignImageUrl]="counterSignBase64">
+  [stampImageUrl]="stampBase64"
+  [counterSignImageUrl]="counterSignBase64">
 </app-bulk-print-pv>
 
 <app-bulk-print-pp [ppItems]="ppItemsForPrint" [companyId]="companyId" [safeDateFormat]="safeDateFormat.bind(this)"

@@ -17,6 +17,7 @@ export class BulkPrintPv {
   @Input() getShellValue!: (t: string) => string;
   @Input() getDishValue!: (t: string) => string;
   @Input() watermarkImageUrl: string = '';
+  @Input() getPressureVesselRule!: () => string;
     // ── Stamp / Signature inputs ──
   @Input() showStamp: boolean = true;
   @Input() signatureImageUrl: string = '';
