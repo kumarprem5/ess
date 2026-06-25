@@ -83,11 +83,11 @@
     {{ item.data.testName || 'REPORT OF EXAMINATION OR TEST OF PRESSURE VESSEL OR PLANT' }}
   </div>
   <ng-container *ngIf="item.data.testName?.includes('HYDRO-STATIC'); else normalSub">
-    <div class="bppv-title-sub">Form no. 9 (Prescribed Under Rule 58 Framed U/S 31(Factory Rules 1950)</div>
+    <div class="bppv-title-sub">Form no. 9 (Prescribed Under Rule 56 Framed U/S 31(Factory Rules 1950)</div>
   </ng-container>
   <ng-template #normalSub>
     <div class="bppv-title-sub">
-    Form no. 9 (Prescribed Under Rule 58 Framed U/S 31(Factory Rules 1950)
+    Form no. 9 (Prescribed Under Rule 56 Framed U/S 31(Factory Rules 1950)
       <!-- {{ item.data.formNo || 'Form No. 9' }} Section 31 {{ item.data.ruleNumber ? '(See ' + item.data.ruleNumber + ')' : '(See Rule 61)' }} -->
     </div>
   </ng-template>
