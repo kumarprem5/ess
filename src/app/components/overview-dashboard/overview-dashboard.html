@@ -124,9 +124,12 @@
       (click)="toggleInspectionGroup(group.companyId)"
       [attr.aria-expanded]="isInspectionGroupExpanded(group.companyId)">
 
-      <span class="group-header__chevron" [class.group-header__chevron--open]="isInspectionGroupExpanded(group.companyId)">
-        <i class="ti ti-chevron-right"></i>
-      </span>
+     <span class="group-header__chevron">
+  <img
+    [src]="isInspectionGroupExpanded(group.companyId) ? '/up.png' : '/down.png'"
+    alt=""
+    class="chevron-icon">
+</span>
 
       <span class="group-header__name">{{ group.companyName }}</span>
       <span class="group-header__id">#{{ group.companyId }}</span>
@@ -295,9 +298,12 @@
               (click)="toggleDueGroup(company.companyId)"
               [attr.aria-expanded]="isDueGroupExpanded(company.companyId)">
 
-              <span class="group-header__chevron" [class.group-header__chevron--open]="isDueGroupExpanded(company.companyId)">
-                <i class="ti ti-chevron-right"></i>
-              </span>
+<span class="group-header__chevron">
+  <img
+    [src]="isDueGroupExpanded(company.companyId) ? '/up.png' : '/down.png'"
+    alt=""
+    class="chevron-icon">
+</span>
 
               <h4 class="company-card__name">
                 {{ company.name }}

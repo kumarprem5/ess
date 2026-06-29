@@ -582,18 +582,6 @@
   background: var(--color-slate-100);
 }
 
-.group-header__chevron {
-  display: flex;
-  align-items: center;
-  color: var(--color-slate-500);
-  transition: transform 0.2s ease;
-  flex-shrink: 0;
-}
-
-.group-header__chevron--open {
-  transform: rotate(90deg);
-}
-
 .group-header__name {
   font-weight: 600;
   font-size: 0.875rem;     /* added — was inheriting larger default */
@@ -674,4 +662,16 @@
   font-size: 0.875rem;     /* was 0.95rem */
   font-weight: 600;
   color: var(--color-slate-900);
+}
+
+.group-header__chevron {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.chevron-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  object-fit: contain;
 }
