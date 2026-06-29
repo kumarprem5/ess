@@ -347,7 +347,7 @@ export const valveTypeList: string[] = [
 ========================================================= */
 export interface RestApiResponse<T = any> {
   code?: string;
-  status: boolean;
+  status: string;
   message?: string;
   data?: T;
   authentication?: {
