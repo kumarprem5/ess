@@ -19,6 +19,26 @@ interface InspectionRecord {
   certificateNumber?: string;
 }
 
+
+interface DueGroup {
+  companyId: number;
+  companies: CompanyDueInfo[]; // usually just 1, but keeps shape consistent
+  hasOverdue: boolean;
+
+
+}
+
+
+
+interface InspectionGroup {
+  companyId: number;
+  companyName: string;
+  records: InspectionRecord[];
+  completedCount: number;
+  pendingOverdueCount: number;
+  hasOverdue: boolean;
+}
+
 interface CompanyDueInfo {
   name: string;
   companyId: number;
@@ -39,6 +59,10 @@ export class OverviewDashboard implements OnInit {
   // ─── TIME SELECTORS ────────────────────────────────────
   selectedYear: number = new Date().getFullYear();
   selectedMonth: number = new Date().getMonth();
+
+
+expandedInspectionGroups: Set<number> = new Set();
+expandedDueGroups: Set<number> = new Set();
 
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth();
@@ -356,4 +380,90 @@ export class OverviewDashboard implements OnInit {
     const companies = new Set(this.getFilteredData().map(r => r.company));
     return companies.size;
   }
+
+
+// ─────────────────────────────────────────────────────
+// GROUPING — INSPECTION RECORDS BY COMPANY
+// ─────────────────────────────────────────────────────
+
+private groupInspections(records: InspectionRecord[]): InspectionGroup[] {
+  const map = new Map<number, InspectionGroup>();
+
+  records.forEach(record => {
+    if (!map.has(record.companyId)) {
+      map.set(record.companyId, {
+        companyId: record.companyId,
+        companyName: record.company,
+        records: [],
+        completedCount: 0,
+        pendingOverdueCount: 0,
+        hasOverdue: false,
+      });
+    }
+    const group = map.get(record.companyId)!;
+    group.records.push(record);
+    if (record.status === 'Completed') {
+      group.completedCount++;
+    } else {
+      group.pendingOverdueCount++;
+    }
+    if (record.status === 'Overdue') {
+      group.hasOverdue = true;
+    }
+  });
+
+  // Sort companies alphabetically; sort each group's records by date desc
+  return Array.from(map.values())
+    .map(group => ({
+      ...group,
+      records: group.records.sort((a, b) => b.date.getTime() - a.date.getTime()),
+    }))
+    .sort((a, b) => a.companyName.localeCompare(b.companyName));
+}
+
+getGroupedFilteredData(): InspectionGroup[] {
+  return this.groupInspections(this.getFilteredData());
+}
+
+getGroupedCurrentData(): InspectionGroup[] {
+  return this.groupInspections(this.getCurrentData());
+}
+
+toggleInspectionGroup(companyId: number): void {
+  if (this.expandedInspectionGroups.has(companyId)) {
+    this.expandedInspectionGroups.delete(companyId);
+  } else {
+    this.expandedInspectionGroups.add(companyId);
+  }
+}
+
+isInspectionGroupExpanded(companyId: number): boolean {
+  return this.expandedInspectionGroups.has(companyId);
+}
+
+// ─────────────────────────────────────────────────────
+// GROUPING — RENEWALS DUE
+// ─────────────────────────────────────────────────────
+
+toggleDueGroup(companyId: number): void {
+  if (this.expandedDueGroups.has(companyId)) {
+    this.expandedDueGroups.delete(companyId);
+  } else {
+    this.expandedDueGroups.add(companyId);
+  }
+}
+
+isDueGroupExpanded(companyId: number): boolean {
+  return this.expandedDueGroups.has(companyId);
+}
+
+isOverdue(dueDate: Date): boolean {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const due = new Date(dueDate);
+  due.setHours(0, 0, 0, 0);
+  return due <= today;
+}
+
+
 }

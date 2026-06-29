@@ -112,37 +112,68 @@
             </div>
 
             <!-- Data Table -->
-            <div class="table-wrapper">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Company ID</th> 
-                    <th>Company</th>
-                    <th>Equipment</th>
-                    <th>Exam Date</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let record of getFilteredData()" class="data-row">
-                    <td class="td-company-id">{{ record.companyId }}</td>
-                    <td class="td-company">{{ record.company }}</td>
-                    <td class="td-equipment">{{ record.equipmentType }}</td>
-                    <td class="td-date">{{ record.date | date: 'dd MMM yyyy' }}</td>
-                    <td class="td-status">
-                      <span [class]="'status-badge status-badge--' + record.status.toLowerCase()">
-                        {{ record.status }}
-                      </span>
-                    </td>
-                  </tr>
-                  <tr *ngIf="getFilteredData().length === 0" class="data-row--empty">
-                    <td colspan="5" class="empty-message">
-                      No inspection records for selected period
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+<!-- Grouped, collapsible inspection records -->
+<div class="group-list">
+  <div
+    *ngFor="let group of getGroupedFilteredData()"
+    class="group-card"
+    [class.group-card--has-overdue]="group.hasOverdue">
+
+    <button
+      class="group-header"
+      (click)="toggleInspectionGroup(group.companyId)"
+      [attr.aria-expanded]="isInspectionGroupExpanded(group.companyId)">
+
+      <span class="group-header__chevron" [class.group-header__chevron--open]="isInspectionGroupExpanded(group.companyId)">
+        <i class="ti ti-chevron-right"></i>
+      </span>
+
+      <span class="group-header__name">{{ group.companyName }}</span>
+      <span class="group-header__id">#{{ group.companyId }}</span>
+
+      <span class="group-header__stats">
+        <span class="group-stat group-stat--total">{{ group.records.length }} records</span>
+        <span class="group-stat group-stat--completed">{{ group.completedCount }} completed</span>
+        <span *ngIf="group.pendingOverdueCount > 0" class="group-stat group-stat--pending">
+          {{ group.pendingOverdueCount }} pending/overdue
+        </span>
+      </span>
+
+      <span *ngIf="group.hasOverdue" class="due-alert-badge">
+        <i class="ti ti-alert-triangle"></i> Overdue
+      </span>
+    </button>
+
+    <div class="group-body" *ngIf="isInspectionGroupExpanded(group.companyId)">
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Equipment</th>
+              <th>Exam Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of group.records" class="data-row">
+              <td class="td-equipment">{{ record.equipmentType }}</td>
+              <td class="td-date">{{ record.date | date: 'dd MMM yyyy' }}</td>
+              <td class="td-status">
+                <span [class]="'status-badge status-badge--' + record.status.toLowerCase()">
+                  {{ record.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="getGroupedFilteredData().length === 0" class="empty-state">
+    <i class="ti ti-check-circle"></i>
+    <p>No inspection records for selected period</p>
+  </div>
+</div>
           </div>
         </ng-container>
 
@@ -168,135 +199,200 @@
             </div>
 
             <!-- Data Table -->
-            <div class="table-wrapper">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                     <th>Company ID</th>
-                    <th>Company</th>
-                    <th>Equipment</th>
-                    <th>Exam Date</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let record of getCurrentData()" class="data-row">
-                    <td class="td-company-id">{{ record.companyId }}</td>
-                    <td class="td-company">{{ record.company }}</td>
-                    <td class="td-equipment">{{ record.equipmentType }}</td>
-                    <td class="td-date">{{ record.date | date: 'dd MMM yyyy' }}</td>
-                    <td class="td-status">
-                      <span [class]="'status-badge status-badge--' + record.status.toLowerCase()">
-                        {{ record.status }}
-                      </span>
-                    </td>
-                  </tr>
-                  <tr *ngIf="getCurrentData().length === 0" class="data-row--empty">
-                    <td colspan="5" class="empty-message">
-                      No inspection records for current period
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+     <!-- Grouped, collapsible inspection records -->
+<div class="group-list">
+  <div
+    *ngFor="let group of getGroupedFilteredData()"
+    class="group-card"
+    [class.group-card--has-overdue]="group.hasOverdue">
+
+    <button
+      class="group-header"
+      (click)="toggleInspectionGroup(group.companyId)"
+      [attr.aria-expanded]="isInspectionGroupExpanded(group.companyId)">
+
+      <span class="group-header__chevron" [class.group-header__chevron--open]="isInspectionGroupExpanded(group.companyId)">
+        <i class="ti ti-chevron-right"></i>
+      </span>
+
+      <span class="group-header__name">{{ group.companyName }}</span>
+      <span class="group-header__id">#{{ group.companyId }}</span>
+
+      <span class="group-header__stats">
+        <span class="group-stat group-stat--total">{{ group.records.length }} records</span>
+        <span class="group-stat group-stat--completed">{{ group.completedCount }} completed</span>
+        <span *ngIf="group.pendingOverdueCount > 0" class="group-stat group-stat--pending">
+          {{ group.pendingOverdueCount }} pending/overdue
+        </span>
+      </span>
+
+      <span *ngIf="group.hasOverdue" class="due-alert-badge">
+        <i class="ti ti-alert-triangle"></i> Overdue
+      </span>
+    </button>
+
+    <div class="group-body" *ngIf="isInspectionGroupExpanded(group.companyId)">
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Equipment</th>
+              <th>Exam Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of group.records" class="data-row">
+              <td class="td-equipment">{{ record.equipmentType }}</td>
+              <td class="td-date">{{ record.date | date: 'dd MMM yyyy' }}</td>
+              <td class="td-status">
+                <span [class]="'status-badge status-badge--' + record.status.toLowerCase()">
+                  {{ record.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="getGroupedFilteredData().length === 0" class="empty-state">
+    <i class="ti ti-check-circle"></i>
+    <p>No inspection records for selected period</p>
+  </div>
+</div>
           </div>
         </ng-template>
       </div>
     </div>
 
     <!-- RIGHT PANEL: DUE COMPANIES -->
-    <div class="data-panel">
-      <div class="panel__header">
-        <h2 class="panel__title">
-          <span class="panel__title-dot panel__title-dot--cyan"></span>
-          Renewal Schedule
-        </h2>
-      </div>
+<!-- RIGHT PANEL: DUE COMPANIES -->
+<div class="data-panel">
+  <div class="panel__header">
+    <h2 class="panel__title">
+      <span class="panel__title-dot panel__title-dot--cyan"></span>
+      Renewal Schedule
+    </h2>
+  </div>
 
-      <div class="panel__content">
-        <!-- If specific period selected -->
-        <ng-container *ngIf="isCustomPeriod; else currentDueBlock">
-          <div class="due-section">
-            <h3 class="due-title">
-              {{ selectedYear }} - {{ months[selectedMonth] }} Renewals Due
-            </h3>
+  <div class="panel__content">
+    <ng-container *ngIf="isCustomPeriod; else currentDueBlock">
+      <div class="due-section">
+        <h3 class="due-title">
+          {{ selectedYear }} - {{ months[selectedMonth] }} Renewals Due
+        </h3>
 
-            <div class="company-list">
-              <div 
-                *ngFor="let company of getCompaniesDueInPeriod()"
-                class="company-card">
-                <div class="company-card__header">
-                  <h4 class="company-card__name">{{ company.name }}
-                  <span class="company-card__id">#{{ company.companyId }}</span>
-                  </h4>
-                  <span class="company-card__badge">{{ company.count }} due</span>
-                </div>
-                <div class="company-card__details">
-                  <div class="detail-row">
-                    <span class="detail-label">Location:</span>
-                    <span class="detail-value">{{ company.city }}, {{ company.state }}</span>
-                  </div>
-                  <div class="detail-row">
-                    <span class="detail-label">Due Date:</span>
-                    <span class="detail-value">{{ company.dueDate | date: 'dd MMM yyyy' }}</span>
-                  </div>
-                  <div class="detail-row">
-                    <span class="detail-label">Equipment:</span>
-                    <span class="detail-value">{{ company.equipmentTypes.join(', ') }}</span>
-                  </div>
-                </div>
+        <div class="company-list">
+          <div
+            *ngFor="let company of getCompaniesDueInPeriod()"
+            class="company-card"
+            [class.company-card--overdue]="isOverdue(company.dueDate)">
+
+            <button
+              class="company-card__header"
+              (click)="toggleDueGroup(company.companyId)"
+              [attr.aria-expanded]="isDueGroupExpanded(company.companyId)">
+
+              <span class="group-header__chevron" [class.group-header__chevron--open]="isDueGroupExpanded(company.companyId)">
+                <i class="ti ti-chevron-right"></i>
+              </span>
+
+              <h4 class="company-card__name">
+                {{ company.name }}
+                <span class="company-card__id">#{{ company.companyId }}</span>
+              </h4>
+
+              <span *ngIf="isOverdue(company.dueDate)" class="due-alert-badge">
+                <i class="ti ti-alert-triangle"></i> Due
+              </span>
+
+              <span class="company-card__badge">{{ company.count }} due</span>
+            </button>
+
+            <div class="company-card__details" *ngIf="isDueGroupExpanded(company.companyId)">
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">{{ company.city }}, {{ company.state }}</span>
               </div>
-
-              <div *ngIf="getCompaniesDueInPeriod().length === 0" class="empty-state">
-                <i class="ti ti-check-circle"></i>
-                <p>No renewals due in this period</p>
+              <div class="detail-row">
+                <span class="detail-label">Due Date:</span>
+                <span class="detail-value">{{ company.dueDate | date: 'dd MMM yyyy' }}</span>
               </div>
-            </div>
-          </div>
-        </ng-container>
-
-        <!-- Else: Current period due companies -->
-        <ng-template #currentDueBlock>
-          <div class="due-section">
-            <h3 class="due-title">
-              Current Period Renewals Due — {{ currentYear }} - {{ months[currentMonth] }}
-            </h3>
-
-            <div class="company-list">
-              <div 
-                *ngFor="let company of getCurrentCompaniesDue()"
-                class="company-card">
-                <div class="company-card__header">
-                    <span class="company-card__id">#{{ company.companyId }}</span>
-                  <h4 class="company-card__name">{{ company.name }}</h4>
-
-                  <span class="company-card__badge">{{ company.count }} due</span>
-                </div>
-                <div class="company-card__details">
-                  <div class="detail-row">
-                    <span class="detail-label">Location:</span>
-                    <span class="detail-value">{{ company.city }}, {{ company.state }}</span>
-                  </div>
-                  <div class="detail-row">
-                    <span class="detail-label">Due Date:</span>
-                    <span class="detail-value">{{ company.dueDate | date: 'dd MMM yyyy' }}</span>
-                  </div>
-                  <div class="detail-row">
-                    <span class="detail-label">Equipment:</span>
-                    <span class="detail-value">{{ company.equipmentTypes.join(', ') }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div *ngIf="getCurrentCompaniesDue().length === 0" class="empty-state">
-                <i class="ti ti-check-circle"></i>
-                <p>No renewals due in current period</p>
+              <div class="detail-row">
+                <span class="detail-label">Equipment:</span>
+                <span class="detail-value">{{ company.equipmentTypes.join(', ') }}</span>
               </div>
             </div>
           </div>
-        </ng-template>
+
+          <div *ngIf="getCompaniesDueInPeriod().length === 0" class="empty-state">
+            <i class="ti ti-check-circle"></i>
+            <p>No renewals due in this period</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </ng-container>
+
+    <ng-template #currentDueBlock>
+      <div class="due-section">
+        <h3 class="due-title">
+          Current Period Renewals Due — {{ currentYear }} - {{ months[currentMonth] }}
+        </h3>
+
+        <div class="company-list">
+          <div
+            *ngFor="let company of getCurrentCompaniesDue()"
+            class="company-card"
+            [class.company-card--overdue]="isOverdue(company.dueDate)">
+
+            <button
+              class="company-card__header"
+              (click)="toggleDueGroup(company.companyId)"
+              [attr.aria-expanded]="isDueGroupExpanded(company.companyId)">
+
+              <span class="group-header__chevron" [class.group-header__chevron--open]="isDueGroupExpanded(company.companyId)">
+                <i class="ti ti-chevron-right"></i>
+              </span>
+
+              <h4 class="company-card__name">
+                {{ company.name }}
+                <span class="company-card__id">#{{ company.companyId }}</span>
+              </h4>
+
+              <span *ngIf="isOverdue(company.dueDate)" class="due-alert-badge">
+                <i class="ti ti-alert-triangle"></i> Due
+              </span>
+
+              <span class="company-card__badge">{{ company.count }} due</span>
+            </button>
+
+            <div class="company-card__details" *ngIf="isDueGroupExpanded(company.companyId)">
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">{{ company.city }}, {{ company.state }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Due Date:</span>
+                <span class="detail-value">{{ company.dueDate | date: 'dd MMM yyyy' }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Equipment:</span>
+                <span class="detail-value">{{ company.equipmentTypes.join(', ') }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="getCurrentCompaniesDue().length === 0" class="empty-state">
+            <i class="ti ti-check-circle"></i>
+            <p>No renewals due in current period</p>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
 
   </div>
 
