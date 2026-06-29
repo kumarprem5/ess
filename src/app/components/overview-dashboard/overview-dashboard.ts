@@ -20,6 +20,8 @@ interface InspectionRecord {
 }
 
 
+
+
 interface DueGroup {
   companyId: number;
   companies: CompanyDueInfo[]; // usually just 1, but keeps shape consistent
@@ -28,6 +30,20 @@ interface DueGroup {
 
 }
 
+interface EquipmentTypeCount {
+  type: string;
+  count: number;
+}
+
+interface InspectionGroup {
+  companyId: number;
+  companyName: string;
+  records: InspectionRecord[];
+  completedCount: number;
+  pendingOverdueCount: number;
+  hasOverdue: boolean;
+  equipmentCounts: EquipmentTypeCount[];   // ← added
+}
 
 
 interface InspectionGroup {
@@ -398,6 +414,7 @@ private groupInspections(records: InspectionRecord[]): InspectionGroup[] {
         completedCount: 0,
         pendingOverdueCount: 0,
         hasOverdue: false,
+        equipmentCounts: [],
       });
     }
     const group = map.get(record.companyId)!;
@@ -412,12 +429,26 @@ private groupInspections(records: InspectionRecord[]): InspectionGroup[] {
     }
   });
 
-  // Sort companies alphabetically; sort each group's records by date desc
+  // Build equipment-type counts per company, then sort & finalize
   return Array.from(map.values())
-    .map(group => ({
-      ...group,
-      records: group.records.sort((a, b) => b.date.getTime() - a.date.getTime()),
-    }))
+    .map(group => {
+      const typeTally = new Map<string, number>();
+      group.records.forEach(r => {
+        typeTally.set(r.equipmentType, (typeTally.get(r.equipmentType) || 0) + 1);
+      });
+
+      // Keep a consistent equipment order regardless of data order
+      const typeOrder = ['Lifting', 'Pressure Vessel', 'Power Press', 'Safety Belt', 'Safety Valve'];
+      const equipmentCounts: EquipmentTypeCount[] = typeOrder
+        .filter(type => typeTally.has(type))
+        .map(type => ({ type, count: typeTally.get(type)! }));
+
+      return {
+        ...group,
+        records: group.records.sort((a, b) => b.date.getTime() - a.date.getTime()),
+        equipmentCounts,
+      };
+    })
     .sort((a, b) => a.companyName.localeCompare(b.companyName));
 }
 

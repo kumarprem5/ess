@@ -134,13 +134,11 @@
       <span class="group-header__name">{{ group.companyName }}</span>
       <span class="group-header__id">#{{ group.companyId }}</span>
 
-      <span class="group-header__stats">
-        <span class="group-stat group-stat--total">{{ group.records.length }} records</span>
-        <span class="group-stat group-stat--completed">{{ group.completedCount }} completed</span>
-        <span *ngIf="group.pendingOverdueCount > 0" class="group-stat group-stat--pending">
-          {{ group.pendingOverdueCount }} pending/overdue
-        </span>
-      </span>
+<span class="group-header__stats">
+  <span *ngFor="let eq of group.equipmentCounts" class="group-stat group-stat--equipment">
+    {{ eq.type }} {{ eq.count.toString().padStart(2, '0') }}
+  </span>
+</span>
 
       <span *ngIf="group.hasOverdue" class="due-alert-badge">
         <i class="ti ti-alert-triangle"></i> Overdue
