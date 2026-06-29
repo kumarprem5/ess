@@ -4,43 +4,37 @@
 
 
   <!-- MOBILE OVERLAY -->
-  <div
-    class="overlay"
-    [class.visible]="mobileOpen"
-    (click)="closeMobile()">
+  <div class="overlay" [class.visible]="mobileOpen" (click)="closeMobile()">
   </div>
 
 
 
   <!-- SIDEBAR -->
-  <aside
-    class="sidebar"
-    [class.sidebar--collapsed]="!sidebarOpen"
-    [class.sidebar--mobile-open]="mobileOpen">
+  <aside class="sidebar" [class.sidebar--collapsed]="!sidebarOpen" [class.sidebar--mobile-open]="mobileOpen">
 
 
     <!-- BRAND -->
     <!-- BRAND -->
-<div class="sb-brand">
+    <div class="sb-brand">
 
-  <div class="sb-brand__mark">
-    <img src="/bg_logo.png" alt="ESS Logo">
-  </div>
+      <div class="sb-brand__mark">
+        <img src="/bg_logo.png" alt="ESS Logo">
+      </div>
 
 
-  <div class="sb-brand__text">
+      <div class="sb-brand__text">
 
-    <span class="sb-brand__name">
-      ESS Admin
-    </span>
+        <span class="sb-brand__name">
+          ESS Admin
+        </span>
 
-    <span class="sb-brand__tag">
-      Control Panel
-    </span>
+        <span class="sb-brand__tag">
+          Control Panel
+        </span>
 
-  </div>
+      </div>
 
-</div>
+    </div>
 
 
 
@@ -53,14 +47,11 @@
 
     </div>
 
-   <!-- NAVIGATION -->
+    <!-- NAVIGATION -->
 
     <nav class="sb-nav">
-      <a
-      *ngFor="let item of navItems; trackBy:trackByPath"
-      [routerLink]="item.path"
-      class="nav-link"
-      [class.nav-link--active]="isActive(item.path,item.exact)">
+      <a *ngFor="let item of navItems; trackBy:trackByPath" [routerLink]="item.path" class="nav-link"
+        [class.nav-link--active]="isActive(item.path,item.exact)">
 
         <span class="nav-link__bar"></span>
 
@@ -114,9 +105,7 @@
 
     <!-- LOGOUT -->
 
-    <button
-    class="sb-logout"
-    (click)="logout()">
+    <button class="sb-logout" (click)="logout()">
 
 
 
@@ -159,9 +148,7 @@
 
       <!-- Mobile button -->
 
-      <button
-      class="topbar__btn topbar__btn--mobile"
-      (click)="toggleMobile()">
+      <button class="topbar__btn topbar__btn--mobile" (click)="toggleMobile()">
 
 
 
@@ -178,16 +165,11 @@
 
       <!-- Desktop collapse -->
 
-      <button
-      class="topbar__btn topbar__btn--desktop"
-      (click)="toggleSidebar()">
+      <button class="topbar__btn topbar__btn--desktop" (click)="toggleSidebar()">
 
 
 
-    <img 
- src="/burger_icon.png"
- class="hamburger-img"
- alt="menu">
+        <img src="/burger_icon.png" class="hamburger-img" alt="menu">
 
 
       </button>
@@ -299,9 +281,7 @@
       <!-- REFRESH -->
 
 
-      <button
-      class="topbar__btn"
-      (click)="loadCompanies()">
+      <button class="topbar__btn" (click)="loadCompanies()">
 
 
 
@@ -329,63 +309,24 @@
 
       </div>
 
-
-
-
-
     </header>
-
-
-
-
-
-
-
-
 
     <!-- CHILD ROUTES -->
 
     <main class="content">
+     <!-- Loading -->
 
-
-
-
-
-      <!-- Loading -->
-
-      <div
-      class="load-strip"
-      [class.load-strip--active]="loading">
-
+      <div class="load-strip" [class.load-strip--active]="loading">
 
         <div class="load-strip__fill"></div>
 
-
       </div>
 
-
-
-
-
-
       <!-- HERE DASHBOARD / COMPANY PAGE LOADS -->
-
-
       <router-outlet></router-outlet>
-
-
-
 
     </main>
 
-
-
-
-
   </div>
-
-
-
-
 
 </div>

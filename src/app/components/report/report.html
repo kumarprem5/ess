@@ -20,11 +20,9 @@
        MAIN CONTENT
   ══════════════════════════════════════════════════════ -->
   <ng-container *ngIf="!loading && !error && company">
-
     <!-- ── PAGE HEADER ── -->
     <div class="page-header">
       <div class="page-header-inner">
-
         <div class="header-top-row">
           <button class="btn-back" (click)="goBack()">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -32,7 +30,6 @@
             </svg>
             Back
           </button>
-
           <div class="header-company-identity">
             <div class="header-avatar">
               {{ company.companyName?.charAt(0)?.toUpperCase() }}
