@@ -44,64 +44,59 @@
   <!-- ── Table ── -->
 <!-- ── Table ── -->
 <!-- ── Table ── -->
+<!-- ── Table ── -->
 <div class="table-wrapper">
   <table class="company-table">
 
     <thead>
-  <tr>
-    <th>Comapny ID</th>
-    <th>Company Name</th>
-    <th>Division</th>
-    <th>Actions</th>
-  </tr>
-</thead>
+      <tr>
+        <th>Company ID</th>
+        <th>Company Name</th>
+        <th>Division</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
 
     <tbody>
 
-     <tr *ngFor="let company of filteredCompanies; let i = index">
+      <tr *ngFor="let company of filteredCompanies">
 
-  <td>{{ i + 1 }}</td>
+        <td class="company-name">
+          {{ company.id }}
+        </td>
 
-   <td class="company-name">
-    {{ company.id }}
-  </td>
+        <td class="company-name">
+          {{ company.companyName }}
+        </td>
 
-  <td class="company-name">
-    {{ company.companyName }}
-  </td>
+        <td>
+          <span class="badge badge-lic">
+            {{ company.factoryLicenseNo || '—' }}
+          </span>
+        </td>
 
-  <!-- <td>
-    {{ company.city }}
-  </td> -->
+        <td>
+          <div class="actions">
 
-  <td>
-    <span class="badge badge-lic">
-      {{ company.factoryLicenseNo || '—' }}
-    </span>
-  </td>
+            <button class="btn-update"
+                    (click)="openUpdate(company)">
+              Update
+            </button>
 
-  <td>
-    <div class="actions">
+            <button class="btn-report"
+                    (click)="openReport(company)">
+              Report
+            </button>
 
-      <button class="btn-update"
-              (click)="openUpdate(company)">
-        Update
-      </button>
+            <button class="btn-delete"
+                    (click)="openDeleteConfirm(company)">
+              Delete
+            </button>
 
-      <button class="btn-report"
-              (click)="openReport(company)">
-        Report
-      </button>
+          </div>
+        </td>
 
-      <button class="btn-delete"
-              (click)="openDeleteConfirm(company)">
-        Delete
-      </button>
-
-    </div>
-  </td>
-
-</tr>
+      </tr>
 
       <tr *ngIf="filteredCompanies.length === 0">
         <td colspan="4" class="no-data">
@@ -109,12 +104,10 @@
         </td>
       </tr>
 
-
     </tbody>
 
   </table>
 </div>
-
 <!-- ── Add / Update Modal ── -->
 <div class="overlay" [class.open]="showModal">
   <div class="modal">
