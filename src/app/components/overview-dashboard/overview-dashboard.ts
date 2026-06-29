@@ -2,6 +2,13 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { forkJoin } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { ApiService } from '../../service/api-service';
+import { CompanyProfile } from '../../model/models.model';
+
+
 interface InspectionRecord {
   id: number;
   company: string;
@@ -10,7 +17,7 @@ interface InspectionRecord {
   status: 'Completed' | 'Pending' | 'Overdue';
   certificateNumber?: string;
 }
- 
+
 interface CompanyDueInfo {
   name: string;
   city: string;
@@ -27,173 +34,218 @@ interface CompanyDueInfo {
   styleUrl: './overview-dashboard.css',
 })
 export class OverviewDashboard implements OnInit {
- 
-  // ─── TIME SELECTORS ────────────────────────────────
+  // ─── TIME SELECTORS ────────────────────────────────────
   selectedYear: number = new Date().getFullYear();
   selectedMonth: number = new Date().getMonth();
-  
+
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth();
-  
+
   availableYears: number[] = [];
   months: string[] = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
- 
+
   // ─── DATA ──────────────────────────────────────────
   inspectionData: InspectionRecord[] = [];
   companiesDueData: CompanyDueInfo[] = [];
- 
+  loading: boolean = true;
+
   // ─── COMPUTED ──────────────────────────────────────
   get isCustomPeriod(): boolean {
-    return this.selectedYear !== this.currentYear || 
-           this.selectedMonth !== this.currentMonth;
+    return (
+      this.selectedYear !== this.currentYear ||
+      this.selectedMonth !== this.currentMonth
+    );
   }
- 
+
   get periodLabel(): string {
     return `${this.months[this.selectedMonth]} ${this.selectedYear}`;
   }
- 
-  constructor(private cdr: ChangeDetectorRef) {}
- 
+
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private apiService: ApiService
+  ) {}
+
   ngOnInit(): void {
-    this.initializeData();
     this.generateYears();
+    this.loadDynamicData();
   }
- 
+
   // ─────────────────────────────────────────────────────
-  // INITIALIZATION
+  // DATA LOADING FROM API
   // ─────────────────────────────────────────────────────
- 
-  private initializeData(): void {
-    // Sample inspection data across multiple months/years
-    this.inspectionData = [
-      // Current month (June 2026)
-      {
-        id: 1,
-        company: 'IOCL Lalkuan',
-        equipmentType: 'Safety Valve',
-        date: new Date(2026, 5, 15),
-        status: 'Completed',
-        certificateNumber: 'ESS/IOL/260615/SV/001'
-      },
-      {
-        id: 2,
-        company: 'IOCL Bijnor',
-        equipmentType: 'Lifting Equipment',
-        date: new Date(2026, 5, 20),
-        status: 'Completed',
-        certificateNumber: 'ESS/IOB/260620/BPL/001'
-      },
-      {
-        id: 3,
-        company: 'HPCL Mathura',
-        equipmentType: 'Pressure Vessel',
-        date: new Date(2026, 5, 10),
-        status: 'Pending'
-      },
-      {
-        id: 4,
-        company: 'BPCL Kochi',
-        equipmentType: 'Power Press',
-        date: new Date(2026, 5, 25),
-        status: 'Pending'
-      },
-      // Previous month (May 2026)
-      {
-        id: 5,
-        company: 'IOCL Lalkuan',
-        equipmentType: 'Safety Belt',
-        date: new Date(2026, 4, 18),
-        status: 'Completed',
-        certificateNumber: 'ESS/IOL/260518/BPSB/001'
-      },
-      {
-        id: 6,
-        company: 'IndianOil Vadodara',
-        equipmentType: 'Lifting Equipment',
-        date: new Date(2026, 4, 22),
-        status: 'Completed'
-      },
-      // Next month (July 2026)
-      {
-        id: 7,
-        company: 'HPCL Mathura',
-        equipmentType: 'Safety Valve',
-        date: new Date(2026, 6, 8),
-        status: 'Overdue'
-      },
-      {
-        id: 8,
-        company: 'BPCL Kochi',
-        equipmentType: 'Pressure Vessel',
-        date: new Date(2026, 6, 12),
-        status: 'Pending'
-      },
-      // Previous year sample data
-      {
-        id: 9,
-        company: 'IOCL Lalkuan',
-        equipmentType: 'Pressure Vessel',
-        date: new Date(2025, 5, 10),
-        status: 'Completed',
-        certificateNumber: 'ESS/IOL/250610/BPPV/005'
-      },
-      {
-        id: 10,
-        company: 'HPCL Mathura',
-        equipmentType: 'Lifting Equipment',
-        date: new Date(2025, 5, 15),
-        status: 'Completed'
+
+  private loadDynamicData(): void {
+    this.loading = true;
+
+    // Step 1: Get all companies
+    this.apiService.getAllCompanies().pipe(
+      catchError(err => {
+        console.error('Error loading companies:', err);
+        this.loading = false;
+        return of({ status: false, data: [] });
+      })
+    ).subscribe(response => {
+      if (response.status && response.data && Array.isArray(response.data)) {
+        const companies = response.data; // ← TypeScript now knows this is CompanyProfile[]
+        this.loadEquipmentForAllCompanies(companies);
+      } else {
+        this.loading = false;
       }
-    ];
- 
-    // Sample companies with due renewals
-    this.companiesDueData = [
-      {
-        name: 'IOCL Lalkuan Haldwani',
-        city: 'Haldwani',
-        state: 'Uttarakhand',
-        count: 3,
-        equipmentTypes: ['Safety Valve', 'Pressure Vessel'],
-        dueDate: new Date(2026, 5, 30)
-      },
-      {
-        name: 'IOCL Bijnor Terminal',
-        city: 'Bijnor',
-        state: 'Uttar Pradesh',
-        count: 2,
-        equipmentTypes: ['Lifting Equipment', 'Safety Belt'],
-        dueDate: new Date(2026, 6, 15)
-      },
-      {
-        name: 'HPCL Mathura Refinery',
-        city: 'Mathura',
-        state: 'Uttar Pradesh',
-        count: 4,
-        equipmentTypes: ['Power Press', 'Pressure Vessel', 'Safety Valve'],
-        dueDate: new Date(2026, 6, 20)
-      },
-      {
-        name: 'BPCL Kochi Terminal',
-        city: 'Kochi',
-        state: 'Kerala',
-        count: 1,
-        equipmentTypes: ['Lifting Equipment'],
-        dueDate: new Date(2026, 7, 10)
-      },
-      {
-        name: 'IndianOil Vadodara',
-        city: 'Vadodara',
-        state: 'Gujarat',
-        count: 2,
-        equipmentTypes: ['Safety Belt', 'Pressure Vessel'],
-        dueDate: new Date(2026, 5, 25)
-      }
-    ];
+    });
   }
- 
+
+  private loadEquipmentForAllCompanies(companies: CompanyProfile[]): void {
+    const equipmentRequests: any[] = [];
+
+    // For each company, fetch all equipment types
+    companies.forEach(company => {
+      equipmentRequests.push(
+        this.apiService
+          .getAllLiftingByCompany(company.id!)
+          .pipe(catchError(() => of({ status: false, data: [] }))),
+        this.apiService
+          .getAllPressureByCompany(company.id!)
+          .pipe(catchError(() => of({ status: false, data: [] }))),
+        this.apiService
+          .getAllPowerPressByCompany(company.id!)
+          .pipe(catchError(() => of({ status: false, data: [] }))),
+        this.apiService
+          .getAllSafetyBelts(company.id!)
+          .pipe(catchError(() => of({ status: false, data: [] }))),
+        this.apiService
+          .getAllSafetyValvesByCompany(company.id!)
+          .pipe(catchError(() => of({ status: false, data: [] })))
+      );
+    });
+
+    forkJoin(equipmentRequests).subscribe({
+      next: results => {
+        this.processEquipmentData(companies, results);
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
+      error: err => {
+        console.error('Error loading equipment data:', err);
+        this.loading = false;
+      },
+    });
+  }
+
+  private processEquipmentData(companies: CompanyProfile[], results: any[]): void {
+    const inspections: InspectionRecord[] = [];
+    const dueCompanies: Map<number, CompanyDueInfo> = new Map();
+
+    let resultIndex = 0;
+
+    // Process results for each company
+    companies.forEach(company => {
+      const companyDueMap = new Map<string, string>();
+      let earliestDueDate: Date | null = null;
+
+      // Process each equipment type for this company
+      const equipmentTypes = [
+        'Lifting',
+        'Pressure Vessel',
+        'Power Press',
+        'Safety Belt',
+        'Safety Valve',
+      ];
+
+      equipmentTypes.forEach(type => {
+        const result = results[resultIndex++];
+        if (result?.status && result?.data && Array.isArray(result.data)) {
+          result.data.forEach((equipment: any) => {
+            // Create inspection record from examination date
+            if (equipment.dateOfExamination || equipment.examinationDate) {
+              const examDate = new Date(
+                equipment.dateOfExamination || equipment.examinationDate
+              );
+              inspections.push({
+                id: equipment.id,
+                company: company.companyName,
+                equipmentType: type,
+                date: examDate,
+                status: this.determineStatus(equipment),
+                certificateNumber:
+                  equipment.certificateNo || equipment.certificateNumber,
+              });
+            }
+
+            // Track due dates for companies
+            if (equipment.nextDueDate) {
+              const dueDate = new Date(equipment.nextDueDate);
+              if (!companyDueMap.has(type)) {
+                companyDueMap.set(type, type);
+              }
+              // Keep the earliest due date
+              if (!earliestDueDate || dueDate < earliestDueDate) {
+                earliestDueDate = dueDate;
+              }
+            }
+          });
+        }
+      });
+
+      // Add company to due list if it has renewals
+      if (companyDueMap.size > 0 && earliestDueDate) {
+        dueCompanies.set(company.id!, {
+          name: company.companyName,
+          city: company.city || 'N/A',
+          state: company.state || 'N/A',
+          count: companyDueMap.size,
+          equipmentTypes: Array.from(companyDueMap.values()),
+          dueDate: earliestDueDate,
+        });
+      }
+    });
+
+    this.inspectionData = inspections;
+    this.companiesDueData = Array.from(dueCompanies.values());
+  }
+
+  private determineStatus(
+    equipment: any
+  ): 'Completed' | 'Pending' | 'Overdue' {
+    const today = new Date();
+
+    // If nextDueDate exists
+    if (equipment.nextDueDate) {
+      const dueDate = new Date(equipment.nextDueDate);
+      if (dueDate < today) {
+        return 'Overdue';
+      } else if (
+        equipment.dateOfExamination ||
+        equipment.examinationDate
+      ) {
+        return 'Completed';
+      }
+    }
+
+    // If only examination date exists (no next due set yet)
+    if (
+      (equipment.dateOfExamination || equipment.examinationDate) &&
+      !equipment.nextDueDate
+    ) {
+      return 'Completed';
+    }
+
+    return 'Pending';
+  }
+
   private generateYears(): void {
     const currentYear = new Date().getFullYear();
     // Generate years: 3 years back to 3 years forward
@@ -201,88 +253,100 @@ export class OverviewDashboard implements OnInit {
       this.availableYears.push(i);
     }
   }
- 
+
   // ─────────────────────────────────────────────────────
   // EVENT HANDLERS
   // ─────────────────────────────────────────────────────
- 
+
   selectMonth(monthIndex: number): void {
     this.selectedMonth = monthIndex;
     this.cdr.markForCheck();
   }
- 
+
   onYearChange(): void {
     this.cdr.markForCheck();
   }
- 
+
   // ─────────────────────────────────────────────────────
   // DATA FILTERING — SELECTED PERIOD
   // ─────────────────────────────────────────────────────
- 
+
   getFilteredData(): InspectionRecord[] {
     return this.inspectionData.filter(record => {
       const recordDate = new Date(record.date);
-      return recordDate.getFullYear() === this.selectedYear &&
-             recordDate.getMonth() === this.selectedMonth;
+      return (
+        recordDate.getFullYear() === this.selectedYear &&
+        recordDate.getMonth() === this.selectedMonth
+      );
     });
   }
- 
+
   getInspectionCount(): number {
     return this.getFilteredData().length;
   }
- 
+
   getCertificateCount(): number {
     return this.getFilteredData().filter(r => r.status === 'Completed').length;
   }
- 
+
   getPendingCount(): number {
-    return this.getFilteredData().filter(r => r.status === 'Pending').length;
+    return this.getFilteredData().filter(
+      r => r.status === 'Pending' || r.status === 'Overdue'
+    ).length;
   }
- 
+
   getCompaniesDueInPeriod(): CompanyDueInfo[] {
     return this.companiesDueData.filter(company => {
       const dueDate = new Date(company.dueDate);
-      return dueDate.getFullYear() === this.selectedYear &&
-             dueDate.getMonth() === this.selectedMonth;
+      return (
+        dueDate.getFullYear() === this.selectedYear &&
+        dueDate.getMonth() === this.selectedMonth
+      );
     });
   }
- 
+
   // ─────────────────────────────────────────────────────
   // DATA FILTERING — CURRENT PERIOD
   // ─────────────────────────────────────────────────────
- 
+
   getCurrentData(): InspectionRecord[] {
     return this.inspectionData.filter(record => {
       const recordDate = new Date(record.date);
-      return recordDate.getFullYear() === this.currentYear &&
-             recordDate.getMonth() === this.currentMonth;
+      return (
+        recordDate.getFullYear() === this.currentYear &&
+        recordDate.getMonth() === this.currentMonth
+      );
     });
   }
- 
+
   getCurrentInspectionCount(): number {
     return this.getCurrentData().length;
   }
- 
+
   getCurrentCertificateCount(): number {
     return this.getCurrentData().filter(r => r.status === 'Completed').length;
   }
- 
+
   getCurrentPendingCount(): number {
-    return this.getCurrentData().filter(r => r.status === 'Pending').length;
+    return this.getCurrentData().filter(
+      r => r.status === 'Pending' || r.status === 'Overdue'
+    ).length;
   }
- 
+
   getCurrentCompaniesDue(): CompanyDueInfo[] {
     return this.companiesDueData.filter(company => {
       const dueDate = new Date(company.dueDate);
-      return dueDate.getFullYear() === this.currentYear &&
-             dueDate.getMonth() === this.currentMonth;
+      return (
+        dueDate.getFullYear() === this.currentYear &&
+        dueDate.getMonth() === this.currentMonth
+      );
     });
   }
- 
+
   // ─────────────────────────────────────────────────────
   // UTILITY
   // ─────────────────────────────────────────────────────
- 
+
   getCompanyCount(): number {
     // Unique companies in current selection
     const companies = new Set(this.getFilteredData().map(r => r.company));
