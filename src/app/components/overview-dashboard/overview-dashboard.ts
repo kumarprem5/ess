@@ -35,6 +35,16 @@ interface EquipmentTypeCount {
   count: number;
 }
 
+
+// interface InspectionGroup {
+//   companyId: number;
+//   companyName: string;
+//   records: InspectionRecord[];
+//   completedCount: number;
+//   pendingOverdueCount: number;
+//   hasOverdue: boolean;
+// }
+
 interface InspectionGroup {
   companyId: number;
   companyName: string;
@@ -46,14 +56,14 @@ interface InspectionGroup {
 }
 
 
-interface InspectionGroup {
-  companyId: number;
-  companyName: string;
-  records: InspectionRecord[];
-  completedCount: number;
-  pendingOverdueCount: number;
-  hasOverdue: boolean;
-}
+// interface InspectionGroup {
+//   companyId: number;
+//   companyName: string;
+//   records: InspectionRecord[];
+//   completedCount: number;
+//   pendingOverdueCount: number;
+//   hasOverdue: boolean;
+// }
 
 interface CompanyDueInfo {
   name: string;

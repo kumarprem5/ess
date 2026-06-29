@@ -675,3 +675,31 @@
   height: 0.875rem;
   object-fit: contain;
 }
+
+.equipment-count-list {
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.equipment-count-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-slate-50);
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+}
+
+.equipment-count-row__type {
+  color: var(--color-slate-700);
+  font-weight: 500;
+}
+
+.equipment-count-row__value {
+  color: var(--color-slate-900);
+  font-weight: 700;
+  font-family: monospace;
+}

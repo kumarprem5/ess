@@ -81,196 +81,149 @@
   <div class="content-grid">
 
     <!-- LEFT PANEL: PERIOD DATA -->
-    <div class="data-panel">
-      <div class="panel__header">
-        <h2 class="panel__title">
-          <span class="panel__title-dot panel__title-dot--amber"></span>
-          Inspection Records
-        </h2>
-      </div>
+<!-- LEFT PANEL: PERIOD DATA -->
+<div class="data-panel">
+  <div class="panel__header">
+    <h2 class="panel__title">
+      <span class="panel__title-dot panel__title-dot--amber"></span>
+      Inspection Records
+    </h2>
+  </div>
 
-      <div class="panel__content">
-        <!-- If specific year/month selected -->
-        <ng-container *ngIf="isCustomPeriod; else currentPeriodBlock">
-          <div class="data-block">
-            <h3 class="data-block__title">
-              {{ selectedYear }} - {{ months[selectedMonth] }}
-            </h3>
-            <div class="stat-grid--inline">
-              <div class="stat-inline">
-                <span class="stat-inline__label">Inspections</span>
-                <span class="stat-inline__value">{{ getInspectionCount() }}</span>
-              </div>
-              <div class="stat-inline">
-                <span class="stat-inline__label">Completed</span>
-                <span class="stat-inline__value">{{ getCertificateCount() }}</span>
-              </div>
-              <div class="stat-inline">
-                <span class="stat-inline__label">Pending/Overdue</span>
-                <span class="stat-inline__value">{{ getPendingCount() }}</span>
+  <div class="panel__content">
+    <!-- If specific year/month selected -->
+    <ng-container *ngIf="isCustomPeriod; else currentPeriodBlock">
+      <div class="data-block">
+        <h3 class="data-block__title">
+          {{ selectedYear }} - {{ months[selectedMonth] }}
+        </h3>
+        <div class="stat-grid--inline">
+          <div class="stat-inline">
+            <span class="stat-inline__label">Inspections</span>
+            <span class="stat-inline__value">{{ getInspectionCount() }}</span>
+          </div>
+          <div class="stat-inline">
+            <span class="stat-inline__label">Completed</span>
+            <span class="stat-inline__value">{{ getCertificateCount() }}</span>
+          </div>
+          <div class="stat-inline">
+            <span class="stat-inline__label">Pending/Overdue</span>
+            <span class="stat-inline__value">{{ getPendingCount() }}</span>
+          </div>
+        </div>
+
+        <!-- Grouped, collapsible inspection records -->
+        <div class="group-list">
+          <div
+            *ngFor="let group of getGroupedFilteredData()"
+            class="group-card"
+            [class.group-card--has-overdue]="group.hasOverdue">
+
+            <button
+              class="group-header"
+              (click)="toggleInspectionGroup(group.companyId)"
+              [attr.aria-expanded]="isInspectionGroupExpanded(group.companyId)">
+
+              <span class="group-header__chevron">
+                <img
+                  [src]="isInspectionGroupExpanded(group.companyId) ? '/up.png' : '/down.png'"
+                  alt=""
+                  class="chevron-icon">
+              </span>
+
+              <span class="group-header__name">{{ group.companyName }}</span>
+              <span class="group-header__id">#{{ group.companyId }}</span>
+
+              <span *ngIf="group.hasOverdue" class="due-alert-badge">
+                <i class="ti ti-alert-triangle"></i> Overdue
+              </span>
+            </button>
+
+            <div class="group-body" *ngIf="isInspectionGroupExpanded(group.companyId)">
+              <div class="equipment-count-list">
+                <div *ngFor="let eq of group.equipmentCounts" class="equipment-count-row">
+                  <span class="equipment-count-row__type">{{ eq.type }}</span>
+                  <span class="equipment-count-row__value">{{ eq.count.toString().padStart(2, '0') }}</span>
+                </div>
               </div>
             </div>
-
-            <!-- Data Table -->
-<!-- Grouped, collapsible inspection records -->
-<div class="group-list">
-  <div
-    *ngFor="let group of getGroupedFilteredData()"
-    class="group-card"
-    [class.group-card--has-overdue]="group.hasOverdue">
-
-    <button
-      class="group-header"
-      (click)="toggleInspectionGroup(group.companyId)"
-      [attr.aria-expanded]="isInspectionGroupExpanded(group.companyId)">
-
-     <span class="group-header__chevron">
-  <img
-    [src]="isInspectionGroupExpanded(group.companyId) ? '/up.png' : '/down.png'"
-    alt=""
-    class="chevron-icon">
-</span>
-
-      <span class="group-header__name">{{ group.companyName }}</span>
-      <span class="group-header__id">#{{ group.companyId }}</span>
-
-<span class="group-header__stats">
-  <span *ngFor="let eq of group.equipmentCounts" class="group-stat group-stat--equipment">
-    {{ eq.type }} {{ eq.count.toString().padStart(2, '0') }}
-  </span>
-</span>
-
-      <span *ngIf="group.hasOverdue" class="due-alert-badge">
-        <i class="ti ti-alert-triangle"></i> Overdue
-      </span>
-    </button>
-
-    <div class="group-body" *ngIf="isInspectionGroupExpanded(group.companyId)">
-      <div class="table-wrapper">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Equipment</th>
-              <th>Exam Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let record of group.records" class="data-row">
-              <td class="td-equipment">{{ record.equipmentType }}</td>
-              <td class="td-date">{{ record.date | date: 'dd MMM yyyy' }}</td>
-              <td class="td-status">
-                <span [class]="'status-badge status-badge--' + record.status.toLowerCase()">
-                  {{ record.status }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div *ngIf="getGroupedFilteredData().length === 0" class="empty-state">
-    <i class="ti ti-check-circle"></i>
-    <p>No inspection records for selected period</p>
-  </div>
-</div>
           </div>
-        </ng-container>
 
-        <!-- Else: Current period data -->
-        <ng-template #currentPeriodBlock>
-          <div class="data-block">
-            <h3 class="data-block__title">
-              Current Period — {{ currentYear }} - {{ months[currentMonth] }}
-            </h3>
-            <div class="stat-grid--inline">
-              <div class="stat-inline">
-                <span class="stat-inline__label">Inspections</span>
-                <span class="stat-inline__value">{{ getCurrentInspectionCount() }}</span>
-              </div>
-              <div class="stat-inline">
-                <span class="stat-inline__label">Completed</span>
-                <span class="stat-inline__value">{{ getCurrentCertificateCount() }}</span>
-              </div>
-              <div class="stat-inline">
-                <span class="stat-inline__label">Pending/Overdue</span>
-                <span class="stat-inline__value">{{ getCurrentPendingCount() }}</span>
+          <div *ngIf="getGroupedFilteredData().length === 0" class="empty-state">
+            <i class="ti ti-check-circle"></i>
+            <p>No inspection records for selected period</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Else: Current period data -->
+    <ng-template #currentPeriodBlock>
+      <div class="data-block">
+        <h3 class="data-block__title">
+          Current Period — {{ currentYear }} - {{ months[currentMonth] }}
+        </h3>
+        <div class="stat-grid--inline">
+          <div class="stat-inline">
+            <span class="stat-inline__label">Inspections</span>
+            <span class="stat-inline__value">{{ getCurrentInspectionCount() }}</span>
+          </div>
+          <div class="stat-inline">
+            <span class="stat-inline__label">Completed</span>
+            <span class="stat-inline__value">{{ getCurrentCertificateCount() }}</span>
+          </div>
+          <div class="stat-inline">
+            <span class="stat-inline__label">Pending/Overdue</span>
+            <span class="stat-inline__value">{{ getCurrentPendingCount() }}</span>
+          </div>
+        </div>
+
+        <!-- Grouped, collapsible inspection records -->
+        <div class="group-list">
+          <div
+            *ngFor="let group of getGroupedCurrentData()"
+            class="group-card"
+            [class.group-card--has-overdue]="group.hasOverdue">
+
+            <button
+              class="group-header"
+              (click)="toggleInspectionGroup(group.companyId)"
+              [attr.aria-expanded]="isInspectionGroupExpanded(group.companyId)">
+
+              <span class="group-header__chevron">
+                <img
+                  [src]="isInspectionGroupExpanded(group.companyId) ? '/up.png' : '/down.png'"
+                  alt=""
+                  class="chevron-icon">
+              </span>
+
+              <span class="group-header__name">{{ group.companyName }}</span>
+              <span class="group-header__id">#{{ group.companyId }}</span>
+
+              <span *ngIf="group.hasOverdue" class="due-alert-badge">
+                <i class="ti ti-alert-triangle"></i> Overdue
+              </span>
+            </button>
+
+            <div class="group-body" *ngIf="isInspectionGroupExpanded(group.companyId)">
+              <div class="equipment-count-list">
+                <div *ngFor="let eq of group.equipmentCounts" class="equipment-count-row">
+                  <span class="equipment-count-row__type">{{ eq.type }}</span>
+                  <span class="equipment-count-row__value">{{ eq.count.toString().padStart(2, '0') }}</span>
+                </div>
               </div>
             </div>
+          </div>
 
-            <!-- Data Table -->
-     <!-- Grouped, collapsible inspection records -->
-<div class="group-list">
-  <div
-    *ngFor="let group of getGroupedFilteredData()"
-    class="group-card"
-    [class.group-card--has-overdue]="group.hasOverdue">
-
-    <button
-      class="group-header"
-      (click)="toggleInspectionGroup(group.companyId)"
-      [attr.aria-expanded]="isInspectionGroupExpanded(group.companyId)">
-
-<span class="group-header__chevron">
-  <img
-    [src]="isInspectionGroupExpanded(group.companyId) ? '/up.png' : '/down.png'"
-    alt=""
-    class="chevron-icon">
-</span>
-
-      <span class="group-header__name">{{ group.companyName }}</span>
-      <span class="group-header__id">#{{ group.companyId }}</span>
-
-      <span class="group-header__stats">
-        <span class="group-stat group-stat--total">{{ group.records.length }} records</span>
-        <span class="group-stat group-stat--completed">{{ group.completedCount }} completed</span>
-        <span *ngIf="group.pendingOverdueCount > 0" class="group-stat group-stat--pending">
-          {{ group.pendingOverdueCount }} pending/overdue
-        </span>
-      </span>
-
-      <span *ngIf="group.hasOverdue" class="due-alert-badge">
-        <i class="ti ti-alert-triangle"></i> Overdue
-      </span>
-    </button>
-
-    <div class="group-body" *ngIf="isInspectionGroupExpanded(group.companyId)">
-      <div class="table-wrapper">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Equipment</th>
-              <th>Exam Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let record of group.records" class="data-row">
-              <td class="td-equipment">{{ record.equipmentType }}</td>
-              <td class="td-date">{{ record.date | date: 'dd MMM yyyy' }}</td>
-              <td class="td-status">
-                <span [class]="'status-badge status-badge--' + record.status.toLowerCase()">
-                  {{ record.status }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          <div *ngIf="getGroupedCurrentData().length === 0" class="empty-state">
+            <i class="ti ti-check-circle"></i>
+            <p>No inspection records for current period</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <div *ngIf="getGroupedFilteredData().length === 0" class="empty-state">
-    <i class="ti ti-check-circle"></i>
-    <p>No inspection records for selected period</p>
+    </ng-template>
   </div>
 </div>
-          </div>
-        </ng-template>
-      </div>
-    </div>
-
     <!-- RIGHT PANEL: DUE COMPANIES -->
 <!-- RIGHT PANEL: DUE COMPANIES -->
 <div class="data-panel">
