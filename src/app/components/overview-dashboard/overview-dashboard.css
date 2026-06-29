@@ -707,6 +707,7 @@
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--color-slate-500);
+  background: #bbf7d0;
   padding: 0.15rem 0.5rem;
   background: var(--color-slate-100);
   border-radius: 9999px;

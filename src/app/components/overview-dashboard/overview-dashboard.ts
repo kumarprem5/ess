@@ -422,7 +422,7 @@ private groupInspections(records: InspectionRecord[]): InspectionGroup[] {
     if (!map.has(record.companyId)) {
        map.set(record.companyId, {
         companyId: record.companyId,
-        division:   record.division,
+         division: record.division,
         companyName: record.company,
         records: [],
         completedCount: 0,
