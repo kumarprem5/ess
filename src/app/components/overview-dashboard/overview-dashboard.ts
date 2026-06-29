@@ -12,6 +12,7 @@ import { CompanyProfile } from '../../model/models.model';
 interface InspectionRecord {
   id: number;
   company: string;
+  division: string;
    companyId: number; 
   equipmentType: string;
   date: Date;
@@ -48,6 +49,7 @@ interface EquipmentTypeCount {
 interface InspectionGroup {
   companyId: number;
   companyName: string;
+  division: string;
   records: InspectionRecord[];
   completedCount: number;
   pendingOverdueCount: number;
@@ -230,6 +232,7 @@ expandedDueGroups: Set<number> = new Set();
                 id: equipment.id,
                 companyId: company.id!,     
                 company: company.companyName,
+                division:company.factoryLicenseNo,
                 equipmentType: type,
                 date: examDate,
                 status: this.determineStatus(equipment),
@@ -417,8 +420,9 @@ private groupInspections(records: InspectionRecord[]): InspectionGroup[] {
 
   records.forEach(record => {
     if (!map.has(record.companyId)) {
-      map.set(record.companyId, {
+       map.set(record.companyId, {
         companyId: record.companyId,
+        division:   record.division,
         companyName: record.company,
         records: [],
         completedCount: 0,
