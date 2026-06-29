@@ -7,7 +7,7 @@
 ───────────────────────────────────────────────────────── */
 :host {
   --bg:           #f4f6fb;
-  --bg-sidebar:   #161c2c;
+  --bg-sidebar:   #ffffff;
   --bg-card:      #ffffff;
   --bg-card2:     #f8f9fc;
   --bg-hover:     rgba(0,0,0,0.04);
@@ -18,19 +18,6 @@
   --tx-2:  #4b5563;
   --tx-3:  #9ca3af;
   --tx-4:  #d1d5db;
-
-  /* Sidebar (dark) palette */
-  --sb-bg:         #161c2c;
-  --sb-border:     rgba(255,255,255,0.08);
-  --sb-tx-1:       #f3f5fb;
-  --sb-tx-2:       #a4abc2;
-  --sb-tx-3:       #69708a;
-  --sb-hover:      rgba(255,255,255,0.06);
-  --sb-active-bg:  rgba(217,119,6,0.18);
-
-  /* Header (light) palette */
-  --hd-bg:         #ffffff;
-  --hd-border:     rgba(15,23,42,0.07);
 
   --amber:     #d97706;
   --amber-d:   #b45309;
@@ -110,9 +97,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .sidebar {
   width: var(--sidebar-w);
   min-height: 100vh;
-  background: var(--sb-bg);
-  border-right: 1px solid var(--sb-border);
-  box-shadow: 2px 0 24px rgba(0,0,0,0.18);
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  box-shadow: 2px 0 12px rgba(0,0,0,0.06);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -150,7 +137,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: flex;
   align-items: center;
   gap: 11px;
-  border-bottom: 1px solid var(--sb-border);
+  border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
 .sb-brand__mark {
@@ -166,13 +153,13 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: block;
   font-family: var(--font-display);
   font-size: 15px; font-weight: 700;
-  color: var(--sb-tx-1);
+  color: var(--tx-1);
   letter-spacing: 0.2px;
 }
 .sb-brand__tag {
   display: block;
   font-size: 10px; font-weight: 500;
-  color: var(--sb-tx-3);
+  color: var(--tx-3);
   text-transform: uppercase;
   letter-spacing: 1.2px;
   margin-top: 1px;
@@ -213,7 +200,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: 10px; font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--sb-tx-3);
+  color: var(--tx-4);
 }
 
 /* ── Nav ── */
@@ -227,13 +214,13 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   border-radius: var(--radius-sm);
   margin-bottom: 2px;
   font-size: 13.5px; font-weight: 400;
-  color: var(--sb-tx-2);
+  color: var(--tx-2);
   transition: background var(--t), color var(--t);
   overflow: hidden;
 }
-.nav-link:hover { background: var(--sb-hover); color: var(--sb-tx-1); }
+.nav-link:hover { background: var(--bg-hover); color: var(--tx-1); }
 .nav-link--active {
-  background: var(--sb-active-bg);
+  background: rgba(217,119,6,0.08);
   color: var(--amber);
   font-weight: 500;
 }
@@ -258,7 +245,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .sb-divider {
   margin: 12px 18px;
   border: none;
-  border-top: 1px solid var(--sb-border);
+  border-top: 1px solid var(--border);
   flex-shrink: 0;
 }
 
@@ -282,19 +269,19 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 8px; height: 8px;
   border-radius: 50%;
   background: var(--emerald);
-  border: 1.5px solid var(--sb-bg);
+  border: 1.5px solid #fff;
 }
 .sb-profile__name {
-  font-size: 12.5px; font-weight: 600; color: var(--sb-tx-1);
+  font-size: 12.5px; font-weight: 600; color: var(--tx-1);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.sb-profile__role { font-size: 10.5px; color: var(--sb-tx-3); margin-top: 1px; white-space: nowrap; }
+.sb-profile__role { font-size: 10.5px; color: var(--tx-3); margin-top: 1px; white-space: nowrap; }
 
 /* ── Logout ── */
 .sb-logout {
   display: flex; align-items: center;
   gap: 8px; padding: 8px 14px 16px;
-  font-size: 12.5px; color: var(--sb-tx-3);
+  font-size: 12.5px; color: var(--tx-3);
   transition: color var(--t); flex-shrink: 0;
 }
 .sb-logout:hover { color: #ef4444; }
@@ -317,10 +304,10 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 ───────────────────────────────────────────────────────── */
 .topbar {
   height: var(--topbar-h);
-  background: var(--hd-bg);
+  background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--hd-border);
-  box-shadow: 0 1px 8px rgba(15,23,42,0.04);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
   display: flex; align-items: center;
   padding: 0 20px; gap: 10px;
   position: sticky; top: 0; z-index: 30;
