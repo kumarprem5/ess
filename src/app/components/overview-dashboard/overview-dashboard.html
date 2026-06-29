@@ -136,7 +136,7 @@
                     </td>
                   </tr>
                   <tr *ngIf="getFilteredData().length === 0" class="data-row--empty">
-                    <td colspan="4" class="empty-message">
+                    <td colspan="5" class="empty-message">
                       No inspection records for selected period
                     </td>
                   </tr>
@@ -172,6 +172,7 @@
               <table class="data-table">
                 <thead>
                   <tr>
+                     <th>Company ID</th>
                     <th>Company</th>
                     <th>Equipment</th>
                     <th>Exam Date</th>
@@ -180,6 +181,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let record of getCurrentData()" class="data-row">
+                    <td class="td-company-id">{{ record.companyId }}</td>
                     <td class="td-company">{{ record.company }}</td>
                     <td class="td-equipment">{{ record.equipmentType }}</td>
                     <td class="td-date">{{ record.date | date: 'dd MMM yyyy' }}</td>
@@ -190,7 +192,7 @@
                     </td>
                   </tr>
                   <tr *ngIf="getCurrentData().length === 0" class="data-row--empty">
-                    <td colspan="4" class="empty-message">
+                    <td colspan="5" class="empty-message">
                       No inspection records for current period
                     </td>
                   </tr>
@@ -265,7 +267,9 @@
                 *ngFor="let company of getCurrentCompaniesDue()"
                 class="company-card">
                 <div class="company-card__header">
+                    <span class="company-card__id">#{{ company.companyId }}</span>
                   <h4 class="company-card__name">{{ company.name }}</h4>
+
                   <span class="company-card__badge">{{ company.count }} due</span>
                 </div>
                 <div class="company-card__details">

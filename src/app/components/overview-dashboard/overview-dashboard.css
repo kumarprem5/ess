@@ -525,3 +525,16 @@
   margin: 0;
   font-size: 0.95rem;
 }
+
+.company-card__id {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-slate-500);
+  margin-left: 0.375rem;
+}
+
+.td-company-id {
+  color: var(--color-slate-500);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
