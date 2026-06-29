@@ -31,11 +31,10 @@ export interface NavItem {
 export class LayoutComponent implements OnInit, OnDestroy {
 
   // ── Navigation (Companies only) ────────────────────────
-  navItems: NavItem[] = [
-    { path: '/dashboard',           label: 'Overview',  icon: 'ti-layout-dashboard',    exact: true  },
-    { path: '/dashboard/companies', label: 'Companies', icon: 'ti-building-skyscraper', exact: false }
-  ];
-
+navItems: NavItem[] = [
+  { path: '/dashboard',           label: 'Overview',  icon: 'ti-layout-dashboard',    exact: true  },
+  { path: '/dashboard/companies', label: 'Companies', icon: 'ti-building-skyscraper', exact: false }
+];
   // ── UI State ───────────────────────────────────────────
   sidebarOpen  = true;
   mobileOpen   = false;

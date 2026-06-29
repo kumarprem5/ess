@@ -13,7 +13,7 @@ export const routes: Routes = [
   // ✅ Public routes — no auth required
   { path: 'login',  component: LoginComponent },
   { path: 'verify', component: VerifyComponent },
-  { path: 'overview', component: OverviewDashboard },
+ 
 
   // ✅ Protected routes — auth required
   // LayoutComponent is the SHELL (sidebar + header visible on ALL children)
@@ -22,11 +22,12 @@ export const routes: Routes = [
     component: LayoutComponent,
     canActivate: [authGuard],
     children: [
-      { path: '',           component: Dashboard },       // /dashboard → Overview
+       { path: '', component: OverviewDashboard },       // /dashboard → Overview
       { path: 'companies',  component: Companies },       // /dashboard/companies → Companies list
       { path: 'report/:id', component: CompanyReport }   // /dashboard/report/123 → Company details
     ]
   },
+  { path: 'overview', redirectTo: 'dashboard', pathMatch: 'full' } ,
 
   // Default + wildcard
   { path: '',   redirectTo: 'login', pathMatch: 'full' },
