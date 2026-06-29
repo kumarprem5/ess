@@ -703,3 +703,11 @@
   font-weight: 700;
   font-family: monospace;
 }
+.group-header__division {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-slate-500);
+  padding: 0.15rem 0.5rem;
+  background: var(--color-slate-100);
+  border-radius: 9999px;
+}

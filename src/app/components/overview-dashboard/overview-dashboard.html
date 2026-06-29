@@ -132,7 +132,7 @@
               </span>
 
               <span class="group-header__name">{{ group.companyName }}</span>
-              <span class="group-header__name">{{ group.division}}</span>
+              <!-- <span class="group-header__name">{{ group.division}}</span> -->
               <span class="group-header__id">#{{ group.companyId }}</span>
 
               <span *ngIf="group.hasOverdue" class="due-alert-badge">
@@ -198,9 +198,10 @@
                   class="chevron-icon">
               </span>
 
-              <span class="group-header__name">{{ group.companyName }}</span>
-              <span class="group-header__id">#{{ group.companyId }}</span>
-
+             <span class="group-header__name">{{ group.companyName }}</span>
+            <span class="group-header__division">{{ group.division }}</span>
+            <span class="group-header__id">#{{ group.companyId }}</span>
+            
               <span *ngIf="group.hasOverdue" class="due-alert-badge">
                 <i class="ti ti-alert-triangle"></i> Overdue
               </span>
