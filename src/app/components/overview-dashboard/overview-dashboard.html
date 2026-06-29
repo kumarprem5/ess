@@ -116,6 +116,7 @@
               <table class="data-table">
                 <thead>
                   <tr>
+                    <th>Company ID</th> 
                     <th>Company</th>
                     <th>Equipment</th>
                     <th>Exam Date</th>
@@ -124,6 +125,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let record of getFilteredData()" class="data-row">
+                    <td class="td-company-id">{{ record.companyId }}</td>
                     <td class="td-company">{{ record.company }}</td>
                     <td class="td-equipment">{{ record.equipmentType }}</td>
                     <td class="td-date">{{ record.date | date: 'dd MMM yyyy' }}</td>
@@ -222,7 +224,9 @@
                 *ngFor="let company of getCompaniesDueInPeriod()"
                 class="company-card">
                 <div class="company-card__header">
-                  <h4 class="company-card__name">{{ company.name }}</h4>
+                  <h4 class="company-card__name">{{ company.name }}
+                  <span class="company-card__id">#{{ company.companyId }}</span>
+                  </h4>
                   <span class="company-card__badge">{{ company.count }} due</span>
                 </div>
                 <div class="company-card__details">

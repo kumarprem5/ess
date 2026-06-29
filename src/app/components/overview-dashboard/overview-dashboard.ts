@@ -12,6 +12,7 @@ import { CompanyProfile } from '../../model/models.model';
 interface InspectionRecord {
   id: number;
   company: string;
+   companyId: number; 
   equipmentType: string;
   date: Date;
   status: 'Completed' | 'Pending' | 'Overdue';
@@ -20,6 +21,7 @@ interface InspectionRecord {
 
 interface CompanyDueInfo {
   name: string;
+  companyId: number;
   city: string;
   state: string;
   count: number;
@@ -176,6 +178,7 @@ export class OverviewDashboard implements OnInit {
               );
               inspections.push({
                 id: equipment.id,
+                companyId: company.id!,     
                 company: company.companyName,
                 equipmentType: type,
                 date: examDate,
@@ -204,6 +207,7 @@ export class OverviewDashboard implements OnInit {
       if (companyDueMap.size > 0 && earliestDueDate) {
         dueCompanies.set(company.id!, {
           name: company.companyName,
+          companyId: company.id!, 
           city: company.city || 'N/A',
           state: company.state || 'N/A',
           count: companyDueMap.size,
